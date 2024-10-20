@@ -345,11 +345,11 @@
         }
 
         function formatNumber(number) {
-            return number.toLocaleString('ar-SA', {
-                useGrouping: true,
-                maximumFractionDigits: 0
-            });
-        }
+    return number.toLocaleString('en-US', {
+        useGrouping: true,
+        maximumFractionDigits: 0
+    });
+}
 
         function calculate() {
             const resultBox = document.querySelector('.result-box');
