@@ -5,144 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة تقسيط العمرة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #1976D2;
-            --secondary-color: #03A9F4;
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f7fa;
             --text-color: #333;
-            --background-color: #F5F5F5;
+            --border-radius: 12px;
         }
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: var(--background-color);
+            background: linear-gradient(135deg, #f6f9fc 0%, #e9eff5 100%);
+            min-height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            padding: 2rem;
             box-sizing: border-box;
+            color: var(--text-color);
         }
         .calculator {
             background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 500px;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+            max-width: 450px;
+            transition: all 0.3s ease;
         }
         .calculator:hover {
-            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
-        .header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 20px;
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 2rem;
             text-align: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        .content {
-            padding: 20px;
         }
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
         label {
             display: block;
-            margin-bottom: 5px;
-            color: var(--text-color);
+            margin-bottom: 0.5rem;
             font-weight: bold;
+            font-size: 1rem;
         }
         select, input {
             width: 100%;
-            padding: 10px;
-            border: none;
-            border-bottom: 2px solid #ddd;
-            font-size: 16px;
-            background-color: transparent;
-            transition: border-color 0.3s;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: var(--secondary-color);
         }
         select:focus, input:focus {
             outline: none;
-            border-color: var(--secondary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
         }
         .result-box {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 20px;
-            border-radius: 4px;
-            margin-top: 20px;
+            background-color: var(--secondary-color);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-top: 2rem;
             text-align: center;
+            transition: all 0.3s ease;
         }
         #result {
             margin: 0;
-            font-size: 1.2rem;
-            line-height: 1.6;
-        }
-        .material-icons {
-            vertical-align: middle;
-            margin-right: 5px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            line-height: 1.8;
         }
         @media (max-width: 600px) {
             .calculator {
-                border-radius: 0;
+                padding: 2rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            #result {
+                font-size: 1.2rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="calculator">
-        <div class="header">
-            <i class="material-icons">calculate</i> حاسبة تقسيط العمرة
+        <h2>حاسبة تقسيط العمرة</h2>
+        <div class="input-group">
+            <label for="persons">عدد الأشخاص:</label>
+            <select id="persons">
+                <option value="1">شخص واحد</option>
+                <option value="2">شخصين</option>
+                <option value="3">3 أشخاص</option>
+                <option value="4">4 أشخاص</option>
+                <option value="5">5 أشخاص</option>
+                <option value="6">6 أشخاص</option>
+            </select>
         </div>
-        <div class="content">
-            <div class="input-group">
-                <label for="persons"><i class="material-icons">group</i> عدد الأشخاص:</label>
-                <select id="persons">
-                    <option value="1">شخص واحد</option>
-                    <option value="2">شخصين</option>
-                    <option value="3">3 أشخاص</option>
-                    <option value="4">4 أشخاص</option>
-                    <option value="5">5 أشخاص</option>
-                    <option value="6">6 أشخاص</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="months"><i class="material-icons">date_range</i> عدد الأشهر:</label>
-                <select id="months">
-                    <option value="3">3 أشهر</option>
-                    <option value="4">4 أشهر</option>
-                    <option value="5">5 أشهر</option>
-                    <option value="6">6 أشهر</option>
-                    <option value="7">7 أشهر</option>
-                    <option value="8">8 أشهر</option>
-                    <option value="9">9 أشهر</option>
-                    <option value="10">10 أشهر</option>
-                    <option value="11">11 شهر</option>
-                    <option value="12">12 شهر</option>
-                    <option value="13">13 شهر</option>
-                    <option value="14">14 شهر</option>
-                    <option value="15">15 شهر</option>
-                    <option value="16">16 شهر</option>
-                    <option value="17">17 شهر</option>
-                    <option value="18">18 شهر</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="downpayment"><i class="material-icons">payments</i> التسبيق (اختياري):</label>
-                <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0">
-            </div>
-            <div class="result-box">
-                <p id="result">النتيجة ستظهر هنا</p>
-            </div>
+        <div class="input-group">
+            <label for="months">عدد الأشهر:</label>
+            <select id="months">
+                <option value="3">3 أشهر</option>
+                <option value="4">4 أشهر</option>
+                <option value="5">5 أشهر</option>
+                <option value="6">6 أشهر</option>
+                <option value="7">7 أشهر</option>
+                <option value="8">8 أشهر</option>
+                <option value="9">9 أشهر</option>
+                <option value="10">10 أشهر</option>
+                <option value="11">11 شهر</option>
+                <option value="12">12 شهر</option>
+                <option value="13">13 شهر</option>
+                <option value="14">14 شهر</option>
+                <option value="15">15 شهر</option>
+                <option value="16">16 شهر</option>
+                <option value="17">17 شهر</option>
+                <option value="18">18 شهر</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="downpayment">التسبيق (اختياري):</label>
+            <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0">
+        </div>
+        <div class="result-box">
+            <p id="result">النتيجة ستظهر هنا</p>
         </div>
     </div>
 
     <script>
-        // نفس الكود JavaScript السابق
+        // JavaScript code remains the same as in your original version
     </script>
 </body>
 </html>
