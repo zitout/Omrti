@@ -289,6 +289,13 @@
     <div class="calculator">
         <h2>حاسبة تقسيط العمرة</h2>
         <div class="input-group">
+            <label for="flightType">نوع الرحلة:</label>
+            <select id="flightType">
+                <option value="direct">مباشر</option>
+                <option value="indirect">غير مباشر</option>
+            </select>
+        </div>
+        <div class="input-group">
             <label for="persons">عدد الأشخاص:</label>
             <select id="persons">
                 <option value="1">شخص واحد</option>
@@ -332,7 +339,11 @@
     <button class="reset-button" onclick="resetCalculator()">↺</button>
 
     <script>
-        const PRICE_PER_PERSON = 168000;
+        const PRICE_PER_PERSON = {
+            direct: 168000,
+            indirect: 163000
+        };
+
         const RATES = {
             1: 0.17, 2: 0.17, 3: 0.2, 4: 0.22, 5: 0.24,
             6: 0.27, 7: 0.3, 8: 0.34, 9: 0.38, 10: 0.42,
@@ -345,22 +356,24 @@
         }
 
         function formatNumber(number) {
-    return number.toLocaleString('en-US', {
-        useGrouping: true,
-        maximumFractionDigits: 0
-    });
-}
+            return number.toLocaleString('en-US', {
+                useGrouping: true,
+                maximumFractionDigits: 0
+            });
+        }
 
         function calculate() {
             const resultBox = document.querySelector('.result-box');
             resultBox.classList.add('loading');
 
             setTimeout(() => {
+                const flightType = document.getElementById('flightType').value;
                 const persons = parseInt(document.getElementById('persons').value);
                 const months = parseInt(document.getElementById('months').value);
                 const downpayment = parseFloat(document.getElementById('downpayment').value) || 0;
                 
-                const totalPrice = persons * PRICE_PER_PERSON;
+                const pricePerPerson = PRICE_PER_PERSON[flightType];
+                const totalPrice = persons * pricePerPerson;
                 if (downpayment > totalPrice) {
                     document.getElementById('result').innerHTML = 'مبلغ التسبيق أكبر من السعر الإجمالي';
                     return;
@@ -384,15 +397,16 @@
                 void resultBox.offsetWidth; // Trigger reflow
                 resultBox.classList.add('pulse');
 
-                document.getElementById('result').innerHTML = `
+                             document.getElementById('result').innerHTML = `
+                    نوع الرحلة: ${flightType === 'direct' ? 'مباشر' : 'غير مباشر'} <br>
                     القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
-                   
                     إجمالي المبلغ: ${formatNumber(totalWithProfit + downpayment)}
                 `;
             }, 300);
         }
 
-                function resetCalculator() {
+        function resetCalculator() {
+            document.getElementById('flightType').value = 'direct';
             document.getElementById('persons').value = '1';
             document.getElementById('months').value = '3';
             document.getElementById('downpayment').value = '0';
@@ -418,6 +432,9 @@
                 input.parentElement.style.transform = 'translateZ(20px)';
             });
         });
+
+        // إضافة مستمع الحدث لعنصر نوع الرحلة
+        document.getElementById('flightType').addEventListener('change', calculate);
 
         window.addEventListener('load', calculate);
     </script>
