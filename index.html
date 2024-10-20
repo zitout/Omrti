@@ -6,18 +6,9 @@
     <title>حاسبة تقسيط العمرة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --background-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --light-bg: #ecf0f1;
-            --dark-bg: #d0d7de;
-            --font-family: 'Tajawal', sans-serif;
-        }
-
         body {
-            font-family: var(--font-family);
-            background: var(--background-gradient);
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             height: 100vh;
             margin: 0;
             display: flex;
@@ -26,42 +17,41 @@
             padding: 1rem;
             box-sizing: border-box;
         }
-
+        #root {
+            width: 100%;
+            max-width: 400px;
+        }
         .calculator {
             background-color: white;
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 400px;
             text-align: center;
             transition: transform 0.3s, box-shadow 0.3s;
         }
-
         .calculator:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 25px rgba(0,0,0,0.2);
         }
-
         h2 {
-            color: var(--secondary-color);
+            color: #2c3e50;
             margin-bottom: 1.5rem;
             font-size: 1.8rem;
         }
-
         .input-group {
             margin-bottom: 1.5rem;
             text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
         }
-
         label {
-            display: block;
             margin-bottom: 0.5rem;
             color: #34495e;
             font-weight: bold;
             font-size: 1rem;
         }
-
         select, input {
             width: 100%;
             padding: 10px;
@@ -71,46 +61,38 @@
             transition: border-color 0.3s;
             background-color: white;
         }
-
         select:focus, input:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: #3498db;
         }
-
         select {
             cursor: pointer;
         }
-
         .result-box {
-            background-color: var(--light-bg);
+            background-color: #ecf0f1;
             padding: 1.5rem;
             border-radius: 5px;
             margin-top: 1.5rem;
             transition: background-color 0.3s;
         }
-
         .result-box:hover {
-            background-color: var(--dark-bg);
+            background-color: #d0d7de;
         }
-
         #result {
             margin: 0;
             font-size: 1.3rem;
             font-weight: bold;
-            color: var(--secondary-color);
+            color: #2c3e50;
             line-height: 1.8;
         }
-
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-
         input[type=number] {
             -moz-appearance: textfield;
         }
-
         @media (max-width: 600px) {
             .calculator {
                 padding: 1.5rem;
@@ -122,69 +104,26 @@
                 font-size: 1.1rem;
             }
         }
-
-        /* إضافات جديدة */
-        .error {
-            color: red;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
     </style>
 </head>
 <body>
-    <main>
-        <section class="calculator" aria-labelledby="calculator-title">
-            <h2 id="calculator-title">حاسبة تقسيط العمرة</h2>
-            <div class="input-group">
-                <label for="persons">عدد الأشخاص:</label>
-                <select id="persons" aria-required="true">
-                    <option value="1">شخص واحد</option>
-                    <option value="2">شخصين</option>
-                    <option value="3">3 أشخاص</option>
-                    <option value="4">4 أشخاص</option>
-                    <option value="5">5 أشخاص</option>
-                    <option value="6">6 أشخاص</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="months">عدد الأشهر:</label>
-                <select id="months" aria-required="true">
-                    <option value="3">3 أشهر</option>
-                    <option value="4">4 أشهر</option>
-                    <option value="5">5 أشهر</option>
-                    <option value="6">6 أشهر</option>
-                    <option value="7">7 أشهر</option>
-                    <option value="8">8 أشهر</option>
-                    <option value="9">9 أشهر</option>
-                    <option value="10">10 أشهر</option>
-                    <option value="11">11 شهر</option>
-                    <option value="12">12 شهر</option>
-                    <option value="13">13 شهر</option>
-                    <option value="14">14 شهر</option>
-                    <option value="15">15 شهر</option>
-                    <option value="16">16 شهر</option>
-                    <option value="17">17 شهر</option>
-                    <option value="18">18 شهر</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="downpayment">التسبيق (اختياري):</label>
-                <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0" aria-describedby="downpayment-help">
-                <small id="downpayment-help" class="error" aria-live="polite"></small>
-            </div>
-            <div class="result-box" aria-live="polite">
-                <p id="result">النتيجة ستظهر هنا</p>
-            </div>
-        </section>
-    </main>
+    <div id="root"></div>
 
-    <script>
+    <!-- تحميل مكتبة React و ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- تحميل Babel لتحويل كود JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
         const PRICE_PER_PERSON = 168000;
         const RATES = {
             3: 0.17, 4: 0.17, 5: 0.2, 6: 0.22, 7: 0.24,
             8: 0.27, 9: 0.3, 10: 0.34, 11: 0.38, 12: 0.42,
-            13: 0.46, 14: 0.5, 15: 0.52, 16: 0.57,
-            17: 0.62, 18: 0.67
+            13: 0.46, 14: 0.5, 15: 0.52, 16: 0.57, 17: 0.62,
+            18: 0.67
         };
 
         /**
@@ -192,68 +131,114 @@
          * @param {number} number
          * @returns {number}
          */
-        const roundUpToNearest100 = number => Math.ceil(number / 100) * 100;
+        const roundUpToNearest100 = (number) => {
+            return Math.ceil(number / 100) * 100;
+        };
 
         /**
          * تنسيق الرقم لعرضه بشكل مناسب
          * @param {number} number
          * @returns {string}
          */
-        const formatNumber = number => number.toLocaleString('ar-EG', {
-            useGrouping: true,
-            maximumFractionDigits: 0
-        });
-
-        /**
-         * حساب الأقساط وعرضها
-         */
-        const calculate = () => {
-            const persons = parseInt(document.getElementById('persons').value, 10);
-            const months = parseInt(document.getElementById('months').value, 10);
-            const downpaymentInput = document.getElementById('downpayment');
-            const downpayment = parseFloat(downpaymentInput.value) || 0;
-            const downpaymentError = document.getElementById('downpayment-help');
-            const resultElement = document.getElementById('result');
-
-            const totalPrice = persons * PRICE_PER_PERSON;
-
-            // إعادة تعيين رسالة الخطأ
-            downpaymentError.textContent = '';
-
-            if (downpayment > totalPrice) {
-                resultElement.textContent = '';
-                downpaymentError.textContent = 'مبلغ التسبيق أكبر من السعر الإجمالي';
-                return;
-            }
-
-            const remainingAmount = totalPrice - downpayment;
-            let monthlyRate = RATES[months] || 0.17;
-
-            if (remainingAmount >= 200000) {
-                monthlyRate *= 0.8;
-            } else if (remainingAmount >= 100000) {
-                monthlyRate *= 0.9;
-            }
-
-            const totalWithProfit = remainingAmount * (1 + monthlyRate);
-            const regularMonthlyPayment = roundUpToNearest100(Math.floor(totalWithProfit / months));
-            const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
-
-            resultElement.innerHTML = `
-                القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
-             
-            `;
+        const formatNumber = (number) => {
+            return number.toLocaleString('ar-EG', {
+                useGrouping: true,
+                maximumFractionDigits: 0
+            });
         };
 
-        // استخدام Event Delegation لتحسين الأداء
-        document.querySelector('.calculator').addEventListener('input', event => {
-            if (event.target.matches('select, input')) {
-                calculate();
-            }
-        });
+        const Calculator = () => {
+            const [persons, setPersons] = useState(1);
+            const [months, setMonths] = useState(3);
+            const [downpayment, setDownpayment] = useState(0);
+            const [result, setResult] = useState('النتيجة ستظهر هنا');
 
-        // تشغيل الحاسبة عند تحميل الصفحة
-        window.addEventListener('load', calculate);
+            useEffect(() => {
+                calculate();
+            }, [persons, months, downpayment]);
+
+            /**
+             * حساب الأقساط وعرضها
+             */
+            const calculate = () => {
+                const totalPrice = persons * PRICE_PER_PERSON;
+                if (downpayment > totalPrice) {
+                    setResult('مبلغ التسبيق أكبر من السعر الإجمالي');
+                    return;
+                }
+
+                const remainingAmount = totalPrice - downpayment;
+                let monthlyRate = RATES[months] || 0.17;
+
+                if (remainingAmount >= 200000) {
+                    monthlyRate *= 0.8;
+                } else if (remainingAmount >= 100000) {
+                    monthlyRate *= 0.9;
+                }
+
+                const totalWithProfit = remainingAmount * (1 + monthlyRate);
+                const regularMonthlyPayment = roundUpToNearest100(Math.floor(totalWithProfit / months));
+                const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
+
+                setResult(`
+                    القسط الشهري: ${formatNumber(regularMonthlyPayment)} جنيه <br>
+                    القسط في الشهر الأخير: ${formatNumber(lastMonthPayment)} جنيه
+                `);
+            };
+
+            return (
+                <div className="calculator" role="form" aria-labelledby="calculator-title">
+                    <h2 id="calculator-title">حاسبة تقسيط العمرة</h2>
+                    <div className="input-group">
+                        <label htmlFor="persons">عدد الأشخاص:</label>
+                        <select
+                            id="persons"
+                            value={persons}
+                            onChange={(e) => setPersons(parseInt(e.target.value))}
+                            aria-label="اختيار عدد الأشخاص"
+                        >
+                            {[...Array(6)].map((_, i) => (
+                                <option key={i+1} value={i+1}>
+                                    {i+1 === 1 ? 'شخص واحد' : `${i+1} أشخاص`}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="months">عدد الأشهر:</label>
+                        <select
+                            id="months"
+                            value={months}
+                            onChange={(e) => setMonths(parseInt(e.target.value))}
+                            aria-label="اختيار عدد الأشهر"
+                        >
+                            {Array.from({ length: 16 }, (_, i) => i + 3).map((month) => (
+                                <option key={month} value={month}>
+                                    {month} {month === 1 ? 'شهر' : 'أشهر'}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="downpayment">التسبيق (اختياري):</label>
+                        <input
+                            type="number"
+                            id="downpayment"
+                            placeholder="أدخل مبلغ التسبيق"
+                            min="0"
+                            value={downpayment}
+                            onChange={(e) => setDownpayment(parseFloat(e.target.value) || 0)}
+                            aria-label="إدخال مبلغ التسبيق"
+                        />
+                    </div>
+                    <div className="result-box" aria-live="polite">
+                        <p id="result" dangerouslySetInnerHTML={{ __html: result }}></p>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<Calculator />);
     </script>
 </body>
 </html>
