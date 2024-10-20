@@ -6,90 +6,97 @@
     <title>حاسبة تقسيط العمرة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #f5f7fa;
-            --text-color: #333;
-            --border-radius: 12px;
-        }
         body {
             font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #f6f9fc 0%, #e9eff5 100%);
-            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
+            padding: 1rem;
             box-sizing: border-box;
-            color: var(--text-color);
         }
         .calculator {
             background-color: white;
-            padding: 2.5rem;
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 450px;
-            transition: all 0.3s ease;
+            max-width: 400px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
         .calculator:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
         }
         h2 {
-            color: var(--primary-color);
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
         }
         .input-group {
             margin-bottom: 1.5rem;
+            text-align: right;
         }
         label {
             display: block;
             margin-bottom: 0.5rem;
+            color: #34495e;
             font-weight: bold;
             font-size: 1rem;
         }
         select, input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e8ed;
-            border-radius: var(--border-radius);
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            background-color: var(--secondary-color);
+            transition: border-color 0.3s;
+            background-color: white;
         }
         select:focus, input:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+            border-color: #3498db;
+        }
+        select {
+            cursor: pointer;
         }
         .result-box {
-            background-color: var(--secondary-color);
+            background-color: #ecf0f1;
             padding: 1.5rem;
-            border-radius: var(--border-radius);
-            margin-top: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+            transition: background-color 0.3s;
+        }
+        .result-box:hover {
+            background-color: #d0d7de;
         }
         #result {
             margin: 0;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            color: var(--primary-color);
+            color: #2c3e50;
             line-height: 1.8;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
         }
         @media (max-width: 600px) {
             .calculator {
-                padding: 2rem;
+                padding: 1.5rem;
             }
             h2 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
             #result {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -139,7 +146,77 @@
     </div>
 
     <script>
-        // JavaScript code remains the same as in your original version
+        const PRICE_PER_PERSON = 168000;
+        const RATES = {
+            1: 0.17, 2: 0.17, 3: 0.2, 4: 0.22, 5: 0.24,
+            6: 0.27, 7: 0.3, 8: 0.34, 9: 0.38, 10: 0.42,
+            11: 0.46, 12: 0.5, 13: 0.52, 14: 0.57, 15: 0.62,
+            16: 0.67, 17: 0.72, 18: 0.77
+        };
+
+        /**
+         * تقريب الرقم إلى أقرب 100 للأعلى
+         * @param {number} number
+         * @returns {number}
+         */
+        function roundUpToNearest100(number) {
+            return Math.ceil(number / 100) * 100;
+        }
+
+        /**
+         * تنسيق الرقم لعرضه بشكل مناسب
+         * @param {number} number
+         * @returns {string}
+         */
+        function formatNumber(number) {
+            return number.toLocaleString('en-US', {
+                useGrouping: true,
+                maximumFractionDigits: 0
+            });
+        }
+
+        /**
+         * حساب الأقساط وعرضها
+         */
+        function calculate() {
+            const persons = parseInt(document.getElementById('persons').value);
+            const months = parseInt(document.getElementById('months').value);
+            const downpayment = parseFloat(document.getElementById('downpayment').value) || 0;
+            
+            const totalPrice = persons * PRICE_PER_PERSON;
+            if (downpayment > totalPrice) {
+                document.getElementById('result').innerHTML = 'مبلغ التسبيق أكبر من السعر الإجمالي';
+                return;
+            }
+
+            const remainingAmount = totalPrice - downpayment;
+            let monthlyRate = RATES[months] || 0.17;
+
+            if (remainingAmount >= 200000) {
+                monthlyRate *= 0.8;
+            } else if (remainingAmount >= 100000) {
+                monthlyRate *= 0.9;
+            }
+
+            const totalWithProfit = remainingAmount * (1 + monthlyRate);
+            const regularMonthlyPayment = roundUpToNearest100(Math.floor(totalWithProfit / months));
+            const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
+
+            document.getElementById('result').innerHTML = `
+                القسط الشهري: ${formatNumber(regularMonthlyPayment)}  <br>
+                 
+            `;
+        }
+
+        // استخدام Event Delegation لتحسين الأداء
+        document.querySelector('.calculator').addEventListener('change', function(event) {
+            if (event.target.matches('select, input')) {
+                calculate();
+            }
+        });
+
+        // تشغيل الحاسبة عند تحميل الصفحة
+        window.addEventListener('load', calculate);
     </script>
 </body>
 </html>
