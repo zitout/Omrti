@@ -14,19 +14,27 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 1rem;
+            box-sizing: border-box;
         }
         .calculator {
             background-color: white;
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            width: 90%;
+            width: 100%;
             max-width: 400px;
             text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .calculator:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
         }
         h2 {
             color: #2c3e50;
             margin-bottom: 1.5rem;
+            font-size: 1.8rem;
         }
         .input-group {
             margin-bottom: 1.5rem;
@@ -37,6 +45,7 @@
             margin-bottom: 0.5rem;
             color: #34495e;
             font-weight: bold;
+            font-size: 1rem;
         }
         select, input {
             width: 100%;
@@ -54,26 +63,15 @@
         select {
             cursor: pointer;
         }
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-            width: 100%;
-            margin-top: 1rem;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
         .result-box {
             background-color: #ecf0f1;
             padding: 1.5rem;
             border-radius: 5px;
             margin-top: 1.5rem;
+            transition: background-color 0.3s;
+        }
+        .result-box:hover {
+            background-color: #d0d7de;
         }
         #result {
             margin: 0;
@@ -89,6 +87,17 @@
         }
         input[type=number] {
             -moz-appearance: textfield;
+        }
+        @media (max-width: 600px) {
+            .calculator {
+                padding: 1.5rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            #result {
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
@@ -145,17 +154,30 @@
             16: 0.67, 17: 0.72, 18: 0.77
         };
 
+        /**
+         * تقريب الرقم إلى أقرب 100
+         * @param {number} number
+         * @returns {number}
+         */
         function roundUpToNearest100(number) {
             return Math.ceil(number / 100) * 100;
         }
 
+        /**
+         * تنسيق الرقم لعرضه بشكل مناسب
+         * @param {number} number
+         * @returns {string}
+         */
         function formatNumber(number) {
-            return number.toLocaleString('en-US', {
+            return number.toLocaleString('ar-EG', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             });
         }
 
+        /**
+         * حساب الأقساط وعرضها
+         */
         function calculate() {
             const persons = parseInt(document.getElementById('persons').value);
             const months = parseInt(document.getElementById('months').value);
@@ -168,7 +190,7 @@
             }
 
             const remainingAmount = totalPrice - downpayment;
-            let monthlyRate = RATES[months] || 0;
+            let monthlyRate = RATES[months] || 0.17;
 
             if (remainingAmount >= 200000) {
                 monthlyRate *= 0.8;
@@ -181,8 +203,8 @@
             const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
 
             document.getElementById('result').innerHTML = `
-                القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
-                القسط الأخير: ${formatNumber(lastMonthPayment)}
+                القسط الشهري: ${formatNumber(regularMonthlyPayment)}  <br>
+                القسط الأخير: ${formatNumber(lastMonthPayment)} 
             `;
         }
 
