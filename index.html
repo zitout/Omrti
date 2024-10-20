@@ -20,7 +20,8 @@
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            width: 350px;
+            width: 90%;
+            max-width: 400px;
             text-align: center;
         }
         h2 {
@@ -96,7 +97,7 @@
         <h2>حاسبة تقسيط العمرة</h2>
         <div class="input-group">
             <label for="persons">عدد الأشخاص:</label>
-            <select id="persons" onchange="calculate()">
+            <select id="persons">
                 <option value="1">شخص واحد</option>
                 <option value="2">شخصين</option>
                 <option value="3">3 أشخاص</option>
@@ -107,7 +108,7 @@
         </div>
         <div class="input-group">
             <label for="months">عدد الأشهر:</label>
-            <select id="months" onchange="calculate()">
+            <select id="months">
                 <option value="3">3 أشهر</option>
                 <option value="4">4 أشهر</option>
                 <option value="5">5 أشهر</option>
@@ -128,7 +129,7 @@
         </div>
         <div class="input-group">
             <label for="downpayment">التسبيق (اختياري):</label>
-            <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0" onchange="calculate()">
+            <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0">
         </div>
         <div class="result-box">
             <p id="result">النتيجة ستظهر هنا</p>
@@ -137,19 +138,15 @@
 
     <script>
         const PRICE_PER_PERSON = 168000;
+        const RATES = {
+            1: 0.17, 2: 0.17, 3: 0.2, 4: 0.22, 5: 0.24,
+            6: 0.27, 7: 0.3, 8: 0.34, 9: 0.38, 10: 0.42,
+            11: 0.46, 12: 0.5, 13: 0.52, 14: 0.57, 15: 0.62,
+            16: 0.67, 17: 0.72, 18: 0.77
+        };
 
-        function getMonthlyRate(months) {
-            const rates = {
-                1: 0.17, 2: 0.17, 3: 0.2, 4: 0.22, 5: 0.24,
-                6: 0.27, 7: 0.3, 8: 0.34, 9: 0.38, 10: 0.42,
-                11: 0.46, 12: 0.5, 13: 0.52, 14: 0.57, 15: 0.62,
-                16: 0.67, 17: 0.72, 18: 0.77
-            };
-            return rates[months] || 0;
-        }
-
-        function roundUpToNearest10(number) {
-            return Math.ceil(number / 10) * 10;
+        function roundUpToNearest100(number) {
+            return Math.ceil(number / 100) * 100;
         }
 
         function formatNumber(number) {
@@ -171,7 +168,7 @@
             }
 
             const remainingAmount = totalPrice - downpayment;
-            let monthlyRate = getMonthlyRate(months);
+            let monthlyRate = RATES[months] || 0;
 
             if (remainingAmount >= 200000) {
                 monthlyRate *= 0.8;
@@ -180,19 +177,24 @@
             }
 
             const totalWithProfit = remainingAmount * (1 + monthlyRate);
-            const monthlyPayment = roundUpToNearest10(totalWithProfit / months);
-            const finalTotal = monthlyPayment * months + downpayment;
+            const regularMonthlyPayment = Math.floor(totalWithProfit / months);
+            const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
 
             document.getElementById('result').innerHTML = `
-               
-               
-                القسط الشهري: ${formatNumber(monthlyPayment)} <br>
-             
+                القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
+                القسط الأخير: ${formatNumber(lastMonthPayment)}
             `;
         }
 
+        // استخدام Event Delegation لتحسين الأداء
+        document.querySelector('.calculator').addEventListener('change', function(event) {
+            if (event.target.matches('select, input')) {
+                calculate();
+            }
+        });
+
         // تشغيل الحاسبة عند تحميل الصفحة
-        window.onload = calculate;
+        window.addEventListener('load', calculate);
     </script>
 </body>
 </html>
