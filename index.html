@@ -6,9 +6,26 @@
     <title>حاسبة تقسيط العمرة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: lch(53% 105 40);
+            --secondary-color: lab(70% 20 30);
+            --background-color: hwb(220 90% 0%);
+            --text-color: lch(30% 0 0);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --border-radius: 15px;
+            --transition-duration: 0.3s;
+        }
+
+        @supports (display: subgrid) {
+            .calculator {
+                display: grid;
+                grid-template-columns: subgrid;
+            }
+        }
+
         body {
             font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--background-color);
             height: 100vh;
             margin: 0;
             display: flex;
@@ -16,78 +33,93 @@
             align-items: center;
             padding: 1rem;
             box-sizing: border-box;
+            color: var(--text-color);
         }
+
         .calculator {
             background-color: white;
             padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 20px var(--shadow-color);
             width: 100%;
             max-width: 400px;
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform var(--transition-duration), box-shadow var(--transition-duration);
         }
+
         .calculator:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 25px var(--shadow-color);
         }
+
         h2 {
-            color: #2c3e50;
+            color: var(--primary-color);
             margin-bottom: 1.5rem;
             font-size: 1.8rem;
         }
+
         .input-group {
             margin-bottom: 1.5rem;
             text-align: right;
         }
+
         label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #34495e;
+            color: var(--secondary-color);
             font-weight: bold;
             font-size: 1rem;
         }
+
         select, input {
             width: 100%;
             padding: 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 5px;
+            border: 1px solid var(--secondary-color);
+            border-radius: calc(var(--border-radius) / 3);
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: border-color var(--transition-duration);
             background-color: white;
         }
+
         select:focus, input:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: var(--primary-color);
         }
+
         select {
             cursor: pointer;
         }
+
         .result-box {
-            background-color: #ecf0f1;
+            background-color: var(--background-color);
             padding: 1.5rem;
-            border-radius: 5px;
+            border-radius: calc(var(--border-radius) / 3);
             margin-top: 1.5rem;
-            transition: background-color 0.3s;
+            transition: background-color var(--transition-duration);
         }
+
         .result-box:hover {
-            background-color: #d0d7de;
+            background-color: hwb(220 80% 10%);
         }
+
         #result {
             margin: 0;
             font-size: 1.3rem;
             font-weight: bold;
-            color: #2c3e50;
+            color: var(--primary-color);
             line-height: 1.8;
         }
+
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
+
         input[type=number] {
             -moz-appearance: textfield;
         }
+
         @media (max-width: 600px) {
             .calculator {
                 padding: 1.5rem;
@@ -99,53 +131,93 @@
                 font-size: 1.1rem;
             }
         }
+
+        @container (max-width: 300px) {
+            .calculator {
+                padding: 1rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .calculator {
+            container-type: inline-size;
+        }
     </style>
 </head>
 <body>
-    <div class="calculator">
-        <h2>حاسبة تقسيط العمرة</h2>
-        <div class="input-group">
-            <label for="persons">عدد الأشخاص:</label>
-            <select id="persons">
-                <option value="1">شخص واحد</option>
-                <option value="2">شخصين</option>
-                <option value="3">3 أشخاص</option>
-                <option value="4">4 أشخاص</option>
-                <option value="5">5 أشخاص</option>
-                <option value="6">6 أشخاص</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label for="months">عدد الأشهر:</label>
-            <select id="months">
-                <option value="3">3 أشهر</option>
-                <option value="4">4 أشهر</option>
-                <option value="5">5 أشهر</option>
-                <option value="6">6 أشهر</option>
-                <option value="7">7 أشهر</option>
-                <option value="8">8 أشهر</option>
-                <option value="9">9 أشهر</option>
-                <option value="10">10 أشهر</option>
-                <option value="11">11 شهر</option>
-                <option value="12">12 شهر</option>
-                <option value="13">13 شهر</option>
-                <option value="14">14 شهر</option>
-                <option value="15">15 شهر</option>
-                <option value="16">16 شهر</option>
-                <option value="17">17 شهر</option>
-                <option value="18">18 شهر</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label for="downpayment">التسبيق (اختياري):</label>
-            <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0">
-        </div>
-        <div class="result-box">
-            <p id="result">النتيجة ستظهر هنا</p>
-        </div>
-    </div>
+    <calculator-component></calculator-component>
 
-    <script>
+    <dialog id="resultDialog">
+        <h3>نتيجة الحساب</h3>
+        <p id="dialogResult"></p>
+        <form method="dialog">
+            <button>إغلاق</button>
+        </form>
+    </dialog>
+
+    <template id="calculator-template">
+        <div class="calculator animate-slide-in">
+            <h2>حاسبة تقسيط العمرة</h2>
+            <div class="input-group">
+                <label for="persons">عدد الأشخاص:</label>
+                <select id="persons">
+                    <option value="1">شخص واحد</option>
+                    <option value="2">شخصين</option>
+                    <option value="3">3 أشخاص</option>
+                    <option value="4">4 أشخاص</option>
+                    <option value="5">5 أشخاص</option>
+                    <option value="6">6 أشخاص</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="months">عدد الأشهر:</label>
+                <select id="months">
+                    <option value="3">3 أشهر</option>
+                    <option value="4">4 أشهر</option>
+                    <option value="5">5 أشهر</option>
+                    <option value="6">6 أشهر</option>
+                    <option value="7">7 أشهر</option>
+                    <option value="8">8 أشهر</option>
+                    <option value="9">9 أشهر</option>
+                    <option value="10">10 أشهر</option>
+                    <option value="11">11 شهر</option>
+                    <option value="12">12 شهر</option>
+                    <option value="13">13 شهر</option>
+                    <option value="14">14 شهر</option>
+                    <option value="15">15 شهر</option>
+                    <option value="16">16 شهر</option>
+                    <option value="17">17 شهر</option>
+                    <option value="18">18 شهر</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="downpayment">التسبيق (اختياري):</label>
+                <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0">
+            </div>
+            <div class="result-box">
+                <p id="result">النتيجة ستظهر هنا</p>
+            </div>
+        </div>
+    </template>
+
+    <script type="module">
         const PRICE_PER_PERSON = 168000;
         const RATES = {
             1: 0.17, 2: 0.17, 3: 0.2, 4: 0.22, 5: 0.24,
@@ -154,69 +226,82 @@
             16: 0.67, 17: 0.72, 18: 0.77
         };
 
-        /**
-         * تقريب الرقم إلى أقرب 100 للأعلى
-         * @param {number} number
-         * @returns {number}
-         */
         function roundUpToNearest100(number) {
             return Math.ceil(number / 100) * 100;
         }
 
-        /**
-         * تنسيق الرقم لعرضه بشكل مناسب
-         * @param {number} number
-         * @returns {string}
-         */
         function formatNumber(number) {
-            return number.toLocaleString('en-US', {
+            return number.toLocaleString('ar-SA', {
                 useGrouping: true,
                 maximumFractionDigits: 0
             });
         }
 
-        /**
-         * حساب الأقساط وعرضها
-         */
-        function calculate() {
-            const persons = parseInt(document.getElementById('persons').value);
-            const months = parseInt(document.getElementById('months').value);
-            const downpayment = parseFloat(document.getElementById('downpayment').value) || 0;
-            
-            const totalPrice = persons * PRICE_PER_PERSON;
-            if (downpayment > totalPrice) {
-                document.getElementById('result').innerHTML = 'مبلغ التسبيق أكبر من السعر الإجمالي';
-                return;
+        class CalculatorComponent extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
             }
 
-            const remainingAmount = totalPrice - downpayment;
-            let monthlyRate = RATES[months] || 0.17;
+            connectedCallback() {
+                const template = document.getElementById('calculator-template');
+                this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-            if (remainingAmount >= 200000) {
-                monthlyRate *= 0.8;
-            } else if (remainingAmount >= 100000) {
-                monthlyRate *= 0.9;
+                this.shadowRoot.querySelector('.calculator').addEventListener('change', (event) => {
+                    if (event.target.matches('select, input')) {
+                        this.calculate();
+                    }
+                });
+
+                this.calculate();
             }
 
-            const totalWithProfit = remainingAmount * (1 + monthlyRate);
-            const regularMonthlyPayment = roundUpToNearest100(Math.floor(totalWithProfit / months));
-            const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
+            calculate() {
+                const persons = parseInt(this.shadowRoot.getElementById('persons').value);
+                const months = parseInt(this.shadowRoot.getElementById('months').value);
+                const downpayment = parseFloat(this.shadowRoot.getElementById('downpayment').value) || 0;
+                
+                const totalPrice = persons * PRICE_PER_PERSON;
+                if (downpayment > totalPrice) {
+                    this.shadowRoot.getElementById('result').innerHTML = 'مبلغ التسبيق أكبر من السعر الإجمالي';
+                    return;
+                }
 
-            document.getElementById('result').innerHTML = `
-                القسط الشهري: ${formatNumber(regularMonthlyPayment)}  <br>
-                 
-            `;
+                const remainingAmount = totalPrice - downpayment;
+                let monthlyRate = RATES[months] || 0.17;
+
+                if (remainingAmount >= 200000) {
+                    monthlyRate *= 0.8;
+                } else if (remainingAmount >= 100000) {
+                    monthlyRate *= 0.9;
+                }
+
+                const totalWithProfit = remainingAmount * (1 + monthlyRate);
+                const regularMonthlyPayment = roundUpToNearest100(Math.floor(totalWithProfit / months));
+                const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
+
+                const result = `
+                    القسط الشهري: ${formatNumber(regularMonthlyPayment)} ريال <br>
+                    القسط الأخير: ${formatNumber(lastMonthPayment)} ريال <br>
+                    إجمالي المبلغ: ${formatNumber(totalWithProfit + downpayment)} ريال
+                `;
+
+                this.shadowRoot.getElementById('result').innerHTML = result;
+                document.getElementById('dialogResult').innerHTML = result;
+                document.getElementById('resultDialog').showModal();
+            }
         }
 
-        // استخدام Event Delegation لتحسين الأداء
-        document.querySelector('.calculator').addEventListener('change', function(event) {
-            if (event.target.matches('select, input')) {
-                calculate();
-            }
-        });
+        customElements.define('calculator-component', CalculatorComponent);
 
-        // تشغيل الحاسبة عند تحميل الصفحة
-        window.addEventListener('load', calculate);
+        // WebAssembly integration example (assuming we have a simple WASM module for number formatting)
+        fetch('number_formatter.wasm')
+            .then(response => response.arrayBuffer())
+            .then(bytes => WebAssembly.instantiate(bytes))
+            .then(results => {
+                const formatNumberWasm = results.instance.exports.formatNumber;
+                // Use formatNumberWasm instead of the JavaScript formatNumber function if needed
+            });
     </script>
 </body>
 </html>
