@@ -155,7 +155,7 @@
         };
 
         /**
-         * تقريب الرقم إلى أقرب 100 أعلى
+         * تقريب الرقم إلى أقرب 100 للأعلى
          * @param {number} number
          * @returns {number}
          */
@@ -164,17 +164,14 @@
         }
 
         /**
-         * تنسيق الرقم لعرضه باستخدام مسافات كمفصول للألاف بدون عملة
+         * تنسيق الرقم لعرضه بشكل مناسب
          * @param {number} number
          * @returns {string}
          */
         function formatNumber(number) {
-            return number.toLocaleString('ar-EG', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
+            return number.toLocaleString('en-US', {
                 useGrouping: true,
-                groupingSeparator: ' ',
-                style: 'decimal'
+                maximumFractionDigits: 0
             });
         }
 
@@ -202,12 +199,12 @@
             }
 
             const totalWithProfit = remainingAmount * (1 + monthlyRate);
-            const regularMonthlyPayment = Math.floor(totalWithProfit / months);
+            const regularMonthlyPayment = roundUpToNearest100(Math.floor(totalWithProfit / months));
             const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
 
             document.getElementById('result').innerHTML = `
-                القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
-                القسط الأخير: ${formatNumber(lastMonthPayment)}
+                القسط الشهري: ${formatNumber(regularMonthlyPayment)}  <br>
+                 
             `;
         }
 
