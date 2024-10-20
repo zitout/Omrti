@@ -5,105 +5,210 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة تقسيط العمرة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #f5f7fa;
+            --text-color: #34495e;
+            --border-color: #bdc3c7;
+            --hover-color: #2980b9;
+            --result-bg: #ecf0f1;
+            --result-hover-bg: #d0d7de;
+        }
+
         body {
             font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            height: 100vh;
+            background: linear-gradient(135deg, var(--background-color) 0%, #c3cfe2 100%);
+            min-height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 1rem;
             box-sizing: border-box;
+            color: var(--text-color);
         }
+
         .calculator {
             background-color: white;
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
             text-align: center;
             transition: transform 0.3s, box-shadow 0.3s;
         }
+
         .calculator:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 25px rgba(0,0,0,0.2);
         }
+
         h2 {
-            color: #2c3e50;
+            color: var(--secondary-color);
             margin-bottom: 1.5rem;
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
+
         .input-group {
             margin-bottom: 1.5rem;
             text-align: right;
         }
+
         label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #34495e;
+            color: var(--text-color);
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
+
         select, input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 5px;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
             background-color: white;
         }
+
         select:focus, input:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
+
         select {
             cursor: pointer;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%2334495e" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px;
         }
+
         .result-box {
-            background-color: #ecf0f1;
+            background-color: var(--result-bg);
             padding: 1.5rem;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-top: 1.5rem;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
         }
+
         .result-box:hover {
-            background-color: #d0d7de;
+            background-color: var(--result-hover-bg);
+            transform: scale(1.02);
         }
+
         #result {
             margin: 0;
             font-size: 1.3rem;
             font-weight: bold;
-            color: #2c3e50;
+            color: var(--secondary-color);
             line-height: 1.8;
         }
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 1rem;
         }
-        input[type=number] {
-            -moz-appearance: textfield;
+
+        .btn:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
         }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            font-size: 0.9rem;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--secondary-color);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .chart-container {
+            margin-top: 2rem;
+            height: 300px;
+        }
+
         @media (max-width: 600px) {
             .calculator {
                 padding: 1.5rem;
             }
             h2 {
-                font-size: 1.5rem;
+                font-size: 1.7rem;
             }
             #result {
                 font-size: 1.1rem;
+            }
+            .chart-container {
+                height: 200px;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #3498db;
+                --secondary-color: #ecf0f1;
+                --background-color: #2c3e50;
+                --text-color: #bdc3c7;
+                --border-color: #34495e;
+                --hover-color: #2980b9;
+                --result-bg: #34495e;
+                --result-hover-bg: #2c3e50;
+            }
+            body {
+                background: linear-gradient(135deg, var(--background-color) 0%, #1a252f 100%);
+            }
+            .calculator {
+                background-color: #34495e;
+            }
+            select, input {
+                background-color: #2c3e50;
+                color: #ecf0f1;
             }
         }
     </style>
 </head>
 <body>
     <div class="calculator">
-        <h2>حاسبة تقسيط العمرة</h2>
+        <h2>حاسبة تقسيط العمرة المتطورة</h2>
         <div class="input-group">
             <label for="persons">عدد الأشخاص:</label>
             <select id="persons">
@@ -137,14 +242,25 @@
             </select>
         </div>
         <div class="input-group">
-            <label for="downpayment">التسبيق (اختياري):</label>
+            <label for="downpayment">
+                التسبيق (اختياري):
+                <span class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltiptext">أدخل مبلغ التسبيق إن وجد</span>
+                </span>
+            </label>
             <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0">
         </div>
+        <button class="btn" onclick="calculate()">احسب التقسيط</button>
         <div class="result-box">
             <p id="result">النتيجة ستظهر هنا</p>
         </div>
+        <div class="chart-container">
+            <canvas id="paymentChart"></canvas>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const PRICE_PER_PERSON = 168000;
         const RATES = {
@@ -154,30 +270,35 @@
             16: 0.67, 17: 0.72, 18: 0.77
         };
 
-        /**
-         * تقريب الرقم إلى أقرب 100 للأعلى
-         * @param {number} number
-         * @returns {number}
-         */
+        let paymentChart;
+
         function roundUpToNearest100(number) {
             return Math.ceil(number / 100) * 100;
         }
 
-        /**
-         * تنسيق الرقم لعرضه بشكل مناسب
-         * @param {number} number
-         * @returns {string}
-         */
         function formatNumber(number) {
-            return number.toLocaleString('en-US', {
-                useGrouping: true,
+            return number.toLocaleString('ar-SA', {
+                style: 'currency',
+                currency: 'SAR',
+                minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             });
         }
 
-        /**
-         * حساب الأقساط وعرضها
-         */
+        function calculateTotalCost(persons, months, downpayment) {
+            const totalPrice = persons * PRICE_PER_PERSON;
+            const remainingAmount = totalPrice - downpayment;
+            let monthlyRate = RATES[months] || 0.17;
+
+            if (remainingAmount >= 200000) {
+                monthlyRate *= 0.8;
+            } else if (remainingAmount >= 100000) {
+                monthlyRate *= 0.9;
+            }
+
+            return remainingAmount * (1 + monthlyRate);
+        }
+
         function calculate() {
             const persons = parseInt(document.getElementById('persons').value);
             const months = parseInt(document.getElementById('months').value);
@@ -189,23 +310,82 @@
                 return;
             }
 
-            const remainingAmount = totalPrice - downpayment;
-            let monthlyRate = RATES[months] || 0.17;
-
-            if (remainingAmount >= 200000) {
-                monthlyRate *= 0.8;
-            } else if (remainingAmount >= 100000) {
-                monthlyRate *= 0.9;
-            }
-
-            const totalWithProfit = remainingAmount * (1 + monthlyRate);
+            const totalWithProfit = calculateTotalCost(persons, months, downpayment);
             const regularMonthlyPayment = roundUpToNearest100(Math.floor(totalWithProfit / months));
             const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
 
-            document.getElementById('result').innerHTML = `
-                القسط الشهري: ${formatNumber(regularMonthlyPayment)}  <br>
-                 
+            const totalCost = downpayment + (regularMonthlyPayment * (months - 1)) + lastMonthPayment;
+            const profit = totalCost - totalPrice;
+
+            const resultHTML = `
+                <strong>ملخص التقسيط:</strong><br>
+                السعر الإجمالي: ${formatNumber(totalPrice)}<br>
+                التسبيق: ${formatNumber(downpayment)}<br>
+                القسط الشهري: ${formatNumber(regularMonthlyPayment)}<br>
+               
+               
+               
             `;
+
+            document.getElementById('result').innerHTML = resultHTML;
+
+            updateChart(months, regularMonthlyPayment, lastMonthPayment, downpayment);
+        }
+
+        function updateChart(months, regularPayment, lastPayment, downpayment) {
+            const ctx = document.getElementById('paymentChart').getContext('2d');
+            
+            if (paymentChart) {
+                paymentChart.destroy();
+            }
+
+            const labels = Array.from({length: months}, (_, i) => `الشهر ${i + 1}`);
+            const data = Array(months).fill(regularPayment);
+            data[months - 1] = lastPayment;
+            
+            if (downpayment > 0) {
+                labels.unshift('التسبيق');
+                data.unshift(downpayment);
+            }
+
+            paymentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'المدفوعات',
+                        data: data,
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,                            ticks: {
+                                callback: function(value) {
+                                    return formatNumber(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `المبلغ: ${formatNumber(context.parsed.y)}`;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
         }
 
         // استخدام Event Delegation لتحسين الأداء
@@ -215,8 +395,69 @@
             }
         });
 
+        // إضافة استجابة للنقر على زر الحساب
+        document.querySelector('.btn').addEventListener('click', calculate);
+
         // تشغيل الحاسبة عند تحميل الصفحة
         window.addEventListener('load', calculate);
+
+        // إضافة وظيفة لحفظ النتائج
+        function saveResults() {
+            const result = document.getElementById('result').innerHTML;
+            const blob = new Blob([result], {type: "text/plain;charset=utf-8"});
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "نتائج_تقسيط_العمرة.txt";
+            a.click();
+        }
+
+        // إضافة زر لحفظ النتائج
+        const saveButton = document.createElement('button');
+        saveButton.textContent = 'حفظ النتائج';
+        saveButton.className = 'btn';
+        saveButton.style.marginTop = '1rem';
+        saveButton.addEventListener('click', saveResults);
+        document.querySelector('.result-box').appendChild(saveButton);
+
+        // إضافة وظيفة للتبديل بين الوضع الليلي والنهاري
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+
+        // إضافة زر للتبديل بين الوضع الليلي والنهاري
+        const darkModeToggle = document.createElement('button');
+        darkModeToggle.textContent = 'تبديل الوضع الليلي';
+        darkModeToggle.className = 'btn';
+        darkModeToggle.style.marginTop = '1rem';
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+        document.querySelector('.calculator').appendChild(darkModeToggle);
+
+        // التحقق من الوضع المفضل للمستخدم عند تحميل الصفحة
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // إضافة وظيفة لمشاركة النتائج
+        function shareResults() {
+            const result = document.getElementById('result').innerText;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'نتائج تقسيط العمرة',
+                    text: result
+                }).catch(console.error);
+            } else {
+                alert('المشاركة غير مدعومة في متصفحك');
+            }
+        }
+
+        // إضافة زر لمشاركة النتائج
+        const shareButton = document.createElement('button');
+        shareButton.textContent = 'مشاركة النتائج';
+        shareButton.className = 'btn';
+        shareButton.style.marginTop = '1rem';
+        shareButton.addEventListener('click', shareResults);
+        document.querySelector('.result-box').appendChild(shareButton);
     </script>
 </body>
 </html>
