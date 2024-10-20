@@ -12,34 +12,79 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #E3F2FD 0%, #FAFAFA 100%);
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            perspective: 1000px;
-            overflow: hidden;
-        }
+       body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
 
-        .calculator {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.05),
-                0 1px 8px rgba(0, 0, 0, 0.02);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: float 6s ease-in-out infinite;
-            backdrop-filter: blur(10px);
-        }
+.calculator {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .calculator {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .input-group {
+        width: calc(50% - 0.5rem);
+    }
+
+    .result-box {
+        width: 100%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .calculator {
+        max-width: 800px;
+    }
+
+    .input-group {
+        width: calc(33.33% - 0.5rem);
+    }
+}
+
+.input-group, .result-box {
+    flex-grow: 1;
+}
+
+.result-box {
+    margin-top: 1rem;
+}
+
+/* تحسين قابلية القراءة على الشاشات الصغيرة */
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    #result {
+        font-size: 1.2rem;
+    }
+}
+
+/* تحسين استخدام المساحة على الشاشات الكبيرة */
+@media (min-width: 1200px) {
+    .calculator {
+        max-width: 1000px;
+    }
+}
 
         @keyframes float {
             0%, 100% { transform: translateY(0) rotateX(0); }
