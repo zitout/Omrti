@@ -49,6 +49,8 @@
             border-radius: 20px;
             padding: 2rem;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            position: relative;
+            overflow: hidden;
         }
 
         @media (min-width: 768px) {
@@ -323,17 +325,18 @@
         }
 
         .visitor-count {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            color: white;
-            backdrop-filter: blur(5px);
+            display: none; /* إخفاء العداد المحلي بعد استخدام Google Analytics */
         }
     </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W376BX808J"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-W376BX808J');
+    </script>
 </head>
 <body>
     <div class="background-animation">
@@ -400,18 +403,9 @@
 
     <button class="reset-button" onclick="resetCalculator()">↺</button>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 
-       <script>
-        // تهيئة Firebase
-        const firebaseConfig = {
-            // YOUR_FIREBASE_CONFIG
-            // يجب استبدال هذا بتكوين Firebase الخاص بك
-        };
-        firebase.initializeApp(firebaseConfig);
-
+    <script>
         const PRICE_PER_PERSON = {
             direct: 168000,
             indirect: 163000
@@ -449,6 +443,7 @@
                 const totalPrice = persons * pricePerPerson;
                 if (downpayment > totalPrice) {
                     document.getElementById('result').innerHTML = 'مبلغ التسبيق أكبر من السعر الإجمالي';
+                    resultBox.classList.remove('loading');
                     return;
                 }
 
@@ -487,29 +482,6 @@
             calculate();
         }
 
-        // دالة لزيادة عدد الزيارات
-        function incrementVisitorCount() {
-            const visitorId = localStorage.getItem('visitorId');
-            if (!visitorId) {
-                const newVisitorId = Date.now().toString();
-                localStorage.setItem('visitorId', newVisitorId);
-                
-                const visitorCountRef = firebase.database().ref('visitorCount');
-                visitorCountRef.transaction((currentCount) => {
-                    return (currentCount || 0) + 1;
-                });
-            }
-        }
-
-        // دالة لعرض عدد الزيارات
-        function displayVisitorCount() {
-            const visitorCountRef = firebase.database().ref('visitorCount');
-            visitorCountRef.on('value', (snapshot) => {
-                const count = snapshot.val() || 0;
-                document.getElementById('visitorCount').textContent = count;
-            });
-        }
-
         // تأثيرات حركية باستخدام GSAP
         function initAnimations() {
             gsap.from('.calculator', {duration: 1, opacity: 0, y: 50, ease: 'power3.out'});
@@ -542,10 +514,14 @@
 
         window.addEventListener('load', () => {
             calculate();
-            incrementVisitorCount();
-            displayVisitorCount();
             initAnimations();
         });
+
+        // تتبع حدث مشاهدة الصفحة بواسطة Google Analytics
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-W376BX808J');
     </script>
 </body>
 </html>
