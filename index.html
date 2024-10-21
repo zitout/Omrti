@@ -325,18 +325,12 @@
         }
 
         .visitor-count {
-            display: none; /* إخفاء العداد المحلي بعد استخدام Google Analytics */
+            display: none;
         }
     </style>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W376BX808J"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-W376BX808J');
-    </script>
+    <!-- إضافة مكتبات Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics-compat.js"></script>
 </head>
 <body>
     <div class="background-animation">
@@ -406,6 +400,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 
     <script>
+        // تهيئة Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEQLPyt8Wp0oA5pvgKz93dczqYsBNDpvY",
+            authDomain: "omrati-453e1.firebaseapp.com",
+            projectId: "omrati-453e1",
+            storageBucket: "omrati-453e1.appspot.com",
+            messagingSenderId: "211184940647",
+            appId: "1:211184940647:web:667cdcc43db29481af06c2",
+            measurementId: "G-YCTG18JWQK"
+        };
+
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // تهيئة Analytics
+        const analytics = firebase.analytics();
+
         const PRICE_PER_PERSON = {
             direct: 168000,
             indirect: 163000
@@ -442,7 +453,7 @@
                 const pricePerPerson = PRICE_PER_PERSON[flightType];
                 const totalPrice = persons * pricePerPerson;
                 if (downpayment > totalPrice) {
-                    document.getElementById('result').innerHTML = 'مبلغ التسبيق أكبر من السعر الإجمالي';
+                    document.getElementById('result').innerHTML = '<span class="error-message">مبلغ التسبيق أكبر من السعر الإجمالي</span>';
                     resultBox.classList.remove('loading');
                     return;
                 }
@@ -466,10 +477,18 @@
                 resultBox.classList.add('pulse');
 
                 document.getElementById('result').innerHTML = `
+                    <span class="success-message">تم حساب التقسيط بنجاح!</span><br>
                     نوع الرحلة: ${flightType === 'direct' ? 'مباشر' : 'غير مباشر'} <br>
-                    القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
-                    إجمالي المبلغ: ${formatNumber(totalWithProfit + downpayment)}
+                    القسط الشهري: ${formatNumber(regularMonthlyPayment)} ريال <br>
+                    القسط الأخير: ${formatNumber(lastMonthPayment)} ريال <br>
+                    إجمالي المبلغ: ${formatNumber(totalWithProfit + downpayment)} ريال
                 `;
+
+                // تسجيل حدث الحساب في Google Analytics
+                gtag('event', 'calculation_performed', {
+                    'event_category': 'Calculation',
+                    'event_label': `${flightType} - ${persons} persons - ${months} months`
+                });
             }, 300);
         }
 
@@ -480,6 +499,11 @@
             document.getElementById('downpayment').value = '0';
             document.getElementById('result').innerHTML = 'النتيجة ستظهر هنا';
             calculate();
+
+            // تسجيل حدث إعادة التعيين في Google Analytics
+            gtag('event', 'calculator_reset', {
+                'event_category': 'User Interaction'
+            });
         }
 
         // تأثيرات حركية باستخدام GSAP
@@ -501,11 +525,11 @@
         const inputs = document.querySelectorAll('select, input');
         inputs.forEach(input => {
             input.addEventListener('focus', () => {
-                input.parentElement.style.transform = 'translateZ(30px)';
+                gsap.to(input.parentElement, {duration: 0.3, scale: 1.05, ease: 'power2.out'});
             });
             
             input.addEventListener('blur', () => {
-                input.parentElement.style.transform = 'translateZ(20px)';
+                gsap.to(input.parentElement, {duration: 0.3, scale: 1, ease: 'power2.out'});
             });
         });
 
@@ -515,13 +539,13 @@
         window.addEventListener('load', () => {
             calculate();
             initAnimations();
-        });
 
-        // تتبع حدث مشاهدة الصفحة بواسطة Google Analytics
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-W376BX808J');
+            // تسجيل حدث تحميل الصفحة في Google Analytics
+            gtag('event', 'page_view', {
+                'event_category': 'Page Interaction',
+                'event_label': 'Calculator Loaded'
+            });
+        });
     </script>
 </body>
 </html>
