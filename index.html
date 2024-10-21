@@ -409,7 +409,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 
-   <script>
+       <script>
         const PRICE_PER_PERSON = {
             direct: 168000,
             indirect: 163000
@@ -421,6 +421,8 @@
             11: 0.46, 12: 0.5, 13: 0.52, 14: 0.57, 15: 0.62,
             16: 0.67, 17: 0.72, 18: 0.77
         };
+
+        const SITE_KEY = 'umrah-calculator'; // مفتاح فريد لموقعك
 
         function roundUpToNearest100(number) {
             return Math.ceil(number / 100) * 100;
@@ -487,20 +489,20 @@
 
         // دالة لزيادة عدد الزيارات
         function incrementVisitorCount() {
-            fetch('/increment-visitor-count', { method: 'POST' })
+            fetch(`https://api.countapi.xyz/hit/${SITE_KEY}/visits`)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('visitorCount').textContent = data.count;
+                    document.getElementById('visitorCount').textContent = data.value;
                 })
                 .catch(error => console.error('Error:', error));
         }
 
         // دالة لعرض عدد الزيارات
         function displayVisitorCount() {
-            fetch('/get-visitor-count')
+            fetch(`https://api.countapi.xyz/get/${SITE_KEY}/visits`)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('visitorCount').textContent = data.count;
+                    document.getElementById('visitorCount').textContent = data.value;
                 })
                 .catch(error => console.error('Error:', error));
         }
@@ -542,5 +544,3 @@
             initAnimations();
         });
     </script>
-</body>
-</html>
