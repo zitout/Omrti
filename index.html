@@ -489,23 +489,22 @@
 
         // دالة لزيادة عدد الزيارات
         function incrementVisitorCount() {
-            fetch(`https://api.countapi.xyz/hit/${SITE_KEY}/visits`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('visitorCount').textContent = data.value;
-                })
-                .catch(error => console.error('Error:', error));
-        }
+    fetch(`https://api.countapi.xyz/hit/${SITE_KEY}/visits`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('visitorCount').textContent = data.value;
+        })
+        .catch(error => console.error('Error:', error));
+}
 
-        // دالة لعرض عدد الزيارات
-        function displayVisitorCount() {
-            fetch(`https://api.countapi.xyz/get/${SITE_KEY}/visits`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('visitorCount').textContent = data.value;
-                })
-                .catch(error => console.error('Error:', error));
-        }
+function displayVisitorCount() {
+    fetch(`https://api.countapi.xyz/get/${SITE_KEY}/visits`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('visitorCount').textContent = data.value;
+        })
+        .catch(error => console.error('Error:', error));
+}
 
         // تأثيرات حركية باستخدام GSAP
         function initAnimations() {
