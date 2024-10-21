@@ -49,8 +49,6 @@
             border-radius: 20px;
             padding: 2rem;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            position: relative;
-            overflow: hidden;
         }
 
         @media (min-width: 768px) {
@@ -325,12 +323,24 @@
         }
 
         .visitor-count {
-            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: white;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .visitor-count:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
     </style>
-    <!-- إضافة مكتبات Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics-compat.js"></script>
 </head>
 <body>
     <div class="background-animation">
@@ -399,24 +409,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 
-    <script>
-        // تهيئة Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDEQLPyt8Wp0oA5pvgKz93dczqYsBNDpvY",
-            authDomain: "omrati-453e1.firebaseapp.com",
-            projectId: "omrati-453e1",
-            storageBucket: "omrati-453e1.appspot.com",
-            messagingSenderId: "211184940647",
-            appId: "1:211184940647:web:667cdcc43db29481af06c2",
-            measurementId: "G-YCTG18JWQK"
-        };
-
-        // تهيئة Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        // تهيئة Analytics
-        const analytics = firebase.analytics();
-
+   <script>
         const PRICE_PER_PERSON = {
             direct: 168000,
             indirect: 163000
@@ -453,8 +446,7 @@
                 const pricePerPerson = PRICE_PER_PERSON[flightType];
                 const totalPrice = persons * pricePerPerson;
                 if (downpayment > totalPrice) {
-                    document.getElementById('result').innerHTML = '<span class="error-message">مبلغ التسبيق أكبر من السعر الإجمالي</span>';
-                    resultBox.classList.remove('loading');
+                    document.getElementById('result').innerHTML = 'مبلغ التسبيق أكبر من السعر الإجمالي';
                     return;
                 }
 
@@ -477,18 +469,10 @@
                 resultBox.classList.add('pulse');
 
                 document.getElementById('result').innerHTML = `
-                    <span class="success-message">تم حساب التقسيط بنجاح!</span><br>
                     نوع الرحلة: ${flightType === 'direct' ? 'مباشر' : 'غير مباشر'} <br>
-                    القسط الشهري: ${formatNumber(regularMonthlyPayment)} ريال <br>
-                    القسط الأخير: ${formatNumber(lastMonthPayment)} ريال <br>
-                    إجمالي المبلغ: ${formatNumber(totalWithProfit + downpayment)} ريال
+                    القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
+                    إجمالي المبلغ: ${formatNumber(totalWithProfit + downpayment)}
                 `;
-
-                // تسجيل حدث الحساب في Google Analytics
-                gtag('event', 'calculation_performed', {
-                    'event_category': 'Calculation',
-                    'event_label': `${flightType} - ${persons} persons - ${months} months`
-                });
             }, 300);
         }
 
@@ -499,11 +483,26 @@
             document.getElementById('downpayment').value = '0';
             document.getElementById('result').innerHTML = 'النتيجة ستظهر هنا';
             calculate();
+        }
 
-            // تسجيل حدث إعادة التعيين في Google Analytics
-            gtag('event', 'calculator_reset', {
-                'event_category': 'User Interaction'
-            });
+        // دالة لزيادة عدد الزيارات
+        function incrementVisitorCount() {
+            fetch('/increment-visitor-count', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('visitorCount').textContent = data.count;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // دالة لعرض عدد الزيارات
+        function displayVisitorCount() {
+            fetch('/get-visitor-count')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('visitorCount').textContent = data.count;
+                })
+                .catch(error => console.error('Error:', error));
         }
 
         // تأثيرات حركية باستخدام GSAP
@@ -525,11 +524,11 @@
         const inputs = document.querySelectorAll('select, input');
         inputs.forEach(input => {
             input.addEventListener('focus', () => {
-                gsap.to(input.parentElement, {duration: 0.3, scale: 1.05, ease: 'power2.out'});
+                input.parentElement.style.transform = 'translateZ(30px)';
             });
             
             input.addEventListener('blur', () => {
-                gsap.to(input.parentElement, {duration: 0.3, scale: 1, ease: 'power2.out'});
+                input.parentElement.style.transform = 'translateZ(20px)';
             });
         });
 
@@ -538,13 +537,9 @@
 
         window.addEventListener('load', () => {
             calculate();
+            incrementVisitorCount();
+            displayVisitorCount();
             initAnimations();
-
-            // تسجيل حدث تحميل الصفحة في Google Analytics
-            gtag('event', 'page_view', {
-                'event_category': 'Page Interaction',
-                'event_label': 'Calculator Loaded'
-            });
         });
     </script>
 </body>
