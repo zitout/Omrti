@@ -26,15 +26,9 @@
         }
 
         @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .calculator {
@@ -49,65 +43,8 @@
             border-radius: 20px;
             padding: 2rem;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        }
-
-        @media (min-width: 768px) {
-            .calculator {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: space-between;
-            }
-
-            .input-group {
-                width: calc(50% - 0.5rem);
-            }
-
-            .result-box {
-                width: 100%;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .calculator {
-                max-width: 800px;
-            }
-
-            .input-group {
-                width: calc(33.33% - 0.5rem);
-            }
-        }
-
-        .input-group, .result-box {
-            flex-grow: 1;
-        }
-
-        .result-box {
-            margin-top: 1rem;
-        }
-
-        @media (max-width: 480px) {
-            body {
-                font-size: 14px;
-            }
-
-            h2 {
-                font-size: 1.5rem;
-            }
-
-            #result {
-                font-size: 1.2rem;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .calculator {
-                max-width: 1000px;
-            }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotateX(0); }
-            50% { transform: translateY(-10px) rotateX(1deg); }
+            position: relative;
+            overflow: hidden;
         }
 
         .calculator::before {
@@ -130,44 +67,15 @@
             50% { opacity: 0.4; }
         }
 
-        h2 {
-            color: #37474F;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-            position: relative;
-            display: inline-block;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #90CAF9, #A1C4FD);
-            border-radius: 2px;
-            transform: scaleX(0);
-            animation: titleUnderline 3s ease-in-out infinite;
-        }
-
-        @keyframes titleUnderline {
-            0%, 100% { transform: scaleX(0); }
-            50% { transform: scaleX(1); }
-        }
-
         .input-group {
-            margin-bottom: 2rem;
-            text-align: right;
+            margin-bottom: 1.5rem;
             position: relative;
-            transform: translateZ(20px);
         }
 
         label {
             display: block;
             margin-bottom: 0.8rem;
-            color: #455A64;
+            color: #37474F;
             font-weight: bold;
             font-size: 1.1rem;
             transition: color 0.3s;
@@ -198,29 +106,13 @@
         }
 
         .result-box {
-            background: linear-gradient(135deg, #F5F9FF 0%, #FFFFFF 100%);
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.95) 100%);
             padding: 2rem;
             border-radius: 15px;
-            margin-top: 2rem;
+            margin-top: 1rem;
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
-            border: 1px solid #E3F2FD;
-        }
-
-        .result-box::before {
-            content: '';
-            position: absolute;
-            top: -100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
-            transition: all 0.5s;
-        }
-
-        .result-box:hover::before {
-            top: 100%;
         }
 
         #result {
@@ -229,7 +121,48 @@
             font-weight: bold;
             color: #37474F;
             line-height: 2;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            text-align: right;
+        }
+
+        .visitor-count {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 1rem;
+            color: #37474F;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            z-index: 1000;
+        }
+
+        .visitor-count:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        #visitorCount {
+            font-weight: bold;
+            color: #1976D2;
+            margin-right: 5px;
+            display: inline-block;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        @keyframes countUp {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .count-animation {
+            animation: countUp 0.5s ease-out;
         }
 
         .reset-button {
@@ -245,6 +178,7 @@
             font-size: 1.2rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
+            z-index: 1000;
         }
 
         .reset-button:hover {
@@ -252,111 +186,50 @@
             transform: scale(1.1);
         }
 
-        .input-group::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #90CAF9, #E3F2FD);
-            transition: all 0.3s;
-            transform: translateX(-50%);
-        }
-
-        .input-group:hover::after {
-            width: 100%;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.01); }
-            100% { transform: scale(1); }
-        }
-
-        .result-box.pulse {
-            animation: pulse 1s ease-in-out;
-        }
-
-        .loading::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, #90CAF9, #A1C4FD);
-            animation: loading 1.5s ease-in-out infinite;
-        }
-
-        @keyframes loading {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .background-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.5;
-        }
-
-        .background-animation span {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #4CAF50;
-            animation: move 3s linear infinite;
-            border-radius: 50%;
-        }
-
-        @keyframes move {
-            0% {
-                transform: translate(0, 0);
+        @media (max-width: 768px) {
+            .calculator {
+                padding: 1.5rem;
             }
-            100% {
-                transform: translate(300px, 300px);
+
+            #result {
+                font-size: 1.2rem;
+            }
+
+            .visitor-count {
+                font-size: 0.9rem;
+                padding: 8px 16px;
             }
         }
 
-        .visitor-count {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            color: white;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+        h2 {
+            color: #37474F;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 0.5rem;
         }
 
-        .visitor-count:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #90CAF9, transparent);
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
-    <div class="background-animation">
-        <span style="left: 10%; top: 20%;"></span>
-        <span style="left: 30%; top: 40%;"></span>
-        <span style="left: 50%; top: 60%;"></span>
-        <span style="left: 70%; top: 80%;"></span>
-        <span style="left: 90%; top: 10%;"></span>
-    </div>
-
     <div class="visitor-count">
         عدد الزيارات: <span id="visitorCount">0</span>
     </div>
 
     <div class="calculator">
         <h2>حاسبة تقسيط العمرة</h2>
+        
         <div class="input-group">
             <label for="flightType">نوع الرحلة:</label>
             <select id="flightType">
@@ -364,6 +237,7 @@
                 <option value="indirect">غير مباشر</option>
             </select>
         </div>
+
         <div class="input-group">
             <label for="persons">عدد الأشخاص:</label>
             <select id="persons">
@@ -375,6 +249,7 @@
                 <option value="6">6 أشخاص</option>
             </select>
         </div>
+
         <div class="input-group">
             <label for="months">عدد الأشهر:</label>
             <select id="months">
@@ -396,10 +271,12 @@
                 <option value="18">18 شهر</option>
             </select>
         </div>
+
         <div class="input-group">
             <label for="downpayment">التسبيق (اختياري):</label>
             <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0">
         </div>
+
         <div class="result-box">
             <p id="result">النتيجة ستظهر هنا</p>
         </div>
@@ -408,8 +285,9 @@
     <button class="reset-button" onclick="resetCalculator()">↺</button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-
-       <script>
+    
+    <script>
+        // ثوابت الحساب
         const PRICE_PER_PERSON = {
             direct: 168000,
             indirect: 163000
@@ -422,23 +300,24 @@
             16: 0.67, 17: 0.72, 18: 0.77
         };
 
-        const SITE_KEY = 'umrah-calculator'; // مفتاح فريد لموقعك
-
+        // دالة تقريب الأرقام
         function roundUpToNearest100(number) {
             return Math.ceil(number / 100) * 100;
         }
 
+        // دالة تنسيق الأرقام
         function formatNumber(number) {
-            return number.toLocaleString('en-US', {
+            return number.toLocaleString('ar-SA', {
                 useGrouping: true,
                 maximumFractionDigits: 0
             });
         }
 
+        // دالة الحساب الرئيسية
         function calculate() {
             const resultBox = document.querySelector('.result-box');
-            resultBox.classList.add('loading');
-
+            resultBox.style.opacity = '0.7';
+            
             setTimeout(() => {
                 const flightType = document.getElementById('flightType').value;
                 const persons = parseInt(document.getElementById('persons').value);
@@ -447,14 +326,17 @@
                 
                 const pricePerPerson = PRICE_PER_PERSON[flightType];
                 const totalPrice = persons * pricePerPerson;
+                
                 if (downpayment > totalPrice) {
                     document.getElementById('result').innerHTML = 'مبلغ التسبيق أكبر من السعر الإجمالي';
+                    resultBox.style.opacity = '1';
                     return;
                 }
 
                 const remainingAmount = totalPrice - downpayment;
                 let monthlyRate = RATES[months] || 0.17;
 
+                // تخفيض النسبة للمبالغ الكبيرة
                 if (remainingAmount >= 200000) {
                     monthlyRate *= 0.8;
                 } else if (remainingAmount >= 100000) {
@@ -465,19 +347,18 @@
                 const regularMonthlyPayment = roundUpToNearest100(Math.floor(totalWithProfit / months));
                 const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
 
-                resultBox.classList.remove('loading');
-                resultBox.classList.remove('pulse');
-                void resultBox.offsetWidth; // Trigger reflow
-                resultBox.classList.add('pulse');
-
+                resultBox.style.opacity = '1';
+                
                 document.getElementById('result').innerHTML = `
-                    نوع الرحلة: ${flightType === 'direct' ? 'مباشر' : 'غير مباشر'} <br>
-                    القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
-                    إجمالي المبلغ: ${formatNumber(totalWithProfit + downpayment)}
+                    نوع الرحلة: ${flightType === 'direct' ? 'مباشر' : 'غير مباشر'}<br>
+                    السعر الأساسي: ${formatNumber(totalPrice)} ريال<br>
+                    القسط الشهري: ${formatNumber(regularMonthlyPayment)} ريال<br>
+                    إجمالي المبلغ مع الربح: ${formatNumber(totalWithProfit + downpayment)} ريال
                 `;
             }, 300);
         }
 
+        // دالة إعادة التعيين
         function resetCalculator() {
             document.getElementById('flightType').value = 'direct';
             document.getElementById('persons').value = '1';
@@ -487,59 +368,60 @@
             calculate();
         }
 
-        // دالة لزيادة عدد الزيارات
-        function incrementVisitorCount() {
-    fetch(`https://api.countapi.xyz/hit/${SITE_KEY}/visits`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('visitorCount').textContent = data.value;
-        })
-        .catch(error => console.error('Error:', error));
+// دوال عداد الزيارات
+function incrementVisitorCount() {
+    const visitorCountElement = document.getElementById('visitorCount');
+    let currentCount = parseInt(localStorage.getItem('umrahVisitorCount')) || 0;
+    
+    // زيادة العداد
+    currentCount++;
+    
+    // تحديث Local Storage
+    localStorage.setItem('umrahVisitorCount', currentCount);
+    
+    // تحديث العرض
+    visitorCountElement.textContent = currentCount;
+    
+    // إضافة تأثير حركي للعداد
+    visitorCountElement.classList.add('count-animation');
+    setTimeout(() => {
+        visitorCountElement.classList.remove('count-animation');
+    }, 500);
 }
 
+// دالة لعرض عدد الزيارات عند تحميل الصفحة
 function displayVisitorCount() {
-    fetch(`https://api.countapi.xyz/get/${SITE_KEY}/visits`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('visitorCount').textContent = data.value;
-        })
-        .catch(error => console.error('Error:', error));
+    const visitorCountElement = document.getElementById('visitorCount');
+    const currentCount = parseInt(localStorage.getItem('umrahVisitorCount')) || 0;
+    visitorCountElement.textContent = currentCount;
 }
 
-        // تأثيرات حركية باستخدام GSAP
-        function initAnimations() {
-            gsap.from('.calculator', {duration: 1, opacity: 0, y: 50, ease: 'power3.out'});
-            gsap.from('.input-group', {duration: 0.8, opacity: 0, y: 20, stagger: 0.2, ease: 'power3.out'});
-            gsap.from('.result-box', {duration: 1, opacity: 0, scale: 0.9, ease: 'elastic.out(1, 0.5)', delay: 0.5});
-            gsap.from('.visitor-count', {duration: 1, opacity: 0, x: -50, ease: 'power3.out', delay: 1});
-        }
+// دالة لإعادة تعيين عداد الزيارات (يمكن استخدامها للاختبار)
+function resetVisitorCount() {
+    localStorage.setItem('umrahVisitorCount', '0');
+    displayVisitorCount();
+}
 
-        // Event Listeners
-        document.querySelector('.calculator').addEventListener('change', function(event) {
-            if (event.target.matches('select, input')) {
-                calculate();
-            }
-        });
+// دالة للتحقق من صحة عدد الزيارات وتصحيحه إذا لزم الأمر
+function validateVisitorCount() {
+    const storedCount = parseInt(localStorage.getItem('umrahVisitorCount'));
+    if (isNaN(storedCount) || storedCount < 0) {
+        localStorage.setItem('umrahVisitorCount', '0');
+    }
+}
 
-        // تأثيرات حركية للمدخلات
-        const inputs = document.querySelectorAll('select, input');
-        inputs.forEach(input => {
-            input.addEventListener('focus', () => {
-                input.parentElement.style.transform = 'translateZ(30px)';
-            });
-            
-            input.addEventListener('blur', () => {
-                input.parentElement.style.transform = 'translateZ(20px)';
-            });
-        });
+// دالة لتحديث عداد الزيارات بشكل دوري (كل ساعة مثلاً)
+function scheduleVisitorCountUpdate() {
+    setInterval(() => {
+        validateVisitorCount();
+        displayVisitorCount();
+    }, 3600000); // كل ساعة
+}
 
-        // إضافة مستمع الحدث لعنصر نوع الرحلة
-        document.getElementById('flightType').addEventListener('change', calculate);
-
-        window.addEventListener('load', () => {
-            calculate();
-            incrementVisitorCount();
-            displayVisitorCount();
-            initAnimations();
-        });
-    </script>
+// إضافة مستمعات الأحداث وتهيئة العداد
+document.addEventListener('DOMContentLoaded', () => {
+    validateVisitorCount();
+    displayVisitorCount();
+    incrementVisitorCount();
+    scheduleVisitorCountUpdate();
+});
