@@ -507,18 +507,27 @@
 
         // دالة لزيادة عدد الزيارات
         function incrementVisitorCount() {
-            const visitorRef = database.ref('visitorCount');
-            
-            visitorRef.transaction((currentCount) => {
-                return (currentCount || 0) + 1;
-            }, (error, committed, snapshot) => {
-                if (error) {
-                    console.error('فشل تحديث العدّاد:', error);
-                } else if (committed) {
-                    document.getElementById('visitorCount').textContent = snapshot.val();
-                }
-            });
-        }
+    const visitorId = localStorage.getItem('visitorId');
+    if (!visitorId) {
+        // إذا لم يكن هناك معرف للزائر، قم بإنشاء واحد جديد
+        const newVisitorId = Date.now().toString();
+        localStorage.setItem('visitorId', newVisitorId);
+        
+        const visitorRef = database.ref('visitorCount');
+        visitorRef.transaction((currentCount) => {
+            return (currentCount || 0) + 1;
+        }, (error, committed, snapshot) => {
+            if (error) {
+                console.error('فشل تحديث العدّاد:', error);
+            } else if (committed) {
+                document.getElementById('visitorCount').textContent = snapshot.val();
+            }
+        });
+    } else {
+        // إذا كان هناك معرف للزائر، فقط قم بعرض العدد الحالي
+        displayVisitorCount();
+    }
+}
 
         // دالة لعرض عدد الزيارات
         function displayVisitorCount() {
