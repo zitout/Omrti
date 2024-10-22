@@ -6,7 +6,7 @@
     <title>حاسبة تقسيط العمرة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
+       * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -408,8 +408,28 @@
     <button class="reset-button" onclick="resetCalculator()">↺</button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    
+    <!-- إضافة Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-       <script>
+    <script>
+        // تكوين Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEQLPyt8Wp0oA5pvgKz93dczqYsBNDpvY",
+            authDomain: "omrati-453e1.firebaseapp.com",
+            databaseURL: "https://omrati-453e1-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "omrati-453e1",
+            storageBucket: "omrati-453e1.appspot.com",
+            messagingSenderId: "211184940647",
+            appId: "1:211184940647:web:865a3a9810d8b45faf06c2",
+            measurementId: "G-RM7T583FYY"
+        };
+
+        // تهيئة Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         const PRICE_PER_PERSON = {
             direct: 168000,
             indirect: 163000
@@ -421,8 +441,6 @@
             11: 0.46, 12: 0.5, 13: 0.52, 14: 0.57, 15: 0.62,
             16: 0.67, 17: 0.72, 18: 0.77
         };
-
-        const SITE_KEY = 'umrah-calculator'; // مفتاح فريد لموقعك
 
         function roundUpToNearest100(number) {
             return Math.ceil(number / 100) * 100;
@@ -489,22 +507,28 @@
 
         // دالة لزيادة عدد الزيارات
         function incrementVisitorCount() {
-    fetch(`https://api.countapi.xyz/hit/${SITE_KEY}/visits`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('visitorCount').textContent = data.value;
-        })
-        .catch(error => console.error('Error:', error));
-}
+            const visitorRef = database.ref('visitorCount');
+            
+            visitorRef.transaction((currentCount) => {
+                return (currentCount || 0) + 1;
+            }, (error, committed, snapshot) => {
+                if (error) {
+                    console.error('فشل تحديث العدّاد:', error);
+                } else if (committed) {
+                    document.getElementById('visitorCount').textContent = snapshot.val();
+                }
+            });
+        }
 
-function displayVisitorCount() {
-    fetch(`https://api.countapi.xyz/get/${SITE_KEY}/visits`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('visitorCount').textContent = data.value;
-        })
-        .catch(error => console.error('Error:', error));
-}
+        // دالة لعرض عدد الزيارات
+        function displayVisitorCount() {
+            const visitorRef = database.ref('visitorCount');
+            visitorRef.on('value', (snapshot) => {
+                document.getElementById('visitorCount').textContent = snapshot.val();
+            }, (error) => {
+                console.error('فشل جلب عدد الزيارات:', error);
+            });
+        }
 
         // تأثيرات حركية باستخدام GSAP
         function initAnimations() {
@@ -543,3 +567,5 @@ function displayVisitorCount() {
             initAnimations();
         });
     </script>
+</body>
+</html>
