@@ -4,146 +4,371 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة تقسيط العمرة</title>
-
-    <!-- المكتبات المطلوبة -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" as="style">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* متغيرات CSS للسمات */
-        :root {
-            --primary-color: #ffffff;
-            --secondary-color: #f0f0f0;
-            --text-color: #333333;
-            --accent-color: #4CAF50;
-            --transition-speed: 0.3s;
-            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* التنسيقات الأساسية */
         body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
             font-family: 'Tajawal', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--primary-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .calculator {
+            width: 100%;
             max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background: var(--secondary-color);
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            transition: transform var(--transition-speed);
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        @media (min-width: 768px) {
+            .calculator {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            .input-group {
+                width: calc(50% - 0.5rem);
+            }
+
+            .result-box {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .calculator {
+                max-width: 800px;
+            }
+
+            .input-group {
+                width: calc(33.33% - 0.5rem);
+            }
+        }
+
+        .input-group, .result-box {
+            flex-grow: 1;
+        }
+
+        .result-box {
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            #result {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .calculator {
+                max-width: 1000px;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateX(0); }
+            50% { transform: translateY(-10px) rotateX(1deg); }
+        }
+
+        .calculator::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #90CAF9, #A1C4FD, #E2EBF0);
+            border-radius: 22px;
+            z-index: -1;
+            filter: blur(15px);
+            opacity: 0.3;
+            animation: borderGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+        }
+
+        h2 {
+            color: #37474F;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #90CAF9, #A1C4FD);
+            border-radius: 2px;
+            transform: scaleX(0);
+            animation: titleUnderline 3s ease-in-out infinite;
+        }
+
+        @keyframes titleUnderline {
+            0%, 100% { transform: scaleX(0); }
+            50% { transform: scaleX(1); }
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 2rem;
+            text-align: right;
+            position: relative;
             transform: translateZ(20px);
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0.8rem;
+            color: #455A64;
             font-weight: bold;
+            font-size: 1.1rem;
+            transition: color 0.3s;
         }
 
         select, input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            font-family: inherit;
-        }
-
-        button {
-            width: 100%;
             padding: 12px;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: transform 0.2s, background-color 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            background-color: #45a049;
-        }
-
-        #result {
-            margin-top: 20px;
-            padding: 20px;
-            background: white;
+            border: 2px solid #E3F2FD;
             border-radius: 10px;
-            box-shadow: var(--shadow);
-            transform: translateZ(30px);
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #37474F;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
 
-        /* تأثيرات 3D */
-        .calculator {
-            transform-style: preserve-3d;
-            perspective: 1000px;
+        select:hover, input:hover {
+            transform: translateY(-2px);
+            border-color: #BBDEFB;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        .input-group {
-            transform: translateZ(20px);
-            transition: transform var(--transition-speed);
+        select:focus, input:focus {
+            outline: none;
+            border-color: #90CAF9;
+            box-shadow: 0 0 15px rgba(144, 202, 249, 0.2);
         }
 
         .result-box {
-            transform: translateZ(30px);
-            transition: all var(--transition-speed);
+            background: linear-gradient(135deg, #F5F9FF 0%, #FFFFFF 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #E3F2FD;
         }
 
-        /* أزرار المشاركة */
-        .share-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            justify-content: center;
+        .result-box::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+            transition: all 0.5s;
         }
 
-        .share-button {
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+        .result-box:hover::before {
+            top: 100%;
+        }
+
+        #result {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #37474F;
+            line-height: 2;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .reset-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #e74c3c;
+            color: white;
             border: none;
+            padding: 15px;
+            border-radius: 50%;
             cursor: pointer;
-            transition: transform 0.2s;
-            width: auto;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
         }
 
-        .share-button:hover {
-            transform: translateY(-2px);
+        .reset-button:hover {
+            background-color: #c0392b;
+            transform: scale(1.1);
         }
 
-        /* أنماط الطباعة */
-        @media print {
-            .no-print {
-                display: none;
+        .input-group::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #90CAF9, #E3F2FD);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .input-group:hover::after {
+            width: 100%;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+
+        .result-box.pulse {
+            animation: pulse 1s ease-in-out;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #90CAF9, #A1C4FD);
+            animation: loading 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .background-animation span {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #4CAF50;
+            animation: move 3s linear infinite;
+            border-radius: 50%;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate(0, 0);
             }
-            .calculator {
-                box-shadow: none;
-                transform: none;
+            100% {
+                transform: translate(300px, 300px);
             }
+        }
+
+      .visitor-count {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease;
+}
+
+@media (max-width: 768px) {
+    .visitor-count {
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+}
+        .visitor-count:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
     </style>
 </head>
 <body>
-    <!-- هيكل الحاسبة -->
+    <div class="background-animation">
+        <span style="left: 10%; top: 20%;"></span>
+        <span style="left: 30%; top: 40%;"></span>
+        <span style="left: 50%; top: 60%;"></span>
+        <span style="left: 70%; top: 80%;"></span>
+        <span style="left: 90%; top: 10%;"></span>
+    </div>
+
+   <div id="visitorCount" class="visitor-count">0</div>
+
     <div class="calculator">
+        <h2>حاسبة تقسيط العمرة</h2>
         <div class="input-group">
             <label for="flightType">نوع الرحلة:</label>
             <select id="flightType">
@@ -151,12 +376,17 @@
                 <option value="indirect">غير مباشر</option>
             </select>
         </div>
-
         <div class="input-group">
             <label for="persons">عدد الأشخاص:</label>
-            <input type="number" id="persons" min="1" value="1">
+            <select id="persons">
+                <option value="1">شخص واحد</option>
+                <option value="2">شخصين</option>
+                <option value="3">3 أشخاص</option>
+                <option value="4">4 أشخاص</option>
+                <option value="5">5 أشخاص</option>
+                <option value="6">6 أشخاص</option>
+            </select>
         </div>
-
         <div class="input-group">
             <label for="months">عدد الأشهر:</label>
             <select id="months">
@@ -178,514 +408,195 @@
                 <option value="18">18 شهر</option>
             </select>
         </div>
-
-        // تحسين دالة الحساب الرئيسية
-function calculate() {
-    const data = getCalculationParams();
-    
-    // التحقق من صحة المدخلات
-    if (!validateInputs(data)) {
-        showError('الرجاء التأكد من صحة المدخلات');
-        return;
-    }
-
-    // التحقق من الذاكرة المؤقتة
-    const cachedResult = getCachedCalculation(data);
-    if (cachedResult) {
-        enhancedResultDisplay(cachedResult);
-        return;
-    }
-
-    // إرسال البيانات إلى Web Worker
-    calculatorWorker.postMessage(data);
-    showLoading();
-}
-
-// دالة التحقق من المدخلات
-function validateInputs(data) {
-    return (
-        data.persons > 0 && 
-        data.persons <= 50 &&
-        data.months >= 3 &&
-        data.months <= 18 &&
-        data.downpayment >= 0
-    );
-}
-
-// تحسين عرض النتائج
-function updateResults(regularPayment, totalAmount) {
-    const resultContainer = document.getElementById('result');
-    
-    const resultHTML = `
-        <div class="result-content animate-on-scroll">
-            <div class="result-header">
-                <h2>نتيجة الحساب</h2>
-                <div class="result-actions">
-                    ${shareButtons}
-                </div>
-            </div>
-            <div class="result-details">
-                <div class="result-item">
-                    <span class="result-label">القسط الشهري:</span>
-                    <span class="result-value">${formatNumber(regularPayment)} ريال</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">إجمالي المبلغ:</span>
-                    <span class="result-value">${formatNumber(totalAmount)} ريال</span>
-                </div>
-            </div>
-            <div class="result-chart-container">
-                <canvas id="paymentChart"></canvas>
-            </div>
+        <div class="input-group">
+            <label for="downpayment">التسبيق (اختياري):</label>
+            <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0">
         </div>
-    `;
-    
-    resultContainer.innerHTML = resultHTML;
-    createPaymentChart(regularPayment, totalAmount);
-    animateResults();
-}
+        <div class="result-box">
+            <p id="result">النتيجة ستظهر هنا</p>
+        </div>
+    </div>
 
-// إضافة رسم بياني للنتائج
-function createPaymentChart(regularPayment, totalAmount) {
-    const ctx = document.getElementById('paymentChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['الأقساط الشهرية', 'الدفعة المقدمة'],
-            datasets: [{
-                data: [regularPayment, totalAmount - regularPayment],
-                backgroundColor: ['#4CAF50', '#2196F3']
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+    <button class="reset-button" onclick="resetCalculator()">↺</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    
+    <!-- إضافة Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <script>
+        // تكوين Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEQLPyt8Wp0oA5pvgKz93dczqYsBNDpvY",
+            authDomain: "omrati-453e1.firebaseapp.com",
+            databaseURL: "https://omrati-453e1-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "omrati-453e1",
+            storageBucket: "omrati-453e1.appspot.com",
+            messagingSenderId: "211184940647",
+            appId: "1:211184940647:web:865a3a9810d8b45faf06c2",
+            measurementId: "G-RM7T583FYY"
+        };
+
+        // تهيئة Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const PRICE_PER_PERSON = {
+            direct: 168000,
+            indirect: 163000
+        };
+
+        const RATES = {
+            1: 0.17, 2: 0.17, 3: 0.2, 4: 0.22, 5: 0.24,
+            6: 0.27, 7: 0.3, 8: 0.34, 9: 0.38, 10: 0.42,
+            11: 0.46, 12: 0.5, 13: 0.52, 14: 0.57, 15: 0.62,
+            16: 0.67, 17: 0.72, 18: 0.77
+        };
+
+        function roundUpToNearest100(number) {
+            return Math.ceil(number / 100) * 100;
+        }
+
+        function formatNumber(number) {
+            return number.toLocaleString('en-US', {
+                useGrouping: true,
+                maximumFractionDigits: 0
+            });
+        }
+
+        function calculate() {
+            const resultBox = document.querySelector('.result-box');
+            resultBox.classList.add('loading');
+
+            setTimeout(() => {
+                const flightType = document.getElementById('flightType').value;
+                const persons = parseInt(document.getElementById('persons').value);
+                const months = parseInt(document.getElementById('months').value);
+                const downpayment = parseFloat(document.getElementById('downpayment').value) || 0;
+                
+                const pricePerPerson = PRICE_PER_PERSON[flightType];
+                const totalPrice = persons * pricePerPerson;
+                if (downpayment > totalPrice) {
+                    document.getElementById('result').innerHTML = 'مبلغ التسبيق أكبر من السعر الإجمالي';
+                    return;
                 }
-            }
-        }
-    });
-}
 
-// تحسين عرض رسالة التحميل
-function showLoading() {
-    const resultContainer = document.getElementById('result');
-    resultContainer.innerHTML = `
-        <div class="loading-container">
-            <div class="loading-spinner"></div>
-            <p>جاري الحساب...</p>
-        </div>
-    `;
-}
+                const remainingAmount = totalPrice - downpayment;
+                let monthlyRate = RATES[months] || 0.17;
 
-// تحسين عرض رسائل الخطأ
-function showError(message) {
-    const resultContainer = document.getElementById('result');
-    resultContainer.innerHTML = `
-        <div class="error-container animate-on-scroll">
-            <i class="fas fa-exclamation-circle"></i>
-            <p>${message}</p>
-        </div>
-    `;
-}
-
-// تحسين تنسيق الأرقام
-function formatNumber(number) {
-    return new Intl.NumberFormat('ar-SA', {
-        style: 'decimal',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }).format(number);
-}
-
-// تحسين أداء الرسوم المتحركة
-function animateResults() {
-    gsap.from('.result-content', {
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        ease: 'power2.out'
-    });
-
-    gsap.from('.result-item', {
-        opacity: 0,
-        x: -20,
-        duration: 0.5,
-        stagger: 0.1,
-        ease: 'power2.out'
-    });
-
-    gsap.from('.result-chart-container', {
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.5,
-        delay: 0.3,
-        ease: 'back.out(1.7)'
-    });
-}
-
-            // تحسين دالة الحساب الرئيسية
-function calculate() {
-    const data = {
-        flightType: document.getElementById('flightType').value,
-        persons: parseInt(document.getElementById('persons').value),
-        months: parseInt(document.getElementById('months').value),
-        downpayment: parseFloat(document.getElementById('downpayment').value) || 0
-    };
-
-    // التحقق من صحة المدخلات
-    if (!validateInputs(data)) {
-        showError('الرجاء التأكد من صحة المدخلات');
-        return;
-    }
-
-    // التحقق من الذاكرة المؤقتة
-    const cachedResult = getCachedCalculation(data);
-    if (cachedResult) {
-        enhancedResultDisplay(cachedResult);
-    } else {
-        showLoading();
-        calculatorWorker.postMessage(data);
-    }
-}
-
-// تحسين عرض النتائج
-function enhancedResultDisplay(result) {
-    const resultContainer = document.getElementById('result');
-    
-    const resultHTML = `
-        <div class="result-content animate-on-scroll">
-            <div class="result-header">
-                <h2>نتيجة الحساب</h2>
-            </div>
-            <div class="result-details">
-                <div class="result-item">
-                    <span class="result-label">نوع الرحلة:</span>
-                    <span class="result-value">${result.flightType === 'direct' ? 'مباشر' : 'غير مباشر'}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">عدد الأشخاص:</span>
-                    <span class="result-value">${result.persons}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">عدد الأشهر:</span>
-                    <span class="result-value">${result.months}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">القسط الشهري:</span>
-                    <span class="result-value">${formatNumber(result.regularPayment)} ريال</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">إجمالي المبلغ:</span>
-                    <span class="result-value">${formatNumber(result.totalAmount)} ريال</span>
-                </div>
-            </div>
-            <div class="result-actions">
-                ${shareButtons}
-                <button onclick="generateEnhancedPDF()" class="action-button">
-                    <i class="fas fa-file-pdf"></i> تحميل PDF
-                </button>
-            </div>
-        </div>
-    `;
-    
-    resultContainer.innerHTML = resultHTML;
-    animateResults();
-}
-
-// تحسين عرض رسالة التحميل
-function showLoading() {
-    const resultContainer = document.getElementById('result');
-    resultContainer.innerHTML = `
-        <div class="loading-container">
-            <div class="loading-spinner"></div>
-            <p>جاري الحساب...</p>
-        </div>
-    `;
-}
-
-// تحسين عرض رسائل الخطأ
-function showError(message) {
-    const resultContainer = document.getElementById('result');
-    resultContainer.innerHTML = `
-        <div class="error-container animate-on-scroll">
-            <i class="fas fa-exclamation-circle"></i>
-            <p>${message}</p>
-        </div>
-    `;
-}
-
-// تحسين التحقق من المدخلات
-function validateInputs(data) {
-    if (!data.persons || data.persons < 1 || data.persons > 50) {
-        showError('عدد الأشخاص يجب أن يكون بين 1 و 50');
-        return false;
-    }
-
-    if (!data.months || data.months < 3 || data.months > 18) {
-        showError('عدد الأشهر يجب أن يكون بين 3 و 18');
-        return false;
-    }
-
-    if (data.downpayment < 0) {
-        showError('الدفعة المقدمة يجب أن تكون 0 أو أكثر');
-        return false;
-    }
-
-    return true;
-}
-
-// تحسين تنسيق الأرقام
-function formatNumber(number) {
-    return new Intl.NumberFormat('ar-SA', {
-        style: 'decimal',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }).format(number);
-}
-
-// إضافة CSS جديد للتحسينات
-const newStyles = `
-    .loading-container {
-        text-align: center;
-        padding: 2rem;
-    }
-
-    .loading-spinner {
-        width: 50px;
-        height: 50px;
-        border: 5px solid var(--secondary-color);
-        border-top: 5px solid var(--accent-color);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin: 0 auto;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    .error-container {
-        background-color: #ffebee;
-        color: #c62828;
-        padding: 1rem;
-        border-radius: 5px;
-        margin-top: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .result-actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        margin-top: 2rem;
-    }
-
-    .action-button {
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        border: none;
-        cursor: pointer;
-        transition: transform 0.2s;
-        background-color: var(--accent-color);
-        color: white;
-    }
-
-    .action-button:hover {
-        transform: translateY(-2px);
-    }
-`;
-
-// إضافة الأنماط الجديدة إلى الصفحة
-const styleSheet = document.createElement('style');
-styleSheet.textContent = newStyles;
-document.head.appendChild(styleSheet);
-
-        // إضافة دالة لتحسين عرض النتائج مع الرسوم البيانية
-function createResultChart(result) {
-    const chartContainer = document.querySelector('.result-chart');
-    const canvas = document.createElement('canvas');
-    chartContainer.appendChild(canvas);
-
-    const ctx = canvas.getContext('2d');
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['القسط الشهري', 'الدفعة المقدمة', 'إجمالي الربح'],
-            datasets: [{
-                data: [
-                    result.regularPayment,
-                    result.downpayment,
-                    result.totalAmount - (result.regularPayment * result.months + result.downpayment)
-                ],
-                backgroundColor: ['#4CAF50', '#2196F3', '#FFC107']
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        font: {
-                            family: 'Tajawal'
-                        }
-                    }
+                if (remainingAmount >= 200000) {
+                    monthlyRate *= 0.8;
+                } else if (remainingAmount >= 100000) {
+                    monthlyRate *= 0.9;
                 }
-            }
+
+                const totalWithProfit = remainingAmount * (1 + monthlyRate);
+                const regularMonthlyPayment = roundUpToNearest100(Math.floor(totalWithProfit / months));
+                const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
+
+                resultBox.classList.remove('loading');
+                resultBox.classList.remove('pulse');
+                void resultBox.offsetWidth; // Trigger reflow
+                resultBox.classList.add('pulse');
+
+                document.getElementById('result').innerHTML = `
+                    نوع الرحلة: ${flightType === 'direct' ? 'مباشر' : 'غير مباشر'} <br>
+                    القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
+                    إجمالي المبلغ: ${formatNumber(totalWithProfit + downpayment)}
+                `;
+            }, 300);
         }
-    });
-}
 
-// تحسين التحقق من المدخلات
-function validateEnhanced(data) {
-    const errors = [];
-    
-    if (!data.persons || data.persons < 1) {
-        errors.push('عدد الأشخاص يجب أن يكون 1 على الأقل');
-    }
-    
-    if (data.persons > 50) {
-        errors.push('الحد الأقصى لعدد الأشخاص هو 50');
-    }
-    
-    if (!data.months || !RATES[data.months]) {
-        errors.push('يرجى اختيار عدد الأشهر المناسب');
-    }
-    
-    if (data.downpayment < 0) {
-        errors.push('الدفعة المقدمة لا يمكن أن تكون سالبة');
-    }
-    
-    return {
-        isValid: errors.length === 0,
-        errors: errors
-    };
-}
-
-// تحسين عرض الأخطاء
-function showEnhancedError(errors) {
-    const resultContainer = document.getElementById('result');
-    const errorHTML = `
-        <div class="error-container animate-fade-in">
-            <div class="error-icon">
-                <i class="fas fa-exclamation-circle"></i>
-            </div>
-            <div class="error-list">
-                ${errors.map(error => `<p class="error-item">${error}</p>`).join('')}
-            </div>
-        </div>
-    `;
-    resultContainer.innerHTML = errorHTML;
-}
-
-// تحسين تجربة المستخدم مع التحميل
-function showEnhancedLoading() {
-    const resultContainer = document.getElementById('result');
-    const loadingHTML = `
-        <div class="loading-container animate-fade-in">
-            <div class="loading-spinner"></div>
-            <p class="loading-text">جاري حساب النتائج...</p>
-        </div>
-    `;
-    resultContainer.innerHTML = loadingHTML;
-}
-
-// إضافة أنماط CSS جديدة للتحسينات
-const enhancedStyles = `
-    .animate-fade-in {
-        animation: fadeIn 0.3s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .loading-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 2rem;
-    }
-
-    .loading-spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid var(--secondary-color);
-        border-top-color: var(--accent-color);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    .loading-text {
-        margin-top: 1rem;
-        color: var(--text-color);
-        font-size: 1.1rem;
-    }
-
-    .error-container {
-        background-color: #ffebee;
-        border-radius: 8px;
-        padding: 1rem;
-        margin-top: 1rem;
-    }
-
-    .error-icon {
-        color: #c62828;
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .error-item {
-        color: #c62828;
-        margin: 0.5rem 0;
-        font-size: 0.9rem;
-    }
-
-    .result-chart {
-        margin-top: 2rem;
-        padding: 1rem;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-`;
-
-// إضافة الأنماط الجديدة إلى الصفحة
-const styleElement = document.createElement('style');
-styleElement.textContent = enhancedStyles;
-document.head.appendChild(styleElement);
-
-// تحسين الأداء العام
-function optimizeOverallPerformance() {
-    // تحسين تحميل الصور
-    document.querySelectorAll('img').forEach(img => {
-        if (img.getAttribute('loading') !== 'lazy') {
-            img.setAttribute('loading', 'lazy');
+        function resetCalculator() {
+            document.getElementById('flightType').value = 'direct';
+            document.getElementById('persons').value = '1';
+            document.getElementById('months').value = '13';
+            document.getElementById('downpayment').value = '0';
+            document.getElementById('result').innerHTML = 'النتيجة ستظهر هنا';
+            calculate();
         }
-    });
 
-    // تحسين تحميل الخطوط
-    if ('fonts' in document) {
-        document.fonts.ready.then(() => {
-            document.documentElement.classList.add('fonts-loaded');
-        });
-    }
-
-    // تحسين أداء الرسوم المتحركة
-    document.querySelectorAll('.animate-on-scroll').forEach(element => {
-        element.style.willChange = 'transform, opacity';
-    });
-}
-
-// تشغيل جميع التحسينات
-document.addEventListener('DOMContentLoaded', () => {
-    initializeEnhancements();
-    optimizeOverallPerformance();
-});
+        // دالة لزيادة عدد الزيارات
+        function incrementVisitorCount() {
+    const visitorId = localStorage.getItem('visitorId');
+    if (!visitorId) {
+        // إذا لم يكن هناك معرف للزائر، قم بإنشاء واحد جديد
+        const newVisitorId = Date.now().toString();
+        localStorage.setItem('visitorId', newVisitorId);
         
+        const visitorRef = database.ref('visitorCount');
+        visitorRef.transaction((currentCount) => {
+            return (currentCount || 0) + 1;
+        }, (error, committed, snapshot) => {
+            if (error) {
+                console.error('فشل تحديث العدّاد:', error);
+            } else if (committed) {
+                document.getElementById('visitorCount').textContent = snapshot.val();
+            }
+        });
+    } else {
+        // إذا كان هناك معرف للزائر، فقط قم بعرض العدد الحالي
+        displayVisitorCount();
+    }
+}
+
+        // دالة لعرض عدد الزيارات
+        function displayVisitorCount() {
+            const visitorRef = database.ref('visitorCount');
+            visitorRef.on('value', (snapshot) => {
+                document.getElementById('visitorCount').textContent = snapshot.val();
+            }, (error) => {
+                console.error('فشل جلب عدد الزيارات:', error);
+            });
+        }
+
+        // تأثيرات حركية باستخدام GSAP
+        function initAnimations() {
+            gsap.from('.calculator', {duration: 1, opacity: 0, y: 50, ease: 'power3.out'});
+            gsap.from('.input-group', {duration: 0.8, opacity: 0, y: 20, stagger: 0.2, ease: 'power3.out'});
+            gsap.from('.result-box', {duration: 1, opacity: 0, scale: 0.9, ease: 'elastic.out(1, 0.5)', delay: 0.5});
+            gsap.from('.visitor-count', {duration: 1, opacity: 0, x: -50, ease: 'power3.out', delay: 1});
+        }
+
+        // Event Listeners
+        document.querySelector('.calculator').addEventListener('change', function(event) {
+            if (event.target.matches('select, input')) {
+                calculate();
+            }
+        });
+
+        
+function changeColor() {
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    document.getElementById('visitorCount').style.backgroundColor = randomColor;
+}
+
+setInterval(changeColor, 3000);
+
+        
+        // تأثيرات حركية للمدخلات
+        const inputs = document.querySelectorAll('select, input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.style.transform = 'translateZ(30px)';
+            });
+            
+            input.addEventListener('blur', () => {
+                input.parentElement.style.transform = 'translateZ(20px)';
+            });
+        });
+
+        // إضافة مستمع الحدث لعنصر نوع الرحلة
+        document.getElementById('flightType').addEventListener('change', calculate);
+
+        window.addEventListener('load', () => {
+            calculate();
+            incrementVisitorCount();
+            displayVisitorCount();
+            initAnimations();
+        });
+    </script>
+</body>
+</html>
