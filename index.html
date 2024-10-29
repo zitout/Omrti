@@ -500,11 +500,11 @@
                 void resultBox.offsetWidth; // Trigger reflow
                 resultBox.classList.add('pulse');
 
-                document.getElementById('result').innerHTML = `
-                    نوع الرحلة: ${flightType === 'direct' ? 'مباشر' : 'غير مباشر'} <br>
-                    القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
-                    إجمالي المبلغ: ${formatNumber(totalWithProfit + downpayment)}
-                `;
+            document.getElementById('result').innerHTML = `
+    نوع الرحلة: ${flightType === 'direct' ? 'مباشر' : 'غير مباشر'} <br>
+    القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
+    إجمالي المبلغ: ${formatNumber(regularMonthlyPayment * months)}
+`;
             }, 300);
         }
 
