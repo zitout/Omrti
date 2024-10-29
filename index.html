@@ -566,6 +566,56 @@
             }
         });
 
+
+function updateDownpaymentOptions() {
+    const flightType = document.getElementById('flightType').value;
+    const persons = parseInt(document.getElementById('persons').value);
+    const totalPrice = persons * PRICE_PER_PERSON[flightType];
+    const datalist = document.getElementById('downpayment-options');
+    
+    // مسح الخيارات القديمة
+    datalist.innerHTML = '';
+    
+    // إنشاء خيارات جديدة من 5000 حتى السعر الإجمالي
+    for(let i = 5000; i <= totalPrice; i += 5000) {
+        const option = document.createElement('option');
+        option.value = i;
+        datalist.appendChild(option);
+    }
+}
+
+// تعديل حقل التسبيق في HTML
+document.getElementById('downpayment').outerHTML = `
+    <input type="number" 
+           id="downpayment" 
+           list="downpayment-options" 
+           placeholder="أدخل مبلغ التسبيق" 
+           min="0" 
+           step="5000" 
+           value="0">
+    <datalist id="downpayment-options"></datalist>
+`;
+
+// إضافة مستمعي الأحداث
+document.getElementById('flightType').addEventListener('change', () => {
+    updateDownpaymentOptions();
+    calculate();
+});
+
+document.getElementById('persons').addEventListener('change', () => {
+    updateDownpaymentOptions();
+    calculate();
+});
+
+// تحديث الخيارات عند تحميل الصفحة
+window.addEventListener('load', () => {
+    updateDownpaymentOptions();
+    calculate();
+    incrementVisitorCount();
+    displayVisitorCount();
+    initAnimations();
+});
+
         
 function changeColor() {
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F'];
