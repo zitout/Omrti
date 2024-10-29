@@ -408,10 +408,16 @@
                 <option value="18">18 شهر</option>
             </select>
         </div>
-        <div class="input-group">
-            <label for="downpayment">التسبيق (اختياري):</label>
-            <input type="number" id="downpayment" placeholder="أدخل مبلغ التسبيق" min="0" value="0">
-        </div>
+       <div class="input-group">
+    <label for="downpayment">التسبيق (اختياري):</label>
+    <input type="number" 
+           id="downpayment" 
+           placeholder="أدخل مبلغ التسبيق" 
+           min="0" 
+           value="0"
+    >
+</div>
+        
         <div class="result-box">
             <p id="result">النتيجة ستظهر هنا</p>
         </div>
@@ -465,6 +471,23 @@
             });
         }
 
+
+        const downpaymentInput = document.getElementById('downpayment');
+
+downpaymentInput.addEventListener('focus', function() {
+    if (this.value === '0') {
+        this.value = '';
+    }
+});
+
+downpaymentInput.addEventListener('blur', function() {
+    if (this.value === '') {
+        this.value = '0';
+        calculate();
+    }
+});
+
+        
         function calculate() {
             const resultBox = document.querySelector('.result-box');
             resultBox.classList.add('loading');
