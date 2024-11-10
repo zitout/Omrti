@@ -3,434 +3,473 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="حاسبة تقسيط العمرة - احسب تكلفة رحلة العمرة بالتقسيط">
-    <title>حاسبة تقسيط العمرة</title>
+    <title>حاسبة تقسيط العمرة - تسجيل الدخول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Preload Fonts -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" as="style">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap">
+  <style>
+    /* إعدادات أساسية */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-    <!-- Essential Libraries -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    /* تنسيق الجسم */
+    body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        font-family: 'Tajawal', sans-serif;
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+    }
 
-    <style>
-        :root {
-            --primary-color: #23a6d5;
-            --secondary-color: #23d5ab;
-            --accent-color: #e73c7e;
-            --background-gradient: linear-gradient(-45deg, #ee7752, var(--accent-color), var(--primary-color), var(--secondary-color));
+    /* حركة الخلفية */
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* تنسيق الحاسبة */
+    .calculator {
+        width: 100%;
+        max-width: 600px;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+
+    /* تنسيقات حسب حجم الشاشة */
+    @media (min-width: 768px) {
+        .calculator {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .input-group {
+            width: calc(50% - 0.5rem);
+        }
+        .result-box {
+            width: 100%;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .calculator {
+            max-width: 800px;
+        }
+        .input-group {
+            width: calc(33.33% - 0.5rem);
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .calculator {
+            max-width: 1000px;
+        }
+    }
+
+    /* تأثير التعويم */
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0) rotateX(0);
+        }
+        50% {
+            transform: translateY(-10px) rotateX(1deg);
+        }
+    }
+
+    /* تأثير الحدود المضيئة */
+    .calculator::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #90CAF9, #A1C4FD, #E2EBF0);
+        border-radius: 22px;
+        z-index: -1;
+        filter: blur(15px);
+        opacity: 0.3;
+        animation: borderGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes borderGlow {
+        0%, 100% { opacity: 0.2; }
+        50% { opacity: 0.4; }
+    }
+
+    /* تنسيق العنوان */
+    h2 {
+        color: #37474F;
+        margin-bottom: 2rem;
+        font-size: 2rem;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        position: relative;
+        display: inline-block;
+    }
+
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #90CAF9, #A1C4FD);
+        border-radius: 2px;
+        transform: scaleX(0);
+        animation: titleUnderline 3s ease-in-out infinite;
+    }
+
+    @keyframes titleUnderline {
+        0%, 100% { transform: scaleX(0); }
+        50% { transform: scaleX(1); }
+    }
+
+    /* تنسيق مجموعات الإدخال */
+    .input-group {
+        margin-bottom: 2rem;
+        text-align: right;
+        position: relative;
+        transform: translateZ(20px);
+    }
+
+    .input-group::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #90CAF9, #E3F2FD);
+        transition: all 0.3s;
+        transform: translateX(-50%);
+    }
+
+    .input-group:hover::after {
+        width: 100%;
+    }
+
+    /* تنسيق التسميات */
+    label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: #455A64;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: color 0.3s;
+    }
+
+    /* تنسيق حقول الاختيار والإدخال */
+    select, input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #E3F2FD;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #37474F;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+
+    select:hover, input:hover {
+        transform: translateY(-2px);
+        border-color: #BBDEFB;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    select:focus, input:focus {
+        outline: none;
+        border-color: #90CAF9;
+        box-shadow: 0 0 15px rgba(144, 202, 249, 0.2);
+    }
+
+    /* تنسيق صندوق النتيجة */
+    .result-box {
+        background: linear-gradient(135deg, #F5F9FF 0%, #FFFFFF 100%);
+        padding: 2rem;
+        border-radius: 15px;
+        margin-top: 2rem;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #E3F2FD;
+    }
+
+    .result-box::before {
+        content: '';
+        position: absolute;
+        top: -100%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+        transition: all 0.5s;
+    }
+
+    .result-box:hover::before {
+        top: 100%;
+    }
+
+    #result {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #37474F;
+        line-height: 2;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    }
+
+    /* زر إعادة التعيين */
+    .reset-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+    }
+
+    .reset-button:hover {
+        background-color: #c0392b;
+        transform: scale(1.1);
+    }
+
+    /* تأثيرات حركية */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.01); }
+        100% { transform: scale(1); }
+    }
+
+    .result-box.pulse {
+        animation: pulse 1s ease-in-out;
+    }
+
+    /* تأثير التحميل */
+    .loading::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, #90CAF9, #A1C4FD);
+        animation: loading 1.5s ease-in-out infinite;
+    }
+
+    @keyframes loading {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    /* خلفية متحركة */
+    .background-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.5;
+    }
+
+    .background-animation span {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: #4CAF50;
+        animation: move 3s linear infinite;
+        border-radius: 50%;
+    }
+
+    @keyframes move {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(300px, 300px); }
+    }
+
+    /* عداد الزوار */
+    .visitor-count {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1rem;
+        font-weight: bold;
+        color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.5s ease;
+    }
+
+    .visitor-count:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* تحسينات للموبايل */
+    @media (max-width: 480px) {
+        body {
+            font-size: 14px;
+            padding: 1rem;
         }
 
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: var(--background-gradient);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            min-height: 100vh;
+        h2 {
+            font-size: 1.5rem;
+        }
+
+        #result {
+            font-size: 1.2rem;
         }
 
         .calculator {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            max-width: 800px;
-            margin: 2rem auto;
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease;
+            padding: 1rem;
         }
 
-        .input-group {
-            margin-bottom: 1.5rem;
-            position: relative;
-            transform: translateZ(20px);
+        .visitor-count {
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            font-size: 0.8rem;
         }
-
-        select, input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-
-        .result-box {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-top: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-       /* إضافة المزيد من التأثيرات والتحسينات */
-
-/* تأثيرات حركية للعناصر عند التحويم */
-.calculator:hover {
-    transform: translateY(-5px) scale(1.01);
-    box-shadow: 0 15px 40px rgba(31, 38, 135, 0.45);
-}
-
-/* تأثير النبض للأزرار */
-@keyframes buttonPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-select:focus, input:focus {
-    animation: buttonPulse 1s infinite;
-}
-
-/* تأثير الإضاءة للحدود */
-.input-group::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, #23a6d5, #23d5ab, #e73c7e);
-    border-radius: 12px;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.input-group:hover::before {
-    opacity: 1;
-}
-
-/* تأثير العمق للنتائج */
-.result-box {
-    transform-style: preserve-3d;
-    perspective: 1000px;
-}
-
-.result-box:hover {
-    transform: rotateX(5deg) scale(1.02);
-}
-
-/* تأثيرات خلفية متحركة إضافية */
-.calculator::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.1) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.1) 50%,
-        rgba(255, 255, 255, 0.1) 75%,
-        transparent 75%,
-        transparent
-    );
-    background-size: 30px 30px;
-    animation: backgroundMove 20s linear infinite;
-    opacity: 0.1;
-    z-index: -1;
-}
-
-@keyframes backgroundMove {
-    0% { background-position: 0 0; }
-    100% { background-position: 60px 60px; }
-}
-
-/* تحسينات للنصوص */
-label {
-    position: relative;
-    overflow: hidden;
-}
-
-label::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, #23a6d5, #23d5ab);
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-}
-
-label:hover::after {
-    transform: translateX(0);
-}
-
-/* تأثيرات التحميل المتقدمة */
-.loading-effect {
-    position: relative;
-    overflow: hidden;
-}
-
-.loading-effect::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        transparent
-    );
-    animation: loadingShimmer 1.5s infinite;
-}
-
-@keyframes loadingShimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
-/* تحسينات التفاعلية */
-.interactive-element {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.interactive-element:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
-}
-
-/* تأثيرات الظل الديناميكية */
-.dynamic-shadow {
-    position: relative;
-}
-
-.dynamic-shadow::before {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: -10px;
-    bottom: -10px;
-    background: rgba(0, 0, 0, 0.1);
-    filter: blur(10px);
-    transition: all 0.3s ease;
-    z-index: -1;
-}
-
-.dynamic-shadow:hover::before {
-    top: 15px;
-    left: 15px;
-    right: -15px;
-    bottom: -15px;
-    filter: blur(15px);
-}
-
-        .input-group {
-    margin-bottom: 2rem;
-    text-align: right;
-    position: relative;
-    transform: translateZ(20px);
-    transition: all 0.3s ease;
-}
-
-.input-group:hover {
-    transform: translateZ(30px) translateY(-5px);
-}
-
-.form-control {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 15px rgba(144, 202, 249, 0.2);
-}
-
-.form-control:hover {
-    transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.4);
-}
-
-label {
-    display: block;
-    margin-bottom: 0.8rem;
-    color: #fff;
-    font-weight: bold;
-    font-size: 1.1rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.result-box {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 2rem;
-    border-radius: 15px;
-    margin-top: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-.result-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.result-text {
-    color: #fff;
-    font-size: 1.2rem;
-    line-height: 1.8;
-    text-align: center;
-}
-        
-
-/* تحسينات للموبايل */
-@media (max-width: 768px) {
-    .calculator {
-        backdrop-filter: blur(5px);
-        padding: 1.5rem;
     }
-
-    .input-group {
-        margin-bottom: 1rem;
-    }
-
-    select, input {
-        font-size: 1rem;
-        padding: 10px;
-    }
-
-    .result-box {
-        margin-top: 1.5rem;
-        padding: 1.5rem;
-    }
-}
-
-/* تحسينات الأداء */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-}
-    </style>
+</style>
+    
 </head>
 <body>
-    <!-- Particles Background -->
-    <div id="particles-js"></div>
+    <div class="background-animation">
+        <span style="left: 10%; top: 20%;"></span>
+        <span style="left: 30%; top: 40%;"></span>
+        <span style="left: 50%; top: 60%;"></span>
+        <span style="left: 70%; top: 80%;"></span>
+        <span style="left: 90%; top: 10%;"></span>
+    </div>
 
-    <!-- Main Calculator -->
-    <div class="calculator" data-aos="fade-up">
-        <h2 class="animate__animated animate__fadeIn">حاسبة تقسيط العمرة</h2>
+   <div id="visitorCount" class="visitor-count">0</div>
+
+    <div class="calculator">
+        <h2>حاسبة تقسيط العمرة</h2>
+        <div class="input-group">
+            <label for="flightType">نوع الرحلة:</label>
+            <select id="flightType">
+                <option value="direct">مباشر</option>
+                <option value="indirect">غير مباشر</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="persons">عدد الأشخاص:</label>
+            <select id="persons">
+                <option value="1">شخص واحد</option>
+                <option value="2">شخصين</option>
+                <option value="3">3 أشخاص</option>
+                <option value="4">4 أشخاص</option>
+                <option value="5">5 أشخاص</option>
+                <option value="6">6 أشخاص</option>
+            </select>
+        </div>
+      <div class="input-group">
+    <label for="roomType">نوع الغرفة:</label>
+    <select id="roomType">
+        <option value="shared">غرفة جماعية</option>
+        <option value="quadruple">غرفة رباعية</option>
+        <option value="triple">غرفة ثلاثية</option>
+        <option value="double">غرفة ثنائية</option>
+        <option value="single">غرفة فردية</option>
+    </select>
+</div>
+        <div class="input-group">
+            <label for="months">عدد الأشهر:</label>
+            <select id="months">
+                <option value="3">3 أشهر</option>
+                <option value="4">4 أشهر</option>
+                <option value="5">5 أشهر</option>
+                <option value="6">6 أشهر</option>
+                <option value="7">7 أشهر</option>
+                <option value="8">8 أشهر</option>
+                <option value="9">9 أشهر</option>
+                <option value="10">10 أشهر</option>
+                <option value="11">11 شهر</option>
+                <option value="12">12 شهر</option>
+                <option value="13" selected>13 شهر</option>
+                <option value="14">14 شهر</option>
+                <option value="15">15 شهر</option>
+                <option value="16">16 شهر</option>
+                <option value="17">17 شهر</option>
+                <option value="18">18 شهر</option>
+            </select>
+        </div>
+       <div class="input-group">
+    <label for="downpayment">التسبيق (اختياري):</label>
+    <input type="number" 
+           id="downpayment" 
+           placeholder="أدخل مبلغ التسبيق" 
+           min="0" 
+           value="0"
+    >
+</div>
         
-        <!-- Calculator Form -->
-        <form id="calculatorForm">
-            <!-- Input Groups -->
-          <!-- Calculator Form -->
-<form id="calculatorForm" class="animate__animated animate__fadeIn">
-    <div class="input-group" data-aos="fade-up">
-        <label for="flightType">نوع الرحلة:</label>
-        <select id="flightType" class="form-control">
-            <option value="direct">مباشر</option>
-            <option value="indirect">غير مباشر</option>
-        </select>
-    </div>
-
-    <div class="input-group" data-aos="fade-up" data-aos-delay="100">
-        <label for="persons">عدد الأشخاص:</label>
-        <select id="persons" class="form-control">
-            <option value="1">شخص واحد</option>
-            <option value="2">شخصين</option>
-            <option value="3">3 أشخاص</option>
-            <option value="4">4 أشخاص</option>
-            <option value="5">5 أشخاص</option>
-            <option value="6">6 أشخاص</option>
-        </select>
-    </div>
-
-    <div class="input-group" data-aos="fade-up" data-aos-delay="200">
-        <label for="roomType">نوع الغرفة:</label>
-        <select id="roomType" class="form-control">
-            <option value="shared">غرفة جماعية</option>
-            <option value="quadruple">غرفة رباعية</option>
-            <option value="triple">غرفة ثلاثية</option>
-            <option value="double">غرفة ثنائية</option>
-            <option value="single">غرفة فردية</option>
-        </select>
-    </div>
-
-    <div class="input-group" data-aos="fade-up" data-aos-delay="300">
-        <label for="months">عدد الأشهر:</label>
-        <select id="months" class="form-control">
-            <option value="3">3 أشهر</option>
-            <option value="4">4 أشهر</option>
-            <option value="5">5 أشهر</option>
-            <option value="6">6 أشهر</option>
-            <option value="7">7 أشهر</option>
-            <option value="8">8 أشهر</option>
-            <option value="9">9 أشهر</option>
-            <option value="10">10 أشهر</option>
-            <option value="11">11 شهر</option>
-            <option value="12">12 شهر</option>
-            <option value="13" selected>13 شهر</option>
-            <option value="14">14 شهر</option>
-            <option value="15">15 شهر</option>
-            <option value="16">16 شهر</option>
-            <option value="17">17 شهر</option>
-            <option value="18">18 شهر</option>
-        </select>
-    </div>
-
-    <div class="input-group" data-aos="fade-up" data-aos-delay="400">
-        <label for="downpayment">التسبيق (اختياري):</label>
-        <input type="number" 
-               id="downpayment" 
-               class="form-control" 
-               placeholder="أدخل مبلغ التسبيق" 
-               min="0" 
-               value="0"
-               aria-label="مبلغ التسبيق">
-    </div>
-
-    <div class="result-box animate__animated animate__fadeIn" data-aos="fade-up" data-aos-delay="500">
-        <p id="result" class="result-text">النتيجة ستظهر هنا</p>
-    </div>
-</form>
-        </form>
-
-        <!-- Results Box -->
-        <div class="result-box animate__animated animate__fadeIn">
-            <p id="result"></p>
+        <div class="result-box">
+            <p id="result">النتيجة ستظهر هنا</p>
         </div>
     </div>
 
-    <!-- Essential Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <button class="reset-button" onclick="resetCalculator()">↺</button>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    
+    <!-- إضافة Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    <script>
-    // ثوابت الأسعار والنسب
+    
+
+    </body>
+</html>
+
+ <script>
+        // تكوين Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEQLPyt8Wp0oA5pvgKz93dczqYsBNDpvY",
+            authDomain: "omrati-453e1.firebaseapp.com",
+            databaseURL: "https://omrati-453e1-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "omrati-453e1",
+            storageBucket: "omrati-453e1.appspot.com",
+            messagingSenderId: "211184940647",
+            appId: "1:211184940647:web:865a3a9810d8b45faf06c2",
+            measurementId: "G-RM7T583FYY"
+        };
+
+        // تهيئة Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
 const PRICE_PER_PERSON = {
     direct: {
         shared: 168000,
@@ -448,49 +487,14 @@ const PRICE_PER_PERSON = {
     }
 };
 
-const RATES = {
-    3: 0.2, 4: 0.22, 5: 0.24, 6: 0.27,
-    7: 0.3, 8: 0.34, 9: 0.38, 10: 0.42,
-    11: 0.46, 12: 0.5, 13: 0.52, 14: 0.57,
-    15: 0.62, 16: 0.67, 17: 0.72, 18: 0.77
-};
+        const RATES = {
+            1: 0.17, 2: 0.17, 3: 0.2, 4: 0.22, 5: 0.24,
+            6: 0.27, 7: 0.3, 8: 0.34, 9: 0.38, 10: 0.42,
+            11: 0.46, 12: 0.5, 13: 0.52, 14: 0.57, 15: 0.62,
+            16: 0.67, 17: 0.72, 18: 0.77
+        };
 
-// تكوين Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyDEQLPyt8Wp0oA5pvgKz93dczqYsBNDpvY",
-    authDomain: "omrati-453e1.firebaseapp.com",
-    databaseURL: "https://omrati-453e1-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "omrati-453e1",
-    storageBucket: "omrati-453e1.appspot.com",
-    messagingSenderId: "211184940647",
-    appId: "1:211184940647:web:865a3a9810d8b45faf06c2",
-    measurementId: "G-RM7T583FYY"
-};
-
-// تهيئة Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-
-// تهيئة Particles.js
-particlesJS('particles-js', {
-    particles: {
-        number: { value: 80 },
-        color: { value: '#ffffff' },
-        shape: { type: 'circle' },
-        opacity: { value: 0.5 },
-        size: { value: 3 },
-        move: { speed: 6 }
-    }
-});
-
-// تهيئة AOS
-AOS.init({
-    duration: 1000,
-    once: true
-});
-
-// الدوال المساعدة
-function getRoomTypeText(roomType) {
+      function getRoomTypeText(roomType) {
     const types = {
         shared: 'غرفة جماعية',
         quadruple: 'غرفة رباعية',
@@ -501,138 +505,176 @@ function getRoomTypeText(roomType) {
     return types[roomType];
 }
 
-function roundUpToNearest100(number) {
-    return Math.ceil(number / 100) * 100;
-}
+      
+        function roundUpToNearest100(number) {
+            return Math.ceil(number / 100) * 100;
+        }
 
-function formatNumber(number) {
-    return number.toLocaleString('ar-SA');
-}
+        function formatNumber(number) {
+            return number.toLocaleString('en-US', {
+                useGrouping: true,
+                maximumFractionDigits: 0
+            });
+        }
 
-// دالة حفظ الحسابات في Firebase
-function saveCalculationToHistory(data) {
-    const historyRef = database.ref('calculations');
-    historyRef.push(data)
-        .then(() => console.log('تم حفظ العملية بنجاح'))
-        .catch(error => console.error('خطأ في حفظ العملية:', error));
-}
 
-// دالة الحساب الرئيسية
-function calculate() {
+        const downpaymentInput = document.getElementById('downpayment');
+
+downpaymentInput.addEventListener('focus', function() {
+    if (this.value === '0') {
+        this.value = '';
+    }
+});
+
+downpaymentInput.addEventListener('blur', function() {
+    if (this.value === '') {
+        this.value = '0';
+        calculate();
+    }
+});
+
+        
+  function calculate() {
     const resultBox = document.querySelector('.result-box');
     resultBox.classList.add('loading');
-
+    
     setTimeout(() => {
-        // جمع البيانات
         const flightType = document.getElementById('flightType').value;
         const roomType = document.getElementById('roomType').value;
         const persons = parseInt(document.getElementById('persons').value);
         const months = parseInt(document.getElementById('months').value);
         const downpayment = parseFloat(document.getElementById('downpayment').value) || 0;
 
-        // الحسابات الأساسية
         const pricePerPerson = PRICE_PER_PERSON[flightType][roomType];
         const totalPrice = persons * pricePerPerson;
 
-        // التحقق من صحة التسبيق
         if (downpayment > totalPrice) {
-            Swal.fire({
-                icon: 'error',
-                title: 'خطأ في المدخلات',
-                text: 'مبلغ التسبيق أكبر من السعر الإجمالي',
-                showClass: { popup: 'animate__animated animate__shakeX' }
-            });
-            resultBox.classList.remove('loading');
+            document.getElementById('result').innerHTML = 'مبلغ التسبيق أكبر من السعر الإجمالي';
             return;
         }
 
-        // حساب الأقساط
-        const remainingAmount = totalPrice - downpayment;
-        let monthlyRate = RATES[months] || 0.17;
 
-        // تطبيق الخصومات
-        if (remainingAmount >= 200000) monthlyRate *= 0.8;
-        else if (remainingAmount >= 100000) monthlyRate *= 0.9;
+                const remainingAmount = totalPrice - downpayment;
+                let monthlyRate = RATES[months] || 0.17;
 
-        const totalWithProfit = remainingAmount * (1 + monthlyRate);
-        const regularMonthlyPayment = roundUpToNearest100(totalWithProfit / months);
+                if (remainingAmount >= 200000) {
+                    monthlyRate *= 0.8;
+                } else if (remainingAmount >= 100000) {
+                    monthlyRate *= 0.9;
+                }
 
-        // عرض النتائج
-        resultBox.classList.remove('loading');
-        resultBox.classList.remove('pulse');
-        void resultBox.offsetWidth;
-        resultBox.classList.add('pulse');
+                const totalWithProfit = remainingAmount * (1 + monthlyRate);
+                const regularMonthlyPayment = roundUpToNearest100(Math.floor(totalWithProfit / months));
+                const lastMonthPayment = roundUpToNearest100(totalWithProfit - (regularMonthlyPayment * (months - 1)));
 
-        const resultHTML = `
-            <div class="result-content animate__animated animate__fadeIn">
-                <div class="result-item">
-                    <span class="result-label">نوع الرحلة:</span>
-                    <span class="result-value">${flightType === 'direct' ? 'مباشر' : 'غير مباشر'}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">نوع الغرفة:</span>
-                    <span class="result-value">${getRoomTypeText(roomType)}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">القسط الشهري:</span>
-                    <span class="result-value">${formatNumber(regularMonthlyPayment)} ريال</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">إجمالي المبلغ:</span>
-                    <span class="result-value">${formatNumber(regularMonthlyPayment * months)} ريال</span>
-                </div>
-            </div>
+                resultBox.classList.remove('loading');
+                resultBox.classList.remove('pulse');
+                void resultBox.offsetWidth; // Trigger reflow
+                resultBox.classList.add('pulse');
+
+        document.getElementById('result').innerHTML = `
+            نوع الرحلة: ${flightType === 'direct' ? 'مباشر' : 'غير مباشر'} <br>
+            نوع الغرفة: ${getRoomTypeText(roomType)} <br>
+            القسط الشهري: ${formatNumber(regularMonthlyPayment)} <br>
+            إجمالي المبلغ: ${formatNumber(regularMonthlyPayment * months)}
         `;
-
-        document.getElementById('result').innerHTML = resultHTML;
-
-        // تأثيرات GSAP
-        gsap.from('.result-item', {
-            duration: 0.5,
-            opacity: 0,
-            y: 20,
-            stagger: 0.1,
-            ease: 'power2.out'
-        });
-
-        // حفظ النتيجة
-        saveCalculationToHistory({
-            flightType,
-            roomType,
-            persons,
-            months,
-            downpayment,
-            monthlyPayment: regularMonthlyPayment,
-            totalAmount: regularMonthlyPayment * months,
-            timestamp: new Date().toISOString()
-        });
-
-        // رسالة نجاح
-        Swal.fire({
-            title: 'تم الحساب بنجاح',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 2000
-        });
     }, 300);
 }
 
-// مستمعات الأحداث
-document.addEventListener('DOMContentLoaded', () => {
-    // تهيئة GSAP
-    gsap.from('.calculator', {
-        duration: 1,
-        opacity: 0,
-        y: 50,
-        ease: 'power3.out'
-    });
 
-    // إضافة مستمعات الأحداث للحقول
-    const inputs = document.querySelectorAll('select, input');
-    inputs.forEach(input => {
-        input.addEventListener('change', calculate);
-    });
-
-    // الحساب الأولي
+      function resetCalculator() {
+    document.getElementById('flightType').value = 'direct';
+    document.getElementById('roomType').value = 'shared';
+    document.getElementById('persons').value = '1';
+    document.getElementById('months').value = '13';
+    document.getElementById('downpayment').value = '0';
+    document.getElementById('result').innerHTML = 'النتيجة ستظهر هنا';
     calculate();
-});
+}
+
+
+
+        // دالة لزيادة عدد الزيارات
+        function incrementVisitorCount() {
+    const visitorId = localStorage.getItem('visitorId');
+    if (!visitorId) {
+        // إذا لم يكن هناك معرف للزائر، قم بإنشاء واحد جديد
+        const newVisitorId = Date.now().toString();
+        localStorage.setItem('visitorId', newVisitorId);
+        
+        const visitorRef = database.ref('visitorCount');
+        visitorRef.transaction((currentCount) => {
+            return (currentCount || 0) + 1;
+        }, (error, committed, snapshot) => {
+            if (error) {
+                console.error('فشل تحديث العدّاد:', error);
+            } else if (committed) {
+                document.getElementById('visitorCount').textContent = snapshot.val();
+            }
+        });
+    } else {
+        // إذا كان هناك معرف للزائر، فقط قم بعرض العدد الحالي
+        displayVisitorCount();
+    }
+}
+
+        // دالة لعرض عدد الزيارات
+        function displayVisitorCount() {
+            const visitorRef = database.ref('visitorCount');
+            visitorRef.on('value', (snapshot) => {
+                document.getElementById('visitorCount').textContent = snapshot.val();
+            }, (error) => {
+                console.error('فشل جلب عدد الزيارات:', error);
+            });
+        }
+
+        // تأثيرات حركية باستخدام GSAP
+        function initAnimations() {
+            gsap.from('.calculator', {duration: 1, opacity: 0, y: 50, ease: 'power3.out'});
+            gsap.from('.input-group', {duration: 0.8, opacity: 0, y: 20, stagger: 0.2, ease: 'power3.out'});
+            gsap.from('.result-box', {duration: 1, opacity: 0, scale: 0.9, ease: 'elastic.out(1, 0.5)', delay: 0.5});
+            gsap.from('.visitor-count', {duration: 1, opacity: 0, x: -50, ease: 'power3.out', delay: 1});
+        }
+
+        // Event Listeners
+        document.querySelector('.calculator').addEventListener('change', function(event) {
+            if (event.target.matches('select, input')) {
+                calculate();
+            }
+        });
+
+
+
+function changeColor() {
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    document.getElementById('visitorCount').style.backgroundColor = randomColor;
+}
+
+setInterval(changeColor, 3000);
+
+        
+        // تأثيرات حركية للمدخلات
+        const inputs = document.querySelectorAll('select, input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.style.transform = 'translateZ(30px)';
+            });
+            
+            input.addEventListener('blur', () => {
+                input.parentElement.style.transform = 'translateZ(20px)';
+            });
+        });
+
+        // إضافة مستمع الحدث لعنصر نوع الرحلة
+        document.getElementById('flightType').addEventListener('change', calculate);
+
+        window.addEventListener('load', () => {
+            calculate();
+            incrementVisitorCount();
+            displayVisitorCount();
+            initAnimations();
+        });
+    </script>
+</body>
+</html>
