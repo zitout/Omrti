@@ -1,457 +1,3113 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="حاسبة تقسيط العمرة - احسب تكاليف عمرتك بسهولة">
+    <meta name="theme-color" content="#23a6d5">
     <title>حاسبة تقسيط العمرة - تسجيل الدخول</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
- 
-  <style>
-    /* إعدادات أساسية */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    /* تنسيق الجسم */
-    body {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 2rem;
-        font-family: 'Tajawal', sans-serif;
-        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-        background-size: 400% 400%;
-        animation: gradient 15s ease infinite;
-    }
-
-    /* حركة الخلفية */
-    @keyframes gradient {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    /* تنسيق الحاسبة */
-    .calculator {
-        width: 100%;
-        max-width: 600px;
-        margin: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    }
-
-    /* تنسيقات حسب حجم الشاشة */
-    @media (min-width: 768px) {
-        .calculator {
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: space-between;
+    
+    <!-- تحسين أداء الخطوط -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" as="style">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- إضافة Tailwind CSS مع JIT mode -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gradient: {
+                            1: '#ee7752',
+                            2: '#e73c7e',
+                            3: '#23a6d5',
+                            4: '#23d5ab',
+                        }
+                    },
+                    fontFamily: {
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
         }
-        .input-group {
-            width: calc(50% - 0.5rem);
-        }
-        .result-box {
-            width: 100%;
-        }
-    }
+    </script>
+    
+    <!-- GSAP للحركات -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
 
-    @media (min-width: 1024px) {
-        .calculator {
-            max-width: 800px;
+    <style>
+        /* تحسين الأداء باستخدام CSS المتقدم */
+        :root {
+            --gradient-1: theme('colors.gradient.1');
+            --gradient-2: theme('colors.gradient.2');
+            --gradient-3: theme('colors.gradient.3');
+            --gradient-4: theme('colors.gradient.4');
         }
-        .input-group {
-            width: calc(33.33% - 0.5rem);
-        }
-    }
 
-    @media (min-width: 1200px) {
-        .calculator {
-            max-width: 1000px;
+        @property --gradient-angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
         }
-    }
 
-    /* تأثير التعويم */
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0) rotateX(0);
+        /* تحسين التنسيقات الأساسية */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-        50% {
-            transform: translateY(-10px) rotateX(1deg);
-        }
-    }
 
-    /* تأثير الحدود المضيئة */
-    .calculator::before {
-        content: '';
-        position: absolute;
-        top: -2px;
-        left: -2px;
-        right: -2px;
-        bottom: -2px;
-        background: linear-gradient(45deg, #90CAF9, #A1C4FD, #E2EBF0);
-        border-radius: 22px;
-        z-index: -1;
-        filter: blur(15px);
+        /* تحسين أداء الحركات باستخدام will-change */
+        .animated-bg {
+            will-change: background-position;
+            background: linear-gradient(
+                var(--gradient-angle),
+                var(--gradient-1),
+                var(--gradient-2),
+                var(--gradient-3),
+                var(--gradient-4)
+            );
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        body {
+            @apply min-h-screen flex flex-col justify-center items-center p-8 font-tajawal;
+            @apply bg-gradient-to-r from-gradient-1 via-gradient-2 to-gradient-3;
+            @apply animated-bg;
+        }
+
+        /* تحسين الحركات */
+        @keyframes gradient {
+            0% {
+                --gradient-angle: 0deg;
+                background-position: 0% 50%;
+            }
+            50% {
+                --gradient-angle: 180deg;
+                background-position: 100% 50%;
+            }
+            100% {
+                --gradient-angle: 360deg;
+                background-position: 0% 50%;
+            }
+        }
+
+        /* تحسين الأداء على الأجهزة التي تفضل الحركة المخفضة */
+        @media (prefers-reduced-motion: reduce) {
+            .animated-bg {
+                animation: none;
+                background-size: 100% 100%;
+            }
+        }
+   
+  /* تعريف المتغيرات الأساسية للحركة */
+:root {
+    --gradient-speed: 15s;
+    --gradient-angle: 45deg;
+    --gradient-scale: 400%;
+}
+
+/* تحسين حركة الخلفية باستخدام طبقات متعددة */
+.animated-background {
+    position: relative;
+    overflow: hidden;
+}
+
+/* الطبقة الأساسية للتدرج */
+.animated-background::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        var(--gradient-angle),
+        var(--gradient-1),
+        var(--gradient-2),
+        var(--gradient-3),
+        var(--gradient-4)
+    );
+    background-size: var(--gradient-scale) var(--gradient-scale);
+    animation: gradientMove var(--gradient-speed) ease infinite,
+               gradientRotate calc(var(--gradient-speed) * 2) linear infinite;
+    z-index: -1;
+}
+
+/* حركة التدرج المحسنة */
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+        transform: scale(1);
+    }
+    50% {
+        background-position: 100% 50%;
+        transform: scale(1.1);
+    }
+    100% {
+        background-position: 0% 50%;
+        transform: scale(1);
+    }
+}
+
+/* حركة دوران التدرج */
+@keyframes gradientRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* تأثير التموج */
+.wave-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at center,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+    );
+    animation: waveEffect 8s ease-in-out infinite;
+}
+
+@keyframes waveEffect {
+    0% {
+        transform: scale(1);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.5);
         opacity: 0.3;
-        animation: borderGlow 4s ease-in-out infinite;
     }
-
-    @keyframes borderGlow {
-        0%, 100% { opacity: 0.2; }
-        50% { opacity: 0.4; }
+    100% {
+        transform: scale(1);
+        opacity: 0;
     }
+}
 
-    /* تنسيق العنوان */
-    h2 {
-        color: #37474F;
-        margin-bottom: 2rem;
-        font-size: 2rem;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-        position: relative;
-        display: inline-block;
+/* تحسين الأداء */
+.animated-background,
+.animated-background::before,
+.wave-effect {
+    will-change: transform, opacity, background-position;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* دعم الأجهزة التي تفضل حركة مخفضة */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --gradient-speed: 30s;
     }
-
-    h2::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background: linear-gradient(90deg, #90CAF9, #A1C4FD);
-        border-radius: 2px;
-        transform: scaleX(0);
-        animation: titleUnderline 3s ease-in-out infinite;
+    
+    .animated-background::before {
+        animation: gradientMove var(--gradient-speed) linear infinite;
+        transform: none;
     }
-
-    @keyframes titleUnderline {
-        0%, 100% { transform: scaleX(0); }
-        50% { transform: scaleX(1); }
+    
+    .wave-effect {
+        display: none;
     }
+}
 
-    /* تنسيق مجموعات الإدخال */
+/* تحسين الأداء على الأجهزة المحمولة */
+@media (max-width: 768px) {
+    :root {
+        --gradient-scale: 200%;
+    }
+    
+    .animated-background::before {
+        animation: gradientMove var(--gradient-speed) ease infinite;
+    }
+}
+
+/* إضافة تأثير التفاعل عند التحويم */
+.animated-background:hover::before {
+    animation-play-state: paused;
+    transition: all 0.3s ease;
+    filter: brightness(1.2);
+}
+
+     /* تعريف المتغيرات */
+:root {
+    --card-bg: rgba(255, 255, 255, 0.15);
+    --card-border: rgba(255, 255, 255, 0.2);
+    --card-shadow-primary: rgba(31, 38, 135, 0.15);
+    --card-shadow-secondary: rgba(0, 0, 0, 0.1);
+    --blur-amount: 20px;
+    --transition-speed: 0.4s;
+}
+
+/* تصميم الحاسبة الأساسي */
+.calculator {
+    @apply w-full mx-auto flex flex-col relative isolate;
+    max-width: 600px;
+    gap: 1.5rem;
+    padding: clamp(1.5rem, 5vw, 2.5rem);
+    
+    /* تحسين الخلفية الزجاجية */
+    background: var(--card-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+    
+    /* تحسين الحواف والظلال */
+    border-radius: 24px;
+    border: 1px solid var(--card-border);
+    box-shadow: 
+        0 8px 32px 0 var(--card-shadow-primary),
+        0 4px 8px var(--card-shadow-secondary),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    
+    /* تحسين الحركات */
+    transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+/* تأثير التحويم المتقدم */
+.calculator:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 
+        0 12px 40px 0 var(--card-shadow-primary),
+        0 8px 16px var(--card-shadow-secondary),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+/* إضافة تأثير الإضاءة */
+.calculator::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at var(--x, 50%) var(--y, 50%),
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0) 50%
+    );
+    opacity: 0;
+    transition: opacity var(--transition-speed);
+    z-index: -1;
+    border-radius: inherit;
+}
+
+.calculator:hover::before {
+    opacity: 1;
+}
+
+/* إضافة تأثير الحدود المضيئة */
+.calculator::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(
+        45deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.2) 45%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.2) 55%,
+        transparent 60%
+    );
+    border-radius: inherit;
+    z-index: -2;
+    animation: borderGlow 3s linear infinite;
+}
+
+/* تحسين التجاوب */
+@media (max-width: 768px) {
+    .calculator {
+        padding: 1.5rem;
+        gap: 1rem;
+        border-radius: 16px;
+    }
+    
+    .calculator:hover {
+        transform: none;
+    }
+}
+
+/* تحسين الأداء */
+@media (prefers-reduced-motion: reduce) {
+    .calculator {
+        transition: none;
+    }
+    
+    .calculator:hover {
+        transform: none;
+    }
+    
+    .calculator::after {
+        animation: none;
+    }
+}
+
+/* حركة الحدود المضيئة */
+@keyframes borderGlow {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+    /* تعريف المتغيرات للتجاوب */
+:root {
+    --container-padding-mobile: 1rem;
+    --container-padding-tablet: 2rem;
+    --container-padding-desktop: 3rem;
+    --gap-mobile: 1rem;
+    --gap-tablet: 2rem;
+    --gap-desktop: 2.5rem;
+}
+
+/* التنسيقات الأساسية */
+.calculator {
+    @apply w-full mx-auto flex flex-col;
+    padding: var(--container-padding-mobile);
+    gap: var(--gap-mobile);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-group {
+    @apply w-full transition-all duration-300 ease-in-out;
+}
+
+.result-box {
+    @apply w-full transition-all duration-300 ease-in-out;
+}
+
+/* التجاوب للشاشات الصغيرة جداً */
+@media (min-width: 480px) {
+    .calculator {
+        padding: calc(var(--container-padding-mobile) * 1.5);
+    }
+    
     .input-group {
-        margin-bottom: 2rem;
-        text-align: right;
-        position: relative;
-        transform: translateZ(20px);
+        @apply hover:scale-102 focus-within:scale-102;
+    }
+}
+
+/* التجاوب للأجهزة اللوحية الصغيرة */
+@media (min-width: 640px) {
+    .calculator {
+        max-width: 600px;
+        padding: var(--container-padding-tablet);
+        gap: calc(var(--gap-tablet) * 0.75);
+    }
+}
+
+/* التجاوب للأجهزة اللوحية */
+@media (min-width: 768px) {
+    .calculator {
+        @apply flex-row flex-wrap justify-between;
+        max-width: 800px;
+        gap: var(--gap-tablet);
     }
 
-    .input-group::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 50%;
-        width: 0;
-        height: 2px;
-        background: linear-gradient(90deg, #90CAF9, #E3F2FD);
-        transition: all 0.3s;
-        transform: translateX(-50%);
+    .input-group {
+        width: calc(50% - var(--gap-tablet) / 2);
+        opacity: 0;
+        animation: fadeInScale 0.5s ease forwards;
+        animation-delay: calc(var(--index) * 0.1s);
     }
 
-    .input-group:hover::after {
-        width: 100%;
-    }
-
-    /* تنسيق التسميات */
-    label {
-        display: block;
-        margin-bottom: 0.8rem;
-        color: #455A64;
-        font-weight: bold;
-        font-size: 1.1rem;
-        transition: color 0.3s;
-    }
-
-    /* تنسيق حقول الاختيار والإدخال */
-    select, input {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #E3F2FD;
-        border-radius: 10px;
-        font-size: 1.1rem;
-        transition: all 0.3s;
-        background-color: rgba(255, 255, 255, 0.9);
-        color: #37474F;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-    }
-
-    select:hover, input:hover {
-        transform: translateY(-2px);
-        border-color: #BBDEFB;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-
-    select:focus, input:focus {
-        outline: none;
-        border-color: #90CAF9;
-        box-shadow: 0 0 15px rgba(144, 202, 249, 0.2);
-    }
-
-    /* تنسيق صندوق النتيجة */
     .result-box {
-        background: linear-gradient(135deg, #F5F9FF 0%, #FFFFFF 100%);
-        padding: 2rem;
-        border-radius: 15px;
-        margin-top: 2rem;
-        transition: all 0.3s;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid #E3F2FD;
+        @apply mt-4 opacity-0;
+        animation: slideUp 0.5s ease forwards;
+        animation-delay: 0.3s;
+    }
+}
+
+/* التجاوب للشاشات المتوسطة */
+@media (min-width: 1024px) {
+    .calculator {
+        max-width: 900px;
+        padding: var(--container-padding-desktop);
+        gap: var(--gap-desktop);
     }
 
-    .result-box::before {
-        content: '';
-        position: absolute;
-        top: -100%;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
-        transition: all 0.5s;
+    .input-group {
+        width: calc(33.33% - var(--gap-desktop) * 2 / 3);
     }
 
-    .result-box:hover::before {
-        top: 100%;
+    .result-box {
+        @apply mt-6;
+    }
+}
+
+/* التجاوب للشاشات الكبيرة */
+@media (min-width: 1280px) {
+    .calculator {
+        max-width: 1100px;
+    }
+
+    .input-group {
+        @apply hover:scale-105;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+/* حركات الظهور */
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* تحسين التجاوب للطباعة */
+@media print {
+    .calculator {
+        max-width: 100%;
+        padding: 0;
+        gap: 1rem;
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    .input-group {
+        width: calc(50% - 0.5rem);
+        page-break-inside: avoid;
+    }
+}
+
+/* تحسين التجاوب لوضع الظلام */
+@media (prefers-color-scheme: dark) {
+    .calculator {
+        --card-bg: rgba(0, 0, 0, 0.2);
+        --card-border: rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* تحسين التجاوب للشاشات العالية الدقة */
+@media (min-resolution: 2dppx) {
+    .calculator {
+        backdrop-filter: blur(calc(var(--blur-amount) * 2));
+    }
+}
+
+       /* تعريف المتغيرات الحركية */
+:root {
+    --animation-duration: 0.6s;
+    --animation-delay-base: 0.1s;
+    --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* الفئات الأساسية للحركات */
+.animate {
+    opacity: 0;
+    will-change: transform, opacity;
+    pointer-events: none;
+}
+
+.animate.active {
+    pointer-events: auto;
+}
+
+/* تأثير الظهور التدريجي */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn var(--animation-duration) var(--animation-timing) forwards;
+    animation-delay: calc(var(--item-index, 0) * var(--animation-delay-base));
+}
+
+/* تأثير الظهور من اليمين (RTL) */
+.slide-in-right {
+    opacity: 0;
+    transform: translateX(-30px);
+    animation: slideInRight var(--animation-duration) var(--animation-timing) forwards;
+    animation-delay: calc(var(--item-index, 0) * var(--animation-delay-base));
+}
+
+/* تأثير التكبير */
+.scale-in {
+    opacity: 0;
+    transform: scale(0.9);
+    animation: scaleIn var(--animation-duration) var(--animation-timing) forwards;
+    animation-delay: calc(var(--item-index, 0) * var(--animation-delay-base));
+}
+
+/* تأثير الدوران */
+.rotate-in {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.95);
+    animation: rotateIn var(--animation-duration) var(--animation-timing) forwards;
+    animation-delay: calc(var(--item-index, 0) * var(--animation-delay-base));
+}
+
+/* تعريف الحركات */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes rotateIn {
+    0% {
+        opacity: 0;
+        transform: rotate(-10deg) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(0) scale(1);
+    }
+}
+
+/* تأثيرات متقدمة */
+.bounce-in {
+    animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    animation-delay: calc(var(--item-index, 0) * var(--animation-delay-base));
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+    80% {
+        opacity: 0.9;
+        transform: scale(0.89);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* تأثير موجة متتابعة */
+.wave-in {
+    animation: waveIn 0.7s ease-out forwards;
+    animation-delay: calc(var(--item-index, 0) * var(--animation-delay-base));
+}
+
+@keyframes waveIn {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    60% {
+        opacity: 0.8;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* دعم تفضيلات الحركة المخفضة */
+@media (prefers-reduced-motion: reduce) {
+    .animate {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+        
+   /* تعريف المتغيرات */
+:root {
+    --float-height: 10px;
+    --float-duration: 3s;
+    --float-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --rotation-degree: 1deg;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* الفئة الأساسية للتعويم */
+.float {
+    position: relative;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    will-change: transform;
+}
+
+/* تأثير التعويم البسيط */
+.float-simple {
+    animation: floatSimple var(--float-duration) var(--float-timing) infinite;
+}
+
+/* تأثير التعويم ثلاثي الأبعاد */
+.float-3d {
+    animation: float3D var(--float-duration) var(--float-timing) infinite;
+}
+
+/* تأثير التعويم مع الظل */
+.float-shadow {
+    animation: floatWithShadow var(--float-duration) var(--float-timing) infinite;
+}
+
+/* تأثير التعويم المتقدم */
+.float-advanced {
+    animation: 
+        floatAdvanced var(--float-duration) var(--float-timing) infinite,
+        rotateAdvanced calc(var(--float-duration) * 1.5) ease-in-out infinite;
+}
+
+/* تعريف الحركات */
+@keyframes floatSimple {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(calc(var(--float-height) * -1));
+    }
+}
+
+@keyframes float3D {
+    0%, 100% {
+        transform: 
+            translateY(0) 
+            rotateX(0) 
+            rotateY(0);
+    }
+    25% {
+        transform: 
+            translateY(calc(var(--float-height) * -0.5)) 
+            rotateX(var(--rotation-degree)) 
+            rotateY(var(--rotation-degree));
+    }
+    50% {
+        transform: 
+            translateY(calc(var(--float-height) * -1)) 
+            rotateX(calc(var(--rotation-degree) * 2)) 
+            rotateY(calc(var(--rotation-degree) * -2));
+    }
+    75% {
+        transform: 
+            translateY(calc(var(--float-height) * -0.5)) 
+            rotateX(calc(var(--rotation-degree) * -1)) 
+            rotateY(calc(var(--rotation-degree) * -1));
+    }
+}
+
+@keyframes floatWithShadow {
+    0%, 100% {
+        transform: translateY(0);
+        filter: drop-shadow(0 5px 4px var(--shadow-color));
+    }
+    50% {
+        transform: translateY(calc(var(--float-height) * -1));
+        filter: drop-shadow(0 15px 8px var(--shadow-color));
+    }
+}
+
+@keyframes floatAdvanced {
+    0%, 100% {
+        transform: 
+            translateY(0) 
+            translateX(0) 
+            scale(1);
+    }
+    25% {
+        transform: 
+            translateY(calc(var(--float-height) * -0.7)) 
+            translateX(calc(var(--float-height) * 0.3)) 
+            scale(1.02);
+    }
+    50% {
+        transform: 
+            translateY(calc(var(--float-height) * -1)) 
+            translateX(0) 
+            scale(1.03);
+    }
+    75% {
+        transform: 
+            translateY(calc(var(--float-height) * -0.7)) 
+            translateX(calc(var(--float-height) * -0.3)) 
+            scale(1.02);
+    }
+}
+
+@keyframes rotateAdvanced {
+    0%, 100% {
+        transform: rotateX(0) rotateY(0);
+    }
+    25% {
+        transform: rotateX(var(--rotation-degree)) rotateY(var(--rotation-degree));
+    }
+    50% {
+        transform: rotateX(0) rotateY(calc(var(--rotation-degree) * 2));
+    }
+    75% {
+        transform: rotateX(calc(var(--rotation-degree) * -1)) rotateY(calc(var(--rotation-degree) * -1));
+    }
+}
+
+/* تأثير التعويم التفاعلي */
+.float-interactive {
+    transition: transform 0.3s var(--float-timing);
+}
+
+.float-interactive:hover {
+    transform: 
+        translateY(calc(var(--float-height) * -1.5))
+        scale(1.05)
+        rotateX(calc(var(--rotation-degree) * 2));
+}
+
+/* تحسينات للأداء */
+@media (prefers-reduced-motion: reduce) {
+    .float {
+        animation: none !important;
+        transform: none !important;
+    }
+}
+
+/* تخصيص للأجهزة المحمولة */
+@media (max-width: 768px) {
+    :root {
+        --float-height: 5px;
+        --float-duration: 2s;
+    }
+}
+
+        
+   /* تعريف المتغيرات */
+:root {
+    --glow-color-1: #90CAF9;
+    --glow-color-2: #A1C4FD;
+    --glow-color-3: #E2EBF0;
+    --glow-opacity: 0.3;
+    --glow-blur: 15px;
+    --glow-spread: 2px;
+    --animation-duration: 4s;
+    --border-radius: 22px;
+}
+
+/* الفئة الأساسية للعنصر */
+.glow-border {
+    position: relative;
+    isolation: isolate;
+}
+
+/* تأثير الحدود المضيئة الأساسي */
+.glow-border::before,
+.glow-border::after {
+    content: '';
+    position: absolute;
+    inset: calc(var(--glow-spread) * -1);
+    border-radius: var(--border-radius);
+    z-index: -1;
+    transition: all 0.3s ease;
+}
+
+/* الطبقة الأولى للتوهج */
+.glow-border::before {
+    background: linear-gradient(
+        45deg,
+        var(--glow-color-1),
+        var(--glow-color-2),
+        var(--glow-color-3)
+    );
+    filter: blur(var(--glow-blur));
+    opacity: var(--glow-opacity);
+    animation: borderGlow var(--animation-duration) ease-in-out infinite,
+               rotateGlow calc(var(--animation-duration) * 2) linear infinite;
+}
+
+/* الطبقة الثانية للتوهج */
+.glow-border::after {
+    background: linear-gradient(
+        -45deg,
+        var(--glow-color-3),
+        var(--glow-color-2),
+        var(--glow-color-1)
+    );
+    filter: blur(calc(var(--glow-blur) * 0.5));
+    opacity: calc(var(--glow-opacity) * 0.5);
+    animation: borderGlow var(--animation-duration) ease-in-out infinite reverse,
+               rotateGlow calc(var(--animation-duration) * 2) linear infinite reverse;
+}
+
+/* تأثير التوهج المتقدم */
+.glow-border-advanced {
+    --glow-layers: 3;
+}
+
+.glow-border-advanced::before {
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            var(--glow-color-1) 0%,
+            var(--glow-color-2) 33%,
+            var(--glow-color-3) 66%
+        );
+    background-size: 200% 200%;
+    animation: 
+        borderGlow var(--animation-duration) ease-in-out infinite,
+        gradientMove calc(var(--animation-duration) * 1.5) linear infinite;
+}
+
+/* تعريف الحركات */
+@keyframes borderGlow {
+    0%, 100% {
+        opacity: calc(var(--glow-opacity) * 0.7);
+        transform: scale(0.98);
+    }
+    50% {
+        opacity: var(--glow-opacity);
+        transform: scale(1.02);
+    }
+}
+
+@keyframes rotateGlow {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 200% 200%;
+    }
+}
+
+/* تأثير التوهج التفاعلي */
+.glow-border-interactive:hover::before {
+    --glow-opacity: 0.5;
+    --glow-blur: calc(var(--glow-blur) * 1.2);
+    transform: scale(1.03);
+}
+
+.glow-border-interactive:hover::after {
+    --glow-opacity: 0.3;
+    --glow-blur: calc(var(--glow-blur) * 0.8);
+    transform: scale(1.01) rotate(180deg);
+}
+
+/* تأثير النبض */
+.glow-border-pulse::before {
+    animation: 
+        borderPulse var(--animation-duration) ease-in-out infinite,
+        rotateGlow calc(var(--animation-duration) * 2) linear infinite;
+}
+
+@keyframes borderPulse {
+    0%, 100% {
+        transform: scale(0.98);
+        filter: blur(var(--glow-blur));
+    }
+    50% {
+        transform: scale(1.02);
+        filter: blur(calc(var(--glow-blur) * 1.3));
+    }
+}
+
+/* تحسينات الأداء */
+@media (prefers-reduced-motion: reduce) {
+    .glow-border::before,
+    .glow-border::after {
+        animation: none;
+    }
+}
+
+/* تخصيص للأجهزة المحمولة */
+@media (max-width: 768px) {
+    :root {
+        --glow-blur: 10px;
+        --glow-spread: 1px;
+        --animation-duration: 3s;
+    }
+}
+        
+
+  /* تعريف المتغيرات */
+:root {
+    --title-color: #37474F;
+    --title-gradient-1: #90CAF9;
+    --title-gradient-2: #A1C4FD;
+    --title-shadow: rgba(0, 0, 0, 0.05);
+    --underline-height: 3px;
+    --animation-duration: 3s;
+    --title-spacing: 2rem;
+}
+
+/* التنسيق الأساسي للعنوان */
+.title {
+    color: var(--title-color);
+    margin-bottom: var(--title-spacing);
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    font-weight: 700;
+    text-shadow: 
+        1px 1px 2px var(--title-shadow),
+        -1px -1px 2px rgba(255, 255, 255, 0.5);
+    position: relative;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+/* تأثير الخط السفلي المتحرك */
+.title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: var(--underline-height);
+    background: linear-gradient(
+        90deg,
+        var(--title-gradient-1),
+        var(--title-gradient-2),
+        var(--title-gradient-1)
+    );
+    border-radius: calc(var(--underline-height) / 2);
+    transform-origin: left;
+    animation: 
+        titleUnderline var(--animation-duration) ease-in-out infinite,
+        gradientFlow calc(var(--animation-duration) * 2) linear infinite;
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 0 10px rgba(144, 202, 249, 0.2);
+}
+
+/* تأثير الخلفية المضيئة */
+.title::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    background: linear-gradient(
+        45deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.2) 45%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0.2) 55%,
+        transparent 60%
+    );
+    filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+/* تأثيرات الحركة */
+@keyframes titleUnderline {
+    0%, 100% {
+        transform: scaleX(0);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scaleX(1);
+        filter: brightness(1.2);
+    }
+}
+
+@keyframes gradientFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+/* تأثير العنوان المتقدم */
+.title-advanced {
+    background: linear-gradient(
+        45deg,
+        var(--title-color) 0%,
+        #4a5c66 50%,
+        var(--title-color) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textGradient 4s linear infinite;
+}
+
+@keyframes textGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+/* تأثيرات التحويم */
+.title:hover::before {
+    opacity: 1;
+}
+
+.title:hover::after {
+    animation-play-state: paused;
+    transform: scaleX(1);
+}
+
+/* تأثير النص ثلاثي الأبعاد */
+.title-3d {
+    text-shadow: 
+        1px 1px 1px var(--title-shadow),
+        2px 2px 1px var(--title-shadow),
+        3px 3px 1px var(--title-shadow),
+        4px 4px 1px var(--title-shadow),
+        5px 5px 1px var(--title-shadow);
+    transition: transform 0.3s ease;
+}
+
+.title-3d:hover {
+    transform: translate(-5px, -5px);
+    text-shadow: 
+        1px 1px 1px var(--title-shadow),
+        2px 2px 1px var(--title-shadow),
+        3px 3px 1px var(--title-shadow),
+        4px 4px 1px var(--title-shadow),
+        5px 5px 1px var(--title-shadow),
+        6px 6px 1px var(--title-shadow),
+        7px 7px 1px var(--title-shadow);
+}
+
+/* تحسينات الأداء */
+@media (prefers-reduced-motion: reduce) {
+    .title::after {
+        animation: none;
+        transform: scaleX(1);
+    }
+}
+
+/* تخصيص للأجهزة المحمولة */
+@media (max-width: 768px) {
+    .title {
+        font-size: 1.5rem;
+        margin-bottom: calc(var(--title-spacing) * 0.75);
+    }
+    
+    .title::after {
+        height: calc(var(--underline-height) * 0.75);
+    }
+}
+        
+  /* تعريف المتغيرات */
+:root {
+    --input-spacing: 2rem;
+    --input-gradient-1: #90CAF9;
+    --input-gradient-2: #E3F2FD;
+    --input-border-color: rgba(144, 202, 249, 0.2);
+    --input-shadow: rgba(0, 0, 0, 0.1);
+    --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --input-radius: 8px;
+}
+
+/* التنسيق الأساسي لمجموعة الإدخال */
+.input-group {
+    position: relative;
+    margin-bottom: var(--input-spacing);
+    text-align: right;
+    transform: translateZ(20px);
+    transition: all 0.3s var(--transition-timing);
+    padding: 1rem;
+    border-radius: var(--input-radius);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* تأثير الخط السفلي */
+.input-group::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        var(--input-gradient-1),
+        var(--input-gradient-2)
+    );
+    transition: all 0.3s var(--transition-timing);
+    transform: translateX(-50%);
+    border-radius: 1px;
+    box-shadow: 0 1px 3px var(--input-shadow);
+}
+
+/* تأثير الإطار */
+.input-group::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--input-radius);
+    padding: 1px;
+    background: linear-gradient(
+        45deg,
+        var(--input-gradient-1),
+        var(--input-gradient-2)
+    );
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask: 
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s var(--transition-timing);
+}
+
+/* تنسيق حقل الإدخال */
+.input-group input,
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--input-border-color);
+    border-radius: calc(var(--input-radius) - 2px);
+    background: rgba(255, 255, 255, 0.1);
+    color: inherit;
+    transition: all 0.3s var(--transition-timing);
+}
+
+/* تأثيرات التحويم */
+.input-group:hover {
+    transform: translateZ(30px) translateY(-2px);
+    box-shadow: 
+        0 5px 15px rgba(144, 202, 249, 0.1),
+        0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.input-group:hover::after {
+    width: 100%;
+}
+
+.input-group:hover::before {
+    opacity: 1;
+}
+
+.input-group:hover input,
+.input-group:hover select,
+.input-group:hover textarea {
+    border-color: var(--input-gradient-1);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* تأثيرات التركيز */
+.input-group:focus-within {
+    transform: translateZ(40px) translateY(-4px);
+    box-shadow: 
+        0 8px 20px rgba(144, 202, 249, 0.15),
+        0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.input-group:focus-within::after {
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        var(--input-gradient-2),
+        var(--input-gradient-1),
+        var(--input-gradient-2)
+    );
+    background-size: 200% 100%;
+    animation: gradientMove 3s linear infinite;
+}
+
+/* تأثير الخطأ */
+.input-group.error::before {
+    background: linear-gradient(45deg, #ff4444, #ff8888);
+    opacity: 1;
+}
+
+.input-group.error input {
+    border-color: #ff4444;
+}
+
+/* تأثير النجاح */
+.input-group.success::before {
+    background: linear-gradient(45deg, #00C851, #00E676);
+    opacity: 1;
+}
+
+/* حركات التدرج */
+@keyframes gradientMove {
+    0% { background-position: 100% 0%; }
+    100% { background-position: -100% 0%; }
+}
+
+/* تأثيرات التحميل */
+.input-group.loading::after {
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--input-gradient-1),
+        transparent
+    );
+    animation: loadingMove 1.5s infinite;
+}
+
+@keyframes loadingMove {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* تحسينات الأداء */
+@media (prefers-reduced-motion: reduce) {
+    .input-group,
+    .input-group::after,
+    .input-group::before {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* تخصيص للأجهزة المحمولة */
+@media (max-width: 768px) {
+    .input-group {
+        margin-bottom: calc(var(--input-spacing) * 0.75);
+        padding: 0.75rem;
+    }
+    
+    .input-group:hover,
+    .input-group:focus-within {
+        transform: none;
+    }
+}
+        
+  /* تعريف المتغيرات */
+:root {
+    --label-color: #455A64;
+    --label-hover-color: #1976D2;
+    --label-focus-color: #2196F3;
+    --label-spacing: 0.8rem;
+    --label-font-size: 1.1rem;
+    --label-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* التنسيق الأساسي للتسميات */
+.form-label {
+    display: block;
+    margin-bottom: var(--label-spacing);
+    color: var(--label-color);
+    font-weight: 600;
+    font-size: var(--label-font-size);
+    transition: all var(--label-transition);
+    position: relative;
+    padding-right: 1.2rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* تأثير الأيقونة */
+.form-label::before {
+    content: '⚡';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) scale(0.8);
+    opacity: 0;
+    transition: all var(--label-transition);
+}
+
+/* تأثير الخط السفلي */
+.form-label::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    right: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        var(--label-hover-color),
+        var(--label-focus-color)
+    );
+    transition: width var(--label-transition);
+}
+
+/* تأثيرات التحويم */
+.form-label:hover {
+    color: var(--label-hover-color);
+    transform: translateX(-5px);
+}
+
+.form-label:hover::before {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+}
+
+.form-label:hover::after {
+    width: 100%;
+}
+
+/* تنسيق التسمية المطلوبة */
+.form-label.required {
+    padding-left: 1rem;
+}
+
+.form-label.required::after {
+    content: '*';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #f44336;
+    width: auto;
+    height: auto;
+    background: none;
+}
+
+/* تأثير التسمية النشطة */
+.form-label.active {
+    color: var(--label-focus-color);
+    transform: translateY(-5px) scale(0.95);
+}
+
+/* تنسيق التسمية مع الأيقونة */
+.form-label-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-label-icon i {
+    font-size: 1.2em;
+    opacity: 0.7;
+    transition: all var(--label-transition);
+}
+
+.form-label-icon:hover i {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* تأثير النص المتدرج */
+.form-label-gradient {
+    background: linear-gradient(
+        45deg,
+        var(--label-color),
+        var(--label-focus-color)
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientText 3s linear infinite;
+}
+
+@keyframes gradientText {
+    to {
+        background-position: 200% center;
+    }
+}
+
+/* تأثير الظل النصي */
+.form-label-shadow {
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.1),
+        -1px -1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* تنسيق مجموعة التسميات */
+.label-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* تحسينات للأجهزة المحمولة */
+@media (max-width: 768px) {
+    .form-label {
+        font-size: calc(var(--label-font-size) * 0.9);
+        margin-bottom: calc(var(--label-spacing) * 0.75);
+    }
+    
+    .form-label:hover {
+        transform: none;
+    }
+}
+
+/* دعم الوضع المظلم */
+@media (prefers-color-scheme: dark) {
+    .form-label {
+        --label-color: #B0BEC5;
+        --label-hover-color: #90CAF9;
+        --label-focus-color: #64B5F6;
+    }
+}
+        
+
+  /* تعريف المتغيرات */
+:root {
+    --input-border: #E3F2FD;
+    --input-border-hover: #BBDEFB;
+    --input-border-focus: #90CAF9;
+    --input-bg: rgba(255, 255, 255, 0.9);
+    --input-text: #37474F;
+    --input-placeholder: #78909C;
+    --input-shadow: rgba(0, 0, 0, 0.03);
+    --input-shadow-hover: rgba(0, 0, 0, 0.05);
+    --input-shadow-focus: rgba(144, 202, 249, 0.2);
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* التنسيق الأساسي */
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--input-border);
+    border-radius: 10px;
+    font-size: 1.1rem;
+    transition: all var(--transition);
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    box-shadow: 
+        0 2px 5px var(--input-shadow),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+/* تنسيق Placeholder */
+.form-input::placeholder {
+    color: var(--input-placeholder);
+    opacity: 0.7;
+    transition: opacity var(--transition);
+}
+
+/* تأثير الخلفية */
+.form-input::before,
+.form-select::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(45deg, 
+        var(--input-border-hover),
+        var(--input-border-focus)
+    );
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask: 
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--transition);
+    z-index: -1;
+}
+
+/* تأثيرات التحويم */
+.form-input:hover,
+.form-select:hover {
+    transform: translateY(-2px);
+    border-color: var(--input-border-hover);
+    box-shadow: 
+        0 5px 15px var(--input-shadow-hover),
+        0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-input:hover::placeholder {
+    opacity: 0.9;
+}
+
+.form-input:hover::before,
+.form-select:hover::before {
+    opacity: 0.5;
+}
+
+/* تأثيرات التركيز */
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--input-border-focus);
+    box-shadow: 
+        0 0 15px var(--input-shadow-focus),
+        0 0 0 2px rgba(144, 202, 249, 0.1);
+    transform: translateY(-3px);
+}
+
+.form-input:focus::placeholder {
+    opacity: 0.5;
+    transform: translateX(-5px);
+}
+
+/* تخصيص Select */
+.form-select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--input-text) 50%),
+                      linear-gradient(135deg, var(--input-text) 50%, transparent 50%);
+    background-position: 
+        calc(100% - 20px) calc(1em + 2px),
+        calc(100% - 15px) calc(1em + 2px);
+    background-size: 
+        5px 5px,
+        5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 2.5rem;
+}
+
+/* تنسيق الخيارات */
+.form-select option {
+    background: white;
+    color: var(--input-text);
+    padding: 10px;
+}
+
+/* تأثيرات الحالة */
+.form-input:disabled,
+.form-select:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.form-input.error,
+.form-select.error {
+    border-color: #f44336;
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.form-input.success,
+.form-select.success {
+    border-color: #4CAF50;
+}
+
+/* تأثير الرجة */
+@keyframes shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-3px); }
+    40%, 60% { transform: translateX(3px); }
+}
+
+/* تحسينات للموبايل */
+@media (max-width: 768px) {
+    .form-input,
+    .form-select {
+        font-size: 1rem;
+        padding: 10px 14px;
+    }
+    
+    .form-input:hover,
+    .form-select:hover,
+    .form-input:focus,
+    .form-select:focus {
+        transform: none;
+    }
+}
+
+/* دعم الوضع المظلم */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --input-bg: rgba(255, 255, 255, 0.05);
+        --input-text: #E3F2FD;
+        --input-placeholder: #90A4AE;
+        --input-border: rgba(255, 255, 255, 0.1);
+    }
+    
+    .form-input,
+    .form-select {
+        backdrop-filter: blur(5px);
+    }
+}
+        
+  /* تعريف المتغيرات */
+:root {
+    --result-gradient-1: #F5F9FF;
+    --result-gradient-2: #FFFFFF;
+    --result-border: #E3F2FD;
+    --result-text: #37474F;
+    --result-shadow: rgba(0, 0, 0, 0.05);
+    --result-glow: rgba(144, 202, 249, 0.2);
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* التنسيق الأساسي لصندوق النتيجة */
+.result-box {
+    background: linear-gradient(135deg, 
+        var(--result-gradient-1) 0%, 
+        var(--result-gradient-2) 100%
+    );
+    padding: 2rem;
+    border-radius: 15px;
+    margin-top: 2rem;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--result-border);
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.05),
+        0 1px 8px rgba(0, 0, 0, 0.02);
+    backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+/* تأثير الإطار المضيء */
+.result-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+        45deg,
+        transparent 40%,
+        rgba(144, 202, 249, 0.5) 45%,
+        rgba(144, 202, 249, 0.8) 50%,
+        rgba(144, 202, 249, 0.5) 55%,
+        transparent 60%
+    );
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask: 
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: borderRotate 4s linear infinite;
+}
+
+/* تأثير التوهج */
+.result-box::after {
+    content: '';
+    position: absolute;
+    inset: -100%;
+    background: radial-gradient(
+        circle at var(--x, 50%) var(--y, 50%),
+        rgba(255, 255, 255, 0.8) 0%,
+        transparent 50%
+    );
+    opacity: 0;
+    transition: opacity var(--transition);
+}
+
+/* تنسيق النتيجة */
+.result {
+    margin: 0;
+    font-size: clamp(1.2rem, 3vw, 1.4rem);
+    font-weight: 700;
+    color: var(--result-text);
+    line-height: 2;
+    text-shadow: 
+        1px 1px 2px var(--result-shadow),
+        -1px -1px 0 rgba(255, 255, 255, 0.5);
+    transition: all var(--transition);
+    position: relative;
+    z-index: 1;
+}
+
+/* تأثير خلفية النتيجة */
+.result-background {
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(144, 202, 249, 0.1),
+            transparent 70%
+        );
+    opacity: 0;
+    transition: opacity var(--transition);
+}
+
+/* تأثيرات التحويم */
+.result-box:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.08),
+        0 5px 15px var(--result-glow);
+}
+
+.result-box:hover::after {
+    opacity: 0.1;
+}
+
+.result-box:hover .result {
+    transform: translateZ(20px);
+    text-shadow: 
+        2px 2px 4px var(--result-shadow),
+        -1px -1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.result-box:hover .result-background {
+    opacity: 1;
+}
+
+/* تأثيرات الحركة */
+@keyframes borderRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes resultPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* تنسيق حالة التحميل */
+.result-box.loading {
+    position: relative;
+}
+
+.result-box.loading::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.5),
+        transparent
+    );
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* تنسيق حالة النجاح */
+.result-box.success {
+    border-color: #4CAF50;
+    animation: successPulse 0.5s ease;
+}
+
+@keyframes successPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 0 20px rgba(76, 175, 80, 0);
+    }
+}
+
+/* تحسينات للموبايل */
+@media (max-width: 768px) {
+    .result-box {
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .result-box:hover {
+        transform: none;
+    }
+}
+
+/* دعم الوضع المظلم */
+@media (prefers-color-scheme: dark) {
+    .result-box {
+        --result-gradient-1: rgba(245, 249, 255, 0.05);
+        --result-gradient-2: rgba(255, 255, 255, 0.1);
+        --result-text: #E3F2FD;
+        --result-border: rgba(255, 255, 255, 0.1);
+    }
+}
+        
+   /* تعريف المتغيرات */
+:root {
+    --button-bg: #e74c3c;
+    --button-hover: #c0392b;
+    --button-active: #a93226;
+    --button-size: 60px;
+    --button-icon-size: 1.2rem;
+    --button-shadow: rgba(0, 0, 0, 0.3);
+    --button-glow: rgba(231, 76, 60, 0.4);
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* التنسيق الأساسي للزر */
+.reset-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: var(--button-size);
+    height: var(--button-size);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: var(--button-icon-size);
+    background: var(--button-bg);
+    color: white;
+    transition: all var(--transition);
+    z-index: 1000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+/* تأثير الظل */
+.reset-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at center,
+        var(--button-bg) 0%,
+        var(--button-hover) 100%
+    );
+    border-radius: inherit;
+    z-index: -1;
+    transition: all var(--transition);
+}
+
+/* تأثير التوهج */
+.reset-button::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0%,
+        var(--button-bg) 25%,
+        transparent 50%
+    );
+    border-radius: inherit;
+    animation: rotateGlow 2s linear infinite;
+    opacity: 0;
+    transition: opacity var(--transition);
+    z-index: -2;
+}
+
+/* أيقونة الزر */
+.reset-button i {
+    transition: transform var(--transition);
+}
+
+/* تأثير النبض */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 var(--button-glow);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(231, 76, 60, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+    }
+}
+
+@keyframes rotateGlow {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* تأثيرات التحويم */
+.reset-button:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 
+        0 8px 20px var(--button-shadow),
+        0 4px 10px var(--button-glow);
+}
+
+.reset-button:hover::before {
+    filter: brightness(1.2);
+}
+
+.reset-button:hover::after {
+    opacity: 0.5;
+}
+
+.reset-button:hover i {
+    transform: rotate(180deg);
+}
+
+/* تأثيرات النقر */
+.reset-button:active {
+    transform: translateY(2px) scale(0.95);
+    background: var(--button-active);
+    box-shadow: 
+        0 2px 10px var(--button-shadow),
+        0 2px 5px var(--button-glow);
+}
+
+/* تأثير التحميل */
+.reset-button.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.reset-button.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* تأثير النجاح */
+.reset-button.success {
+    background: #2ecc71;
+    --button-glow: rgba(46, 204, 113, 0.4);
+    animation: successPulse 1s ease;
+}
+
+@keyframes successPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 0 20px rgba(46, 204, 113, 0);
+    }
+}
+
+/* تخصيص للموبايل */
+@media (max-width: 768px) {
+    :root {
+        --button-size: 50px;
+        --button-icon-size: 1rem;
+    }
+    
+    .reset-button {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .reset-button:hover {
+        transform: none;
+    }
+}
+
+/* دعم تفضيلات الحركة المخفضة */
+@media (prefers-reduced-motion: reduce) {
+    .reset-button,
+    .reset-button::before,
+    .reset-button::after,
+    .reset-button i {
+        transition: none;
+        animation: none;
+    }
+}
+        
+
+   /* تعريف المتغيرات */
+:root {
+    --animation-duration: 1s;
+    --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --scale-amount: 1.02;
+    --translate-amount: 10px;
+    --rotate-amount: 2deg;
+    --glow-color: rgba(144, 202, 249, 0.5);
+}
+
+/* تأثير النبض المتقدم */
+@keyframes advancedPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    50% {
+        transform: scale(var(--scale-amount));
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15),
+                   0 0 20px var(--glow-color);
+    }
+}
+
+/* تأثير الظهور التدريجي */
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* تأثير التموج */
+@keyframes ripple {
+    0% {
+        box-shadow: 0 0 0 0 var(--glow-color);
+        transform: scale(1);
+    }
+    70% {
+        box-shadow: 0 0 0 20px rgba(144, 202, 249, 0);
+        transform: scale(var(--scale-amount));
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(144, 202, 249, 0);
+        transform: scale(1);
+    }
+}
+
+/* تأثير الاهتزاز الناعم */
+@keyframes softShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(calc(var(--translate-amount) * -0.25));
+    }
+    75% {
+        transform: translateX(calc(var(--translate-amount) * 0.25));
+    }
+}
+
+/* تأثير الدوران الخفيف */
+@keyframes gentleRotate {
+    0%, 100% {
+        transform: rotate(0deg) scale(1);
+    }
+    50% {
+        transform: rotate(var(--rotate-amount)) scale(var(--scale-amount));
+    }
+}
+
+/* تأثير التلاشي المتدرج */
+@keyframes gradientFade {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* تأثير الانزلاق */
+@keyframes slideInOut {
+    0% {
+        transform: translateY(calc(var(--translate-amount) * -1));
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* تطبيق التأثيرات */
+.animate {
+    animation-duration: var(--animation-duration);
+    animation-timing-function: var(--animation-timing);
+    animation-fill-mode: both;
+}
+
+.pulse {
+    animation-name: advancedPulse;
+}
+
+.fade-in {
+    animation-name: fadeInScale;
+}
+
+.ripple {
+    animation-name: ripple;
+}
+
+.shake {
+    animation-name: softShake;
+}
+
+.rotate {
+    animation-name: gentleRotate;
+}
+
+.gradient {
+    background: linear-gradient(270deg, #90CAF9, #64B5F6, #42A5F5, #90CAF9);
+    background-size: 300% 300%;
+    animation-name: gradientFade;
+}
+
+.slide {
+    animation-name: slideInOut;
+}
+
+/* تأثيرات متعددة */
+.multi-effect {
+    animation: 
+        advancedPulse var(--animation-duration) var(--animation-timing),
+        gradientFade calc(var(--animation-duration) * 2) linear infinite;
+}
+
+/* تأثير تفاعلي */
+.interactive {
+    transition: all 0.3s var(--animation-timing);
+}
+
+.interactive:hover {
+    transform: 
+        scale(var(--scale-amount)) 
+        translateY(calc(var(--translate-amount) * -0.5));
+    box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.15),
+        0 0 20px var(--glow-color);
+}
+
+/* تأثيرات الحالة */
+.success-animation {
+    animation: ripple 0.6s var(--animation-timing);
+    --glow-color: rgba(76, 175, 80, 0.5);
+}
+
+.error-animation {
+    animation: softShake 0.5s var(--animation-timing);
+    --glow-color: rgba(244, 67, 54, 0.5);
+}
+
+/* تحسينات الأداء */
+@media (prefers-reduced-motion: reduce) {
+    .animate {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+        
+/* تعريف المتغيرات */
+:root {
+    --loading-color-1: #90CAF9;
+    --loading-color-2: #A1C4FD;
+    --loading-duration: 1.5s;
+    --loading-height: 2px;
+    --loading-blur: 4px;
+    --loading-glow: rgba(144, 202, 249, 0.5);
+}
+
+/* الحاوية الأساسية للتحميل */
+.loading-container {
+    position: relative;
+    overflow: hidden;
+}
+
+/* تأثير التحميل الخطي */
+.loading-linear::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: var(--loading-height);
+    background: linear-gradient(
+        90deg,
+        var(--loading-color-1),
+        var(--loading-color-2)
+    );
+    animation: loadingLinear var(--loading-duration) ease-in-out infinite;
+    box-shadow: 0 0 var(--loading-blur) var(--loading-glow);
+    border-radius: calc(var(--loading-height) / 2);
+}
+
+/* تأثير التحميل النابض */
+.loading-pulse::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at center,
+        var(--loading-color-1),
+        transparent 70%
+    );
+    opacity: 0;
+    animation: loadingPulse var(--loading-duration) ease-in-out infinite;
+}
+
+/* تأثير التحميل الدائري */
+.loading-spinner::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    margin: -15px 0 0 -15px;
+    border: 3px solid var(--loading-color-1);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: loadingSpinner var(--loading-duration) linear infinite;
+}
+
+/* تأثير التحميل المتموج */
+.loading-wave::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: var(--loading-height);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--loading-color-1),
+        var(--loading-color-2),
+        transparent
+    );
+    animation: loadingWave var(--loading-duration) ease-in-out infinite;
+    filter: blur(var(--loading-blur));
+}
+
+/* تأثير التحميل المتدرج */
+.loading-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        45deg,
+        transparent 25%,
+        var(--loading-color-1) 50%,
+        transparent 75%
+    );
+    background-size: 200% 200%;
+    animation: loadingGradient var(--loading-duration) linear infinite;
+}
+
+/* تأثير التحميل النقطي */
+.loading-dots::after {
+    content: '...';
+    position: absolute;
+    right: -20px;
+    animation: loadingDots var(--loading-duration) steps(4, end) infinite;
+}
+
+/* تعريف الحركات */
+@keyframes loadingLinear {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0.5;
+    }
+}
+
+@keyframes loadingPulse {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+}
+
+@keyframes loadingSpinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loadingWave {
+    0% {
+        transform: translateX(-100%) scaleX(0.5);
+    }
+    50% {
+        transform: translateX(0%) scaleX(1);
+    }
+    100% {
+        transform: translateX(100%) scaleX(0.5);
+    }
+}
+
+@keyframes loadingGradient {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes loadingDots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+}
+
+/* تأثير التحميل المتقدم */
+.loading-advanced {
+    position: relative;
+}
+
+.loading-advanced::before,
+.loading-advanced::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+}
+
+.loading-advanced::before {
+    background: conic-gradient(
+        transparent 0%,
+        var(--loading-color-1) 25%,
+        var(--loading-color-2) 50%,
+        transparent 75%
+    );
+    animation: loadingRotate var(--loading-duration) linear infinite;
+    filter: blur(calc(var(--loading-blur) / 2));
+}
+
+.loading-advanced::after {
+    background: inherit;
+    margin: 2px;
+    border-radius: inherit;
+}
+
+@keyframes loadingRotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* تخصيص للموبايل */
+@media (max-width: 768px) {
+    :root {
+        --loading-height: 1.5px;
+        --loading-blur: 2px;
+    }
+}
+
+/* دعم تفضيلات الحركة المخفضة */
+@media (prefers-reduced-motion: reduce) {
+    .loading-container::after,
+    .loading-container::before {
+        animation-duration: calc(var(--loading-duration) * 2);
+    }
+}
+        
+  /* تعريف المتغيرات */
+:root {
+    --particle-size: 20px;
+    --particle-color-1: #4CAF50;
+    --particle-color-2: #2196F3;
+    --particle-color-3: #9C27B0;
+    --animation-duration: 15s;
+    --particle-count: 50;
+    --particle-blur: 5px;
+}
+
+/* الحاوية الرئيسية */
+.background-animation {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background: linear-gradient(
+        135deg,
+        rgba(33, 150, 243, 0.1),
+        rgba(76, 175, 80, 0.1)
+    );
+}
+
+/* طبقة التأثير */
+.background-animation::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(100px);
+    pointer-events: none;
+}
+
+/* الجزيئات المتحركة */
+.particle {
+    position: absolute;
+    width: var(--particle-size);
+    height: var(--particle-size);
+    background: var(--particle-color-1);
+    border-radius: 50%;
+    filter: blur(var(--particle-blur));
+    animation: float var(--animation-duration) infinite;
+    opacity: 0;
+}
+
+/* تأثيرات متعددة للجزيئات */
+.particle::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: radial-gradient(
+        circle at center,
+        currentColor 0%,
+        transparent 70%
+    );
+    border-radius: inherit;
+}
+
+/* تعريف الحركات */
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 0.3;
+    }
+    90% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(
+            calc(100vw - var(--particle-size)),
+            calc(100vh - var(--particle-size))
+        ) rotate(360deg) scale(0);
+        opacity: 0;
+    }
+}
+
+/* تأثير التموج */
+@keyframes ripple {
+    0% {
+        transform: scale(0.3);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+/* تأثير الدوران */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* تأثير النبض */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.8;
+    }
+}
+
+/* تخصيص للموبايل */
+@media (max-width: 768px) {
+    :root {
+        --particle-size: 15px;
+        --particle-count: 30;
+        --particle-blur: 3px;
+    }
+}
+
+/* دعم تفضيلات الحركة المخفضة */
+@media (prefers-reduced-motion: reduce) {
+    .particle {
+        animation-duration: calc(var(--animation-duration) * 2);
+    }
+}
+        
+
+  /* تعريف المتغيرات */
+:root {
+    --counter-size: 40px;
+    --counter-bg: rgba(255, 255, 255, 0.2);
+    --counter-color: white;
+    --counter-shadow: rgba(0, 0, 0, 0.2);
+    --counter-glow: rgba(255, 255, 255, 0.3);
+    --counter-border: rgba(255, 255, 255, 0.1);
+    --transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* التنسيق الأساسي */
+.visitor-count {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: var(--counter-size);
+    height: var(--counter-size);
+    border-radius: 50%;
+    background: var(--counter-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--counter-color);
+    box-shadow: 
+        0 2px 10px var(--counter-shadow),
+        inset 0 1px 2px var(--counter-glow);
+    transition: all var(--transition);
+    cursor: pointer;
+    overflow: hidden;
+    border: 1px solid var(--counter-border);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+/* تأثير الإطار المضيء */
+.visitor-count::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: conic-gradient(
+        from 0deg at 50% 50%,
+        transparent,
+        var(--counter-glow),
+        transparent 60%
+    );
+    border-radius: inherit;
+    animation: rotateGlow 3s linear infinite;
+    opacity: 0;
+    transition: opacity var(--transition);
+}
+
+/* تأثير التوهج الداخلي */
+.visitor-count::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: inherit;
+    border-radius: inherit;
+    z-index: 1;
+}
+
+/* عرض العدد */
+.visitor-count-number {
+    position: relative;
+    z-index: 2;
+    transition: all var(--transition);
+}
+
+/* تأثير التحديث */
+.visitor-count.updating .visitor-count-number {
+    animation: updateCount 0.5s ease-in-out;
+}
+
+/* توسيع العداد عند التحويم */
+.visitor-count.expanded {
+    width: auto;
+    padding: 0 20px;
+    border-radius: 20px;
+}
+
+/* أيقونة العداد */
+.visitor-count-icon {
+    margin-right: 8px;
+    font-size: 0.9em;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all var(--transition);
+}
+
+.visitor-count.expanded .visitor-count-icon {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* تعريف الحركات */
+@keyframes rotateGlow {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes updateCount {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-10px) scale(1.2);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* تأثيرات التحويم */
+.visitor-count:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 
+        0 6px 15px var(--counter-shadow),
+        0 2px 5px rgba(0, 0, 0, 0.1),
+        inset 0 1px 3px var(--counter-glow);
+}
+
+.visitor-count:hover::before {
+    opacity: 1;
+}
+
+/* تخصيص للموبايل */
+@media (max-width: 768px) {
+    .visitor-count {
+        top: 10px;
+        right: 10px;
+        --counter-size: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .visitor-count:hover {
+        transform: none;
+    }
+}
+
+/* دعم الوضع المظلم */
+@media (prefers-color-scheme: dark) {
+    .visitor-count {
+        --counter-bg: rgba(0, 0, 0, 0.3);
+        --counter-glow: rgba(255, 255, 255, 0.1);
+    }
+}
+        
+ /* تعريف نقاط التوقف */
+:root {
+    --breakpoint-xs: 380px;
+    --breakpoint-sm: 480px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    
+    /* متغيرات متجاوبة */
+    --spacing-base: clamp(0.5rem, 3vw, 2rem);
+    --font-size-base: clamp(14px, 2.5vw, 16px);
+    --border-radius-base: clamp(8px, 2vw, 16px);
+    --container-padding: clamp(1rem, 5vw, 2.5rem);
+}
+
+/* التنسيقات الأساسية المتجاوبة */
+@media (max-width: 768px) {
+    /* تحسينات عامة */
+    html {
+        font-size: var(--font-size-base);
+    }
+
+    body {
+        padding: var(--spacing-base);
+        overflow-x: hidden;
+    }
+
+    /* تحسين التمرير */
+    * {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+}
+
+/* تحسينات للشاشات الصغيرة جداً */
+@media (max-width: var(--breakpoint-xs)) {
+    :root {
+        --container-padding: 0.8rem;
+    }
+
+    /* تعديلات الخط والمسافات */
+    body {
+        font-size: 13px;
+        padding: 0.8rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    /* تحسين أحجام العناصر */
+    .calculator {
+        padding: 0.8rem;
+        gap: 0.8rem;
+        border-radius: 12px;
+    }
+
+    .input-group {
+        margin-bottom: 0.8rem;
     }
 
     #result {
-        margin: 0;
-        font-size: 1.4rem;
-        font-weight: bold;
-        color: #37474F;
-        line-height: 2;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        font-size: 1.1rem;
+    }
+}
+
+/* تحسينات للهواتف الصغيرة */
+@media (max-width: var(--breakpoint-sm)) {
+    /* تنسيقات الحاوية */
+    .calculator {
+        padding: var(--container-padding);
+        margin: 0.5rem;
+        border-radius: var(--border-radius-base);
     }
 
-    /* زر إعادة التعيين */
-    .reset-button {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        padding: 15px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 1.2rem;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        transition: all 0.3s ease;
+    /* تحسين العناصر التفاعلية */
+    input,
+    select,
+    button {
+        min-height: 44px; /* تحسين إمكانية النقر */
+        font-size: 16px; /* منع التكبير التلقائي في iOS */
     }
 
-    .reset-button:hover {
-        background-color: #c0392b;
-        transform: scale(1.1);
-    }
-
-    /* تأثيرات حركية */
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.01); }
-        100% { transform: scale(1); }
-    }
-
-    .result-box.pulse {
-        animation: pulse 1s ease-in-out;
-    }
-
-    /* تأثير التحميل */
-    .loading::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(90deg, #90CAF9, #A1C4FD);
-        animation: loading 1.5s ease-in-out infinite;
-    }
-
-    @keyframes loading {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-    }
-
-    /* خلفية متحركة */
-    .background-animation {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        opacity: 0.5;
-    }
-
-    .background-animation span {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background: #4CAF50;
-        animation: move 3s linear infinite;
-        border-radius: 50%;
-    }
-
-    @keyframes move {
-        0% { transform: translate(0, 0); }
-        100% { transform: translate(300px, 300px); }
-    }
-
-    /* عداد الزوار */
+    /* تعديل عداد الزوار */
     .visitor-count {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(5px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1rem;
-        font-weight: bold;
-        color: white;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        transition: all 0.5s ease;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
     }
 
-    .visitor-count:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    /* تحسين المسافات */
+    .input-group {
+        gap: 0.8rem;
     }
 
-    /* تحسينات للموبايل */
-    @media (max-width: 480px) {
-        body {
-            font-size: 14px;
-            padding: 1rem;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-        }
-
-        #result {
-            font-size: 1.2rem;
-        }
-
-        .calculator {
-            padding: 1rem;
-        }
-
-        .visitor-count {
-            top: 10px;
-            right: 10px;
-            width: 30px;
-            height: 30px;
-            font-size: 0.8rem;
-        }
+    label {
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
     }
+}
+
+/* تحسينات للأجهزة المتوسطة */
+@media (max-width: var(--breakpoint-md)) {
+    /* تحسين التخطيط */
+    .calculator {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* تعديل الأزرار العائمة */
+    .reset-button {
+        bottom: 15px;
+        right: 15px;
+        padding: 12px;
+    }
+
+    /* تحسين التفاعلية */
+    .input-group:hover,
+    .result-box:hover {
+        transform: none !important;
+    }
+}
+
+/* تحسينات لوضع الشاشة الأفقي */
+@media (max-height: 480px) and (orientation: landscape) {
+    body {
+        padding: 0.5rem;
+    }
+
+    .calculator {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}
+
+/* تحسينات للأداء */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* تحسينات لدعم اللمس */
+@media (hover: none) and (pointer: coarse) {
+    /* تكبير مناطق النقر */
+    button,
+    input,
+    select {
+        padding: 12px 16px;
+    }
+
+    /* إزالة تأثيرات التحويم */
+    .input-group:hover::after,
+    .result-box:hover::before {
+        opacity: 0;
+    }
+
+    /* تحسين التمرير */
+    .calculator {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* تحسينات لشاشات الرتينا */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* تحسين حدة الخطوط */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* تحسين الحدود */
+    .calculator,
+    .input-group,
+    .result-box {
+        border-width: 0.5px;
+    }
+}
+
+/* تحسينات للطباعة */
+@media print {
+    .calculator {
+        box-shadow: none !important;
+        border: 1px solid #ccc;
+    }
+
+    .visitor-count,
+    .reset-button,
+    .background-animation {
+        display: none !important;
+    }
+}
+        
 </style>
     
 </head>
 <body>
-    <div class="background-animation">
-        <span style="left: 10%; top: 20%;"></span>
-        <span style="left: 30%; top: 40%;"></span>
-        <span style="left: 50%; top: 60%;"></span>
-        <span style="left: 70%; top: 80%;"></span>
-        <span style="left: 90%; top: 10%;"></span>
+
+        <div class="animated-background">
+        <div class="wave-effect"></div>
+
+       <!-- خلفية متحركة -->
+    <div class="background-animation" aria-hidden="true">
+        <div class="particle" style="--index: 1"></div>
+        <div class="particle" style="--index: 2"></div>
+        <div class="particle" style="--index: 3"></div>
+        <div class="particle" style="--index: 4"></div>
+        <div class="particle" style="--index: 5"></div>
     </div>
 
-   <div id="visitorCount" class="visitor-count">0</div>
+            <!-- أمثلة للاستخدام -->
 
-    <div class="calculator">
-        <h2>حاسبة تقسيط العمرة</h2>
-        <div class="input-group">
-            <label for="flightType">نوع الرحلة:</label>
-            <select id="flightType">
-                <option value="direct">مباشر</option>
-                <option value="indirect">غير مباشر</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label for="persons">عدد الأشخاص:</label>
-            <select id="persons">
-                <option value="1">شخص واحد</option>
-                <option value="2">شخصين</option>
-                <option value="3">3 أشخاص</option>
-                <option value="4">4 أشخاص</option>
-                <option value="5">5 أشخاص</option>
-                <option value="6">6 أشخاص</option>
-            </select>
-        </div>
-      <div class="input-group">
-    <label for="roomType">نوع الغرفة:</label>
-    <select id="roomType">
-        <option value="shared">غرفة جماعية</option>
-        <option value="quadruple">غرفة رباعية</option>
-        <option value="triple">غرفة ثلاثية</option>
-        <option value="double">غرفة ثنائية</option>
-        <option value="single">غرفة فردية</option>
-    </select>
-</div>
-        <div class="input-group">
-            <label for="months">عدد الأشهر:</label>
-            <select id="months">
-                <option value="3">3 أشهر</option>
-                <option value="4">4 أشهر</option>
-                <option value="5">5 أشهر</option>
-                <option value="6">6 أشهر</option>
-                <option value="7">7 أشهر</option>
-                <option value="8">8 أشهر</option>
-                <option value="9">9 أشهر</option>
-                <option value="10">10 أشهر</option>
-                <option value="11">11 شهر</option>
-                <option value="12">12 شهر</option>
-                <option value="13" selected>13 شهر</option>
-                <option value="14">14 شهر</option>
-                <option value="15">15 شهر</option>
-                <option value="16">16 شهر</option>
-                <option value="17">17 شهر</option>
-                <option value="18">18 شهر</option>
-            </select>
-        </div>
-       <div class="input-group">
-    <label for="downpayment">التسبيق (اختياري):</label>
-    <input type="number" 
-           id="downpayment" 
-           placeholder="أدخل مبلغ التسبيق" 
-           min="0" 
-           value="0"
-    >
-</div>
-        
-        <div class="result-box">
-            <p id="result">النتيجة ستظهر هنا</p>
-        </div>
+<div class="float float-advanced">تعويم متقدم</div>
+
+            <!-- أمثلة للاستخدام -->
+
+<div class="calculator glow-border glow-border-advanced">توهج متقدم</div>
+
+
+            <h2 class="title title-advanced">عنوان متقدم</h2>
+
+            
+            
+
+    <!-- عداد الزوار -->
+    <div class="visitor-count" role="status" aria-live="polite">
+        <i class="fas fa-users"></i>
+        <span class="visitor-count-number">0</span>
     </div>
 
-    <button class="reset-button" onclick="resetCalculator()">↺</button>
+    <!-- الحاسبة الرئيسية -->
+    <main class="calculator" role="main">
+        <header>
+            <h1 class="title">حاسبة تقسيط العمرة</h1>
+        </header>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+        <form id="calculatorForm" class="calculator-form">
+            <!-- نوع الرحلة -->
+            <div class="input-group">
+                <label for="flightType" class="form-label">نوع الرحلة:</label>
+                <select id="flightType" class="form-select" required>
+                    <option value="direct">مباشر</option>
+                    <option value="indirect">غير مباشر</option>
+                </select>
+            </div>
+
+            <!-- عدد الأشخاص -->
+            <div class="input-group">
+                <label for="persons" class="form-label">عدد الأشخاص:</label>
+                <select id="persons" class="form-select" required>
+                    <option value="" disabled>اختر عدد الأشخاص</option>
+                    <option value="1">شخص واحد</option>
+                    <option value="2">شخصين</option>
+                    <option value="3">3 أشخاص</option>
+                    <option value="4">4 أشخاص</option>
+                    <option value="5">5 أشخاص</option>
+                    <option value="6">6 أشخاص</option>
+                </select>
+            </div>
+
+            <!-- نوع الغرفة -->
+            <div class="input-group">
+                <label for="roomType" class="form-label">نوع الغرفة:</label>
+                <select id="roomType" class="form-select" required>
+                    <option value="" disabled>اختر نوع الغرفة</option>
+                    <option value="shared">غرفة جماعية</option>
+                    <option value="quadruple">غرفة رباعية</option>
+                    <option value="triple">غرفة ثلاثية</option>
+                    <option value="double">غرفة ثنائية</option>
+                    <option value="single">غرفة فردية</option>
+                </select>
+            </div>
+
+            <!-- عدد الأشهر -->
+            <div class="input-group">
+                <label for="months" class="form-label">عدد الأشهر:</label>
+                <select id="months" class="form-select" required>
+                    <option value="" disabled>اختر عدد الأشهر</option>
+                    <!-- تم تنظيم الخيارات في مجموعات -->
+                    <optgroup label="3-6 أشهر">
+                        <option value="3">3 أشهر</option>
+                        <option value="4">4 أشهر</option>
+                        <option value="5">5 أشهر</option>
+                        <option value="6">6 أشهر</option>
+                    </optgroup>
+                    <optgroup label="7-12 شهر">
+                        <option value="7">7 أشهر</option>
+                        <option value="8">8 أشهر</option>
+                        <option value="9">9 أشهر</option>
+                        <option value="10">10 أشهر</option>
+                        <option value="11">11 شهر</option>
+                        <option value="12">12 شهر</option>
+                    </optgroup>
+                    <optgroup label="13-18 شهر">
+                        <option value="13" selected>13 شهر</option>
+                        <option value="14">14 شهر</option>
+                        <option value="15">15 شهر</option>
+                        <option value="16">16 شهر</option>
+                        <option value="17">17 شهر</option>
+                        <option value="18">18 شهر</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- التسبيق -->
+            <div class="input-group">
+                <label for="downpayment" class="form-label">التسبيق (اختياري):</label>
+                <input type="number" 
+                       id="downpayment" 
+                       class="form-input"
+                       placeholder="أدخل مبلغ التسبيق" 
+                       min="0" 
+                       value="0"
+                       aria-label="مبلغ التسبيق"
+                >
+            </div>
+
+            <!-- صندوق النتيجة -->
+            <div class="result-box" role="alert" aria-live="polite">
+                <div class="result-background"></div>
+                <p id="result" class="result">النتيجة ستظهر هنا</p>
+            </div>
+        </form>
+    </main>
+
+    <!-- زر إعادة التعيين -->
+    <button class="reset-button" 
+            onclick="resetCalculator()" 
+            aria-label="إعادة تعيين الحاسبة"
+            title="إعادة تعيين">
+        <i class="fas fa-redo-alt"></i>
+    </button>
+
+    <!-- المكتبات -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" defer></script>
     
-    <!-- إضافة Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js" defer></script>
 
-    
-
-    </body>
+    <!-- سكريبتات التطبيق -->
+    <script src="js/config.js" defer></script>
+    <script src="js/animations.js" defer></script>
+    <script src="js/calculator.js" defer></script>
+    <script src="js/visitors.js" defer></script>
+</body>
 </html>
+
 
  <script>
         // تكوين Firebase
@@ -675,6 +3331,824 @@ setInterval(changeColor, 3000);
             displayVisitorCount();
             initAnimations();
         });
+
+     // تأثير الإضاءة التفاعلي
+const calculator = document.querySelector('.calculator');
+
+calculator.addEventListener('mousemove', (e) => {
+    const rect = calculator.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    calculator.style.setProperty('--x', `${x}%`);
+    calculator.style.setProperty('--y', `${y}%`);
+});
+
+// إضافة تأثير عند النقر
+calculator.addEventListener('click', () => {
+    calculator.style.transform = 'scale(0.98)';
+    setTimeout(() => {
+        calculator.style.transform = '';
+    }, 100);
+});
+
+     // إضافة فهرس للعناصر للحركات المتتابعة
+document.querySelectorAll('.input-group').forEach((group, index) => {
+    group.style.setProperty('--index', index);
+});
+
+// تحسين التجاوب للتمرير
+const handleScroll = () => {
+    const calculator = document.querySelector('.calculator');
+    const rect = calculator.getBoundingClientRect();
+    const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
+    
+    if (isVisible) {
+        calculator.classList.add('animate-in');
+    }
+};
+
+window.addEventListener('scroll', handleScroll);
+
+// تحسين التجاوب للتغيير في حجم الشاشة
+const resizeObserver = new ResizeObserver(entries => {
+    entries.forEach(entry => {
+        const calculator = entry.target;
+        const width = entry.contentRect.width;
+        
+        if (width < 768) {
+            calculator.classList.add('mobile-view');
+        } else {
+            calculator.classList.remove('mobile-view');
+        }
+    });
+});
+
+resizeObserver.observe(document.querySelector('.calculator'));
+
+     // دالة لتفعيل الحركات عند الظهور
+const observeElements = () => {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '50px'
+    });
+
+    // تحديد العناصر المتحركة
+    document.querySelectorAll('.animate').forEach((element, index) => {
+        element.style.setProperty('--item-index', index);
+        observer.observe(element);
+    });
+};
+
+// دالة لإضافة الحركات بشكل متتابع
+const addSequentialAnimations = () => {
+    const elements = document.querySelectorAll('.animate');
+    elements.forEach((element, index) => {
+        element.style.animationDelay = `${index * 0.1}s`;
+    });
+};
+
+// دالة لإعادة تعيين الحركات
+const resetAnimations = () => {
+    document.querySelectorAll('.animate').forEach(element => {
+        element.classList.remove('active');
+        void element.offsetWidth; // إعادة تشغيل الحركة
+        element.classList.add('active');
+    });
+};
+
+// تفعيل الحركات عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    observeElements();
+    addSequentialAnimations();
+});
+
+// إعادة تعيين الحركات عند تغيير حجم الشاشة
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resetAnimations, 250);
+});
+
+     // إضافة تأثير التعويم التفاعلي
+const addFloatingEffect = (element) => {
+    element.addEventListener('mousemove', (e) => {
+        const rect = element.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 20;
+        const rotateY = (centerX - x) / 20;
+        
+        element.style.transform = `
+            perspective(1000px)
+            rotateX(${rotateX}deg)
+            rotateY(${rotateY}deg)
+            translateZ(10px)
+        `;
+    });
+    
+    element.addEventListener('mouseleave', () => {
+        element.style.transform = '';
+    });
+};
+
+// تطبيق التأثير على العناصر
+document.querySelectorAll('.float-interactive').forEach(addFloatingEffect);
+
+     // إضافة تأثير التوهج التفاعلي المتقدم
+const addGlowEffect = (element) => {
+    element.addEventListener('mousemove', (e) => {
+        const rect = element.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // تحديث موقع التوهج
+        element.style.setProperty('--glow-position-x', `${x}px`);
+        element.style.setProperty('--glow-position-y', `${y}px`);
+        
+        // تعديل كثافة التوهج
+        const distance = Math.sqrt(
+            Math.pow(x - rect.width / 2, 2) + 
+            Math.pow(y - rect.height / 2, 2)
+        );
+        const maxDistance = Math.sqrt(
+            Math.pow(rect.width / 2, 2) + 
+            Math.pow(rect.height / 2, 2)
+        );
+        const intensity = 1 - (distance / maxDistance);
+        
+        element.style.setProperty('--glow-intensity', intensity);
+    });
+};
+
+// تطبيق التأثير على العناصر
+document.querySelectorAll('.glow-border-interactive').forEach(addGlowEffect);
+
+     // إضافة تأثير تتبع الماوس للعنوان
+const addTitleEffect = (title) => {
+    title.addEventListener('mousemove', (e) => {
+        const rect = title.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 10;
+        const rotateY = (centerX - x) / 10;
+        
+        title.style.transform = `
+            perspective(1000px)
+            rotateX(${rotateX}deg)
+            rotateY(${rotateY}deg)
+        `;
+    });
+    
+    title.addEventListener('mouseleave', () => {
+        title.style.transform = '';
+    });
+};
+
+// تطبيق التأثير
+document.querySelectorAll('.title').forEach(addTitleEffect);
+
+     
+     // إضافة تأثيرات تفاعلية لمجموعات الإدخال
+const addInputEffects = (inputGroup) => {
+    const input = inputGroup.querySelector('input, select, textarea');
+    
+    // تأثير التحقق من الصحة
+    input.addEventListener('input', (e) => {
+        const value = e.target.value;
+        inputGroup.classList.remove('error', 'success');
+        
+        if (value.length > 0) {
+            inputGroup.classList.add(
+                isValidInput(value) ? 'success' : 'error'
+            );
+        }
+    });
+    
+    // تأثير الحركة
+    inputGroup.addEventListener('mousemove', (e) => {
+        const rect = inputGroup.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        inputGroup.style.setProperty('--x', `${x}px`);
+        inputGroup.style.setProperty('--y', `${y}px`);
+    });
+};
+
+// التحقق من صحة الإدخال (مثال)
+const isValidInput = (value) => {
+    return value.length >= 3;
+};
+
+// تطبيق التأثيرات
+document.querySelectorAll('.input-group').forEach(addInputEffects);
+
+     // إضافة تأثيرات تفاعلية للتسميات
+const addLabelEffects = () => {
+    const labels = document.querySelectorAll('.form-label');
+    
+    labels.forEach(label => {
+        // ربط التسمية بحقل الإدخال
+        const input = document.querySelector(
+            `#${label.getAttribute('for')}`
+        );
+        
+        if (input) {
+            // تفعيل التسمية عند التركيز
+            input.addEventListener('focus', () => {
+                label.classList.add('active');
+            });
+            
+            // إلغاء تفعيل التسمية عند فقد التركيز
+            input.addEventListener('blur', () => {
+                if (!input.value) {
+                    label.classList.remove('active');
+                }
+            });
+            
+            // تحديث حالة التسمية عند تحميل الصفحة
+            if (input.value) {
+                label.classList.add('active');
+            }
+        }
+    });
+};
+
+// تطبيق التأثيرات
+document.addEventListener('DOMContentLoaded', addLabelEffects);
+
+     // إضافة تأثيرات وتحقق للحقول
+const addInputEffects = () => {
+    const inputs = document.querySelectorAll('.form-input, .form-select');
+    
+    inputs.forEach(input => {
+        // تحقق من القيمة عند الإدخال
+        input.addEventListener('input', (e) => {
+            const value = e.target.value;
+            input.classList.remove('error', 'success');
+            
+            if (value.length > 0) {
+                validateInput(input);
+            }
+        });
+        
+        // تأثير الحركة المتقدم
+        input.addEventListener('mousemove', (e) => {
+            const rect = input.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            input.style.setProperty('--x', `${x}px`);
+            input.style.setProperty('--y', `${y}px`);
+        });
+    });
+};
+
+// التحقق من صحة الإدخال
+const validateInput = (input) => {
+    const value = input.value;
+    const type = input.type;
+    
+    switch(type) {
+        case 'email':
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            input.classList.add(
+                emailRegex.test(value) ? 'success' : 'error'
+            );
+            break;
+            
+        case 'tel':
+            const phoneRegex = /^\d{10}$/;
+            input.classList.add(
+                phoneRegex.test(value) ? 'success' : 'error'
+            );
+            break;
+            
+        default:
+            input.classList.add(
+                value.length >= 3 ? 'success' : 'error'
+            );
+    }
+};
+
+// تطبيق التأثيرات
+document.addEventListener('DOMContentLoaded', addInputEffects);
+
+     // إضافة تأثيرات تفاعلية لصندوق النتيجة
+const addResultEffects = () => {
+    const resultBox = document.querySelector('.result-box');
+    
+    // تأثير التوهج التفاعلي
+    resultBox.addEventListener('mousemove', (e) => {
+        const rect = resultBox.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        resultBox.style.setProperty('--x', `${x}%`);
+        resultBox.style.setProperty('--y', `${y}%`);
+    });
+    
+    // تأثير تحديث النتيجة
+    const updateResult = (value) => {
+        const result = resultBox.querySelector('.result');
+        resultBox.classList.add('loading');
+        
+        setTimeout(() => {
+            result.textContent = value;
+            resultBox.classList.remove('loading');
+            resultBox.classList.add('success');
+            
+            setTimeout(() => {
+                resultBox.classList.remove('success');
+            }, 1000);
+        }, 800);
+    };
+    
+    return { updateResult };
+};
+
+// تطبيق التأثيرات
+const resultEffects = addResultEffects();
+
+     class ResetButton {
+    constructor(selector) {
+        this.button = document.querySelector(selector);
+        this.icon = this.button.querySelector('i');
+        this.initialIcon = this.icon.className;
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        this.button.addEventListener('click', () => this.handleReset());
+        this.button.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+    }
+
+    handleReset() {
+        // تأثير التحميل
+        this.setLoading(true);
+
+        // محاكاة عملية إعادة التعيين
+        setTimeout(() => {
+            this.setSuccess();
+            
+            // إعادة الزر لحالته الأصلية
+            setTimeout(() => {
+                this.resetState();
+            }, 1500);
+        }, 1000);
+    }
+
+    handleMouseMove(e) {
+        const rect = this.button.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // تحديث موقع التوهج
+        this.button.style.setProperty('--x', `${x}px`);
+        this.button.style.setProperty('--y', `${y}px`);
+    }
+
+    setLoading(isLoading) {
+        this.button.classList.toggle('loading', isLoading);
+        if (isLoading) {
+            this.icon.className = 'fas fa-spinner';
+        }
+    }
+
+    setSuccess() {
+        this.button.classList.remove('loading');
+        this.button.classList.add('success');
+        this.icon.className = 'fas fa-check';
+    }
+
+    resetState() {
+        this.button.classList.remove('loading', 'success');
+        this.icon.className = this.initialIcon;
+    }
+}
+
+// استخدام الكلاس
+const resetButton = new ResetButton('.reset-button');
+
+     class AnimationController {
+    constructor() {
+        this.animationClasses = [
+            'pulse', 'fade-in', 'ripple', 'shake', 
+            'rotate', 'gradient', 'slide'
+        ];
+    }
+
+    // إضافة حركة
+    addAnimation(element, animationType, duration = 1000) {
+        // إزالة الحركات السابقة
+        this.removeAnimations(element);
+        
+        // إضافة الحركة الجديدة
+        element.classList.add('animate', animationType);
+        
+        // تحديث مدة الحركة إذا تم تحديدها
+        if (duration !== 1000) {
+            element.style.setProperty('--animation-duration', `${duration}ms`);
+        }
+        
+        // إزالة الحركة بعد انتهائها
+        element.addEventListener('animationend', () => {
+            this.removeAnimations(element);
+        }, { once: true });
+    }
+
+    // إزالة جميع الحركات
+    removeAnimations(element) {
+        element.classList.remove('animate', ...this.animationClasses);
+        element.style.removeProperty('--animation-duration');
+    }
+
+    // إضافة حركة النجاح
+    success(element) {
+        this.addAnimation(element, 'success-animation');
+    }
+
+    // إضافة حركة الخطأ
+    error(element) {
+        this.addAnimation(element, 'error-animation');
+    }
+
+    // إضافة حركات متعددة متتابعة
+    async chainAnimations(element, animations, interval = 1000) {
+        for (const animation of animations) {
+            await new Promise(resolve => {
+                this.addAnimation(element, animation);
+                setTimeout(resolve, interval);
+            });
+        }
+    }
+}
+
+// استخدام الحركات
+const animator = new AnimationController();
+
+// مثال للاستخدام
+const resultBox = document.querySelector('.result-box');
+
+// إضافة حركة بسيطة
+animator.addAnimation(resultBox, 'pulse');
+
+// إضافة سلسلة من الحركات
+animator.chainAnimations(resultBox, [
+    'fade-in',
+    'ripple',
+    'rotate'
+]);
+
+// إضافة حركة نجاح
+document.querySelector('form').onsubmit = (e) => {
+    e.preventDefault();
+    animator.success(resultBox);
+};
+
+     class LoadingController {
+    constructor() {
+        this.loadingStates = new Map();
+    }
+
+    // بدء التحميل
+    startLoading(element, type = 'linear') {
+        // إزالة أي حالة تحميل سابقة
+        this.stopLoading(element);
+        
+        // إضافة صنف التحميل
+        element.classList.add('loading-container', `loading-${type}`);
+        
+        // تخزين حالة التحميل
+        this.loadingStates.set(element, type);
+        
+        // إضافة نص التحميل إذا كان مطلوباً
+        if (type === 'dots') {
+            element.setAttribute('data-original-text', element.textContent);
+            element.textContent = 'جاري التحميل';
+        }
+    }
+
+    // إيقاف التحميل
+    stopLoading(element) {
+        const type = this.loadingStates.get(element);
+        if (type) {
+            element.classList.remove('loading-container', `loading-${type}`);
+            
+            // استعادة النص الأصلي إذا كان موجوداً
+            if (type === 'dots') {
+                const originalText = element.getAttribute('data-original-text');
+                if (originalText) {
+                    element.textContent = originalText;
+                    element.removeAttribute('data-original-text');
+                }
+            }
+            
+            this.loadingStates.delete(element);
+        }
+    }
+
+    // تبديل حالة التحميل
+    toggleLoading(element, type = 'linear') {
+        if (this.loadingStates.has(element)) {
+            this.stopLoading(element);
+        } else {
+            this.startLoading(element, type);
+        }
+    }
+}
+
+// استخدام التحكم في التحميل
+const loader = new LoadingController();
+
+// أمثلة للاستخدام
+const element = document.querySelector('.my-element');
+
+// بدء التحميل
+loader.startLoading(element, 'linear');
+
+// بدء التحميل بنمط مختلف
+loader.startLoading(element, 'pulse');
+
+// إيقاف التحميل بعد 3 ثوانٍ
+setTimeout(() => {
+    loader.stopLoading(element);
+}, 3000);
+
+     class ParticleBackground {
+    constructor(container, options = {}) {
+        this.container = container;
+        this.options = {
+            particleCount: 50,
+            colors: ['#4CAF50', '#2196F3', '#9C27B0'],
+            minSize: 10,
+            maxSize: 20,
+            minDuration: 10,
+            maxDuration: 20,
+            ...options
+        };
+        
+        this.init();
+    }
+
+    init() {
+        this.particles = [];
+        this.createParticles();
+        this.animate();
+    }
+
+    createParticles() {
+        for (let i = 0; i < this.options.particleCount; i++) {
+            this.createParticle();
+        }
+    }
+
+    createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // تخصيص عشوائي
+        const size = this.random(this.options.minSize, this.options.maxSize);
+        const color = this.options.colors[
+            Math.floor(Math.random() * this.options.colors.length)
+        ];
+        const duration = this.random(
+            this.options.minDuration,
+            this.options.maxDuration
+        );
+        
+        // تطبيق الخصائص
+        particle.style.cssText = `
+            width: ${size}px;
+            height: ${size}px;
+            background: ${color};
+            left: ${this.random(0, 100)}%;
+            top: ${this.random(0, 100)}%;
+            animation-duration: ${duration}s;
+            animation-delay: ${this.random(0, 5)}s;
+        `;
+        
+        this.container.appendChild(particle);
+        this.particles.push(particle);
+        
+        // إعادة تدوير الجزيئة
+        particle.addEventListener('animationend', () => {
+            particle.remove();
+            this.particles = this.particles.filter(p => p !== particle);
+            this.createParticle();
+        });
+    }
+
+    random(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+        
+        // تحديث الجزيئات
+        this.particles.forEach(particle => {
+            const rect = particle.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > window.innerHeight ||
+                rect.right < 0 || rect.left > window.innerWidth) {
+                particle.style.opacity = '0';
+            }
+        });
+    }
+
+    // إضافة تأثيرات تفاعلية
+    addInteractivity() {
+        this.container.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            this.particles.forEach(particle => {
+                const rect = particle.getBoundingClientRect();
+                const dx = x - (rect.left + rect.width / 2);
+                const dy = y - (rect.top + rect.height / 2);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 100) {
+                    particle.style.transform = `translate(${dx}px, ${dy}px) scale(1.2)`;
+                }
+            });
+        });
+    }
+}
+
+// استخدام الخلفية
+const background = new ParticleBackground(
+    document.querySelector('.background-animation'),
+    {
+        particleCount: 50,
+        colors: ['#4CAF50', '#2196F3', '#9C27B0'],
+        minSize: 10,
+        maxSize: 20,
+        minDuration: 10,
+        maxDuration: 20
+    }
+);
+
+// إضافة التفاعلية
+background.addInteractivity();
+
+     class VisitorCounter {
+    constructor(selector) {
+        this.counter = document.querySelector(selector);
+        this.numberElement = this.counter.querySelector('.visitor-count-number');
+        this.count = 0;
+        this.init();
+    }
+
+    init() {
+        this.loadCount();
+        this.addEventListeners();
+        this.startAutoUpdate();
+    }
+
+    async loadCount() {
+        try {
+            // محاكاة جلب البيانات من الخادم
+            const response = await fetch('/api/visitors');
+            const data = await response.json();
+            this.updateCount(data.count);
+        } catch (error) {
+            console.error('Error loading visitor count:', error);
+        }
+    }
+
+    updateCount(newCount) {
+        this.counter.classList.add('updating');
+        
+        setTimeout(() => {
+            this.count = newCount;
+            this.numberElement.textContent = this.formatNumber(this.count);
+            this.counter.classList.remove('updating');
+        }, 500);
+    }
+
+    formatNumber(num) {
+        return new Intl.NumberFormat('ar-SA').format(num);
+    }
+
+    addEventListeners() {
+        this.counter.addEventListener('mouseenter', () => {
+            this.counter.classList.add('expanded');
+        });
+
+        this.counter.addEventListener('mouseleave', () => {
+            this.counter.classList.remove('expanded');
+        });
+
+        this.counter.addEventListener('click', () => {
+            this.showDetails();
+        });
+    }
+
+    startAutoUpdate() {
+        setInterval(() => {
+            // محاكاة تحديث تلقائي
+            this.updateCount(this.count + Math.floor(Math.random() * 5));
+        }, 30000); // تحديث كل 30 ثانية
+    }
+
+    showDetails() {
+        // إظهار تفاصيل إضافية في نافذة منبثقة
+        const details = `
+            <div class="visitor-details">
+                <h3>إحصائيات الزوار</h3>
+                <p>العدد الإجمالي: ${this.formatNumber(this.count)}</p>
+                <p>اليوم: ${this.formatNumber(Math.floor(this.count * 0.1))}</p>
+                <p>هذا الأسبوع: ${this.formatNumber(Math.floor(this.count * 0.4))}</p>
+            </div>
+        `;
+        
+        // إضافة المنطق الخاص بعرض النافذة المنبثقة
+    }
+}
+
+// استخدام العداد
+const visitorCounter = new VisitorCounter('.visitor-count');
+
+     class MobileOptimizer {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.addTouchSupport();
+        this.optimizeScrolling();
+        this.handleOrientation();
+        this.addFastClick();
+    }
+
+    addTouchSupport() {
+        // تحسين الاستجابة للمس
+        document.addEventListener('touchstart', () => {}, {passive: true});
+        
+        // منع التكبير المزدوج
+        document.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+        });
+    }
+
+    optimizeScrolling() {
+        // تحسين التمرير
+        let timeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                // تنظيف الذاكرة بعد التمرير
+                window.requestAnimationFrame(() => {
+                    // تحديث العناصر المرئية فقط
+                });
+            }, 150);
+        }, {passive: true});
+    }
+
+    handleOrientation() {
+        // التعامل مع تغيير اتجاه الشاشة
+        window.addEventListener('orientationchange', () => {
+            // إعادة تحجيم العناصر
+            this.updateLayout();
+        });
+    }
+
+    updateLayout() {
+        // تحديث تخطيط الصفحة بناءً على الاتجاه
+        const isLandscape = window.innerWidth > window.innerHeight;
+        document.body.classList.toggle('landscape', isLandscape);
+    }
+
+    addFastClick() {
+        // تقليل تأخير النقر على الأجهزة المحمولة
+        if ('addEventListener' in document) {
+            document.addEventListener('DOMContentLoaded', function() {
+                FastClick.attach(document.body);
+            }, false);
+        }
+    }
+}
+
+// تطبيق التحسينات
+const mobileOptimizer = new MobileOptimizer();
+
+     
     </script>
 </body>
 </html>
