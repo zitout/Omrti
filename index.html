@@ -1,705 +1,355 @@
-// pages/_document.js
-import { Html, Head, Main, NextScript } from 'next/document'
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="حاسبة تقسيط العمرة - احسب تكلفة رحلة العمرة بالتقسيط">
+    <meta name="keywords" content="عمرة, تقسيط, حاسبة, العمرة بالتقسيط">
+    <title>حاسبة تقسيط العمرة</title>
 
-export default function Document() {
-  return (
-    <Html lang="ar" dir="rtl">
-      <Head>
-        <meta charSet="UTF-8" />
-        <meta name="description" content="حاسبة تقسيط العمرة - احسب تكلفة رحلة العمرة بالتقسيط" />
-        <meta name="keywords" content="عمرة, تقسيط, حاسبة, العمرة بالتقسيط" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-      <body>
-        <Main />
-        <NextScript />
-      </body>
-    </Html>
-  )
-}
+    <!-- Preload Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap">
 
-// pages/_app.js
-import '@/styles/globals.css'
-import { ChakraProvider } from '@chakra-ui/react'
-import { AnimatePresence } from 'framer-motion'
+    <!-- Essential CSS Libraries -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
-function MyApp({ Component, pageProps }) {
-  return (
-    <ChakraProvider>
-      <AnimatePresence mode="wait">
-        <Component {...pageProps} />
-      </AnimatePresence>
-    </ChakraProvider>
-  )
-}
 
-export default MyApp
+<style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #23a6d5;
+            --secondary-color: #23d5ab;
+            --accent-color: #e73c7e;
+            --background-color: #f5f5f5;
+            --text-color: #333;
+            --shadow-color: rgba(31, 38, 135, 0.37);
+            --transition-speed: 0.3s;
+        }
 
-// styles/globals.css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+        /* Reset Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-@layer base {
-  :root {
-    --primary-color: #23a6d5;
-    --secondary-color: #23d5ab;
-    --accent-color: #e73c7e;
-  }
-  
-  body {
-    @apply min-h-screen font-tajawal bg-gradient-to-br from-[#ee7752] via-[var(--accent-color)] to-[var(--secondary-color)];
-  }
-}
+        /* Body Styles */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(-45deg, 
+                #ee7752, 
+                var(--accent-color), 
+                var(--primary-color), 
+                var(--secondary-color));
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+            color: var(--text-color);
+        }
 
-// tailwind.config.js
-module.exports = {
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-  ],
-  theme: {
-    extend: {
-      fontFamily: {
-        tajawal: ['Tajawal', 'sans-serif'],
-      },
-      animation: {
-        gradient: 'gradient 15s ease infinite',
-      },
-      keyframes: {
-        gradient: {
-          '0%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-          '100%': { backgroundPosition: '0% 50%' },
-        },
-      },
-    },
-  },
-  plugins: [],
-}
+        /* Background Animation */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-// components/Layout.js
-import { motion } from 'framer-motion'
-import ParticlesBackground from './ParticlesBackground'
+        /* Particles Container */
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
 
-export default function Layout({ children }) {
-  return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center p-8">
-      <ParticlesBackground />
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        className="relative z-10 w-full max-w-2xl"
-      >
-        {children}
-      </motion.div>
+        /* Main Container */
+        .login-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px 0 var(--shadow-color);
+            text-align: center;
+            z-index: 2;
+            transform-style: preserve-3d;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Heading Styles */
+        .login-container h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+
+/* Button Container */
+        .user-type-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Button Styles */
+        .user-type-buttons button {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, 
+                var(--primary-color), 
+                var(--secondary-color));
+            color: white;
+            font-family: 'Tajawal', sans-serif;
+            position: relative;
+            overflow: hidden;
+            font-weight: 700;
+        }
+
+        .user-type-buttons button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            transition: 0.5s;
+        }
+
+        .user-type-buttons button:hover::before {
+            left: 100%;
+        }
+
+        .user-type-buttons button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Admin Login Form */
+        .admin-login-form {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .admin-login-form input {
+            width: 100%;
+            max-width: 300px;
+            margin: 1rem auto;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .admin-login-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(35, 166, 213, 0.3);
+        }
+
+        .admin-login-form button {
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+        }
+
+        .admin-login-form button:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Visitor Counter */
+        .visitor-count {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            color: white;
+            font-size: 1.2rem;
+            z-index: 1000;
+            animation: bounce 2s infinite;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+
+
+  @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+
+            .login-container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            .user-type-buttons {
+                flex-direction: column;
+            }
+
+            .user-type-buttons button {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            .visitor-count {
+                top: 10px;
+                right: 10px;
+                font-size: 1rem;
+                padding: 8px 15px;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+
+
+  </head>
+
+    <body>
+    <!-- Particles.js Container -->
+    <div id="particles-js"></div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner"></div>
+
+    <!-- Visitor Counter -->
+    <div id="visitorCount" class="visitor-count animate__animated animate__fadeIn">
+        <span id="visitorCountNumber">0</span> زائر
     </div>
-  )
-}
 
-// components/ParticlesBackground.js
-import { useCallback } from 'react'
-import Particles from 'react-particles'
-import { loadFull } from 'tsparticles'
-
-export default function ParticlesBackground() {
-  const particlesInit = useCallback(async (engine) => {
-    await loadFull(engine)
-  }, [])
-
-  return (
-    <Particles
-      className="absolute inset-0"
-      init={particlesInit}
-      options={{
-        particles: {
-          number: { value: 80 },
-          color: { value: '#ffffff' },
-          opacity: { value: 0.5 },
-          size: { value: 3 },
-          move: { enable: true, speed: 6 },
-          links: {
-            enable: true,
-            distance: 150,
-            color: '#ffffff',
-            opacity: 0.4,
-            width: 1,
-          },
-        },
-        interactivity: {
-          events: {
-            onHover: { enable: true, mode: 'repulse' },
-            onClick: { enable: true, mode: 'push' },
-          },
-        },
-      }}
-    />
-  )
-}
-   // styles/globals.css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  :root {
-    --primary-color: #23a6d5;
-    --secondary-color: #23d5ab;
-    --accent-color: #e73c7e;
-  }
-}
-
-@layer components {
-  .gradient-animate {
-    @apply bg-gradient-to-r from-[#ee7752] via-[var(--accent-color)] to-[var(--secondary-color)] bg-[length:400%_400%] animate-gradient;
-  }
-  
-  .glass-effect {
-    @apply bg-white/10 backdrop-blur-md;
-  }
-}
-
-// tailwind.config.js
-module.exports = {
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-  ],
-  theme: {
-    extend: {
-      fontFamily: {
-        tajawal: ['Tajawal', 'sans-serif'],
-      },
-      animation: {
-        gradient: 'gradient 15s ease infinite',
-        float: 'float 6s ease-in-out infinite',
-      },
-      keyframes: {
-        gradient: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
-      },
-    },
-  },
-  plugins: [],
-}
-
-// components/LoginContainer.js
-import { motion } from 'framer-motion'
-import { Box, Heading, VStack } from '@chakra-ui/react'
-
-export default function LoginContainer({ children }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="relative w-full max-w-[500px] z-10"
-    >
-      <Box
-        className="glass-effect rounded-[20px] p-10 text-center transform-gpu transition-all duration-300 hover:-translate-y-1 hover:rotate-x-3 hover:shadow-xl"
-        boxShadow="0 8px 32px 0 rgba(31, 38, 135, 0.37)"
-      >
-        <VStack spacing={8}>
-          <Heading
-            as="h2"
-            className="text-white text-4xl font-bold text-shadow-lg"
-          >
-            حاسبة تقسيط العمرة
-          </Heading>
-          {children}
-        </VStack>
-      </Box>
-    </motion.div>
-  )
-}
-
-// pages/index.js
-import { Box } from '@chakra-ui/react'
-import LoginContainer from '../components/LoginContainer'
-import ParticlesBackground from '../components/ParticlesBackground'
-
-export default function Home() {
-  return (
-    <Box className="min-h-screen flex flex-col justify-center items-center p-8 font-tajawal gradient-animate overflow-x-hidden relative">
-      <ParticlesBackground />
-      <LoginContainer>
-        {/* محتوى الصفحة */}
-      </LoginContainer>
-    </Box>
-  )
-}
-
-  // components/UserTypeButtons.js
-import { motion } from 'framer-motion'
-import { Button, HStack } from '@chakra-ui/react'
-
-export const UserTypeButtons = ({ onCustomerClick, onAdminClick }) => {
-  return (
-    <HStack spacing={6} my={8} justify="center">
-      <motion.div whileHover={{ y: -3 }}>
-        <Button
-          onClick={onCustomerClick}
-          className="relative overflow-hidden bg-gradient-to-r from-primary to-secondary hover:shadow-xl"
-          size="lg"
-          fontSize="xl"
-          px={8}
-          py={6}
-          _before={{
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: '-100%',
-            width: '100%',
-            height: '100%',
-            background: 'linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent)',
-            transition: '0.5s',
-          }}
-          _hover={{
-            _before: {
-              left: '100%',
-            },
-          }}
-        >
-          دخول كزبون
-        </Button>
-      </motion.div>
-
-      <motion.div whileHover={{ y: -3 }}>
-        <Button
-          onClick={onAdminClick}
-          className="relative overflow-hidden bg-gradient-to-r from-primary to-secondary hover:shadow-xl"
-          size="lg"
-          fontSize="xl"
-          px={8}
-          py={6}
-          _before={{
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: '-100%',
-            width: '100%',
-            height: '100%',
-            background: 'linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent)',
-            transition: '0.5s',
-          }}
-          _hover={{
-            _before: {
-              left: '100%',
-            },
-          }}
-        >
-          دخول كمدير
-        </Button>
-      </motion.div>
-    </HStack>
-  )
-}
-
-// components/AdminLoginForm.js
-import { motion, AnimatePresence } from 'framer-motion'
-import { VStack, Input, Button, Box } from '@chakra-ui/react'
-
-export const AdminLoginForm = ({ isVisible, onSubmit }) => {
-  return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Box
-            className="glass-effect rounded-xl mt-8 p-8"
-            bgColor="whiteAlpha.200"
-          >
-            <VStack spacing={4}>
-              <Input
-                type="password"
-                placeholder="أدخل كلمة المرور"
-                maxW="300px"
-                textAlign="center"
-                fontSize="lg"
-                borderWidth={2}
-                borderColor="whiteAlpha.200"
-                _focus={{
-                  borderColor: 'primary.500',
-                  boxShadow: '0 0 10px rgba(35, 166, 213, 0.3)',
-                }}
-                className="bg-white/10 text-white"
-              />
-              <Button
-                onClick={onSubmit}
-                bgColor="secondary.500"
-                _hover={{
-                  bgColor: 'primary.500',
-                  transform: 'translateY(-2px)',
-                }}
-                size="lg"
-                mt={4}
-              >
-                دخول
-              </Button>
-            </VStack>
-          </Box>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
-}
-
-// components/VisitorCounter.js
-import { motion } from 'framer-motion'
-import { Box, Text } from '@chakra-ui/react'
-
-export const VisitorCounter = ({ count }) => {
-  return (
-    <motion.div
-      initial={{ y: -50 }}
-      animate={{ y: 0 }}
-      className="fixed top-5 right-5 z-50"
-    >
-      <Box
-        className="glass-effect px-6 py-3 rounded-full"
-        bgColor="whiteAlpha.200"
-        boxShadow="0 4px 6px rgba(0,0,0,0.1)"
-      >
-        <Text color="white" fontSize="xl">
-          {count} زائر
-        </Text>
-      </Box>
-    </motion.div>
-  )
-}
-
-// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        primary: '#23a6d5',
-        secondary: '#23d5ab',
-      },
-      animation: {
-        shine: 'shine 1s linear infinite',
-      },
-      keyframes: {
-        shine: {
-          '100%': { left: '100%' },
-        },
-      },
-    },
-  },
-}
-      // tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      keyframes: {
-        bounce: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
-        slideIn: {
-          from: { 
-            opacity: '0',
-            transform: 'translateY(-20px)',
-          },
-          to: { 
-            opacity: '1',
-            transform: 'translateY(0)',
-          },
-        },
-        spin: {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
-        },
-      },
-      animation: {
-        bounce: 'bounce 2s infinite',
-        slideIn: 'slideIn 0.5s ease-out',
-        spin: 'spin 1s linear infinite',
-      },
-    },
-  },
-}
-
-// components/LoadingSpinner.js
-import { motion } from 'framer-motion'
-
-export const LoadingSpinner = ({ isLoading }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isLoading ? 1 : 0 }}
-      className={`
-        w-10 h-10 
-        border-4 border-gray-200 
-        border-t-primary 
-        rounded-full 
-        animate-spin 
-        mx-auto my-5
-        ${isLoading ? 'block' : 'hidden'}
-      `}
-    />
-  )
-}
-
-// components/ResponsiveLayout.js
-import { motion } from 'framer-motion'
-
-export const ResponsiveLayout = ({ children }) => {
-  return (
-    <div className="p-4 sm:p-8">
-      <motion.div 
-        className="
-          w-full max-w-md 
-          mx-auto 
-          p-6 sm:p-10 
-          m-4
-          bg-white/10 
-          backdrop-blur-md 
-          rounded-2xl
-          shadow-xl
-        "
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  )
-}
-
-// components/UserTypeButtons.js
-import { motion } from 'framer-motion'
-
-export const UserTypeButtons = () => {
-  return (
-    <div className="flex flex-col sm:flex-row justify-center gap-6 my-8">
-      <motion.button
-        whileHover={{ y: -3 }}
-        className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-secondary"
-      >
-        دخول كزبون
-      </motion.button>
-      <motion.button
-        whileHover={{ y: -3 }}
-        className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-secondary"
-      >
-        دخول كمدير
-      </motion.button>
-    </div>
-  )
-}
-
-// components/VisitorCounter.js
-import { motion } from 'framer-motion'
-
-export const VisitorCounter = ({ count }) => {
-  return (
-    <motion.div
-      initial={{ y: -50 }}
-      animate={{ y: 0 }}
-      className="
-        fixed top-2.5 right-2.5 sm:top-5 sm:right-5
-        px-4 py-2 sm:px-5 sm:py-3
-        text-sm sm:text-lg
-        bg-white/20 
-        backdrop-blur-sm 
-        rounded-full 
-        text-white 
-        shadow-lg
-        animate-bounce
-      "
-    >
-      {count} زائر
-    </motion.div>
-  )
-}
-
-// styles/globals.css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer utilities {
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      @apply animate-none transition-none;
-    }
-  }
-}
-    </style>
+    <!-- Main Container -->
+    <div class="login-container" data-aos="fade-up">
+        <h2 class="animate__animated animate__fadeInDown">حاسبة تقسيط العمرة</h2>
         
-// pages/index.js
-import { motion } from 'framer-motion'
-import { Box, Button, Input, VStack, Heading, Text, Icon } from '@chakra-ui/react'
-import { FaUser, FaUserShield } from 'react-icons/fa'
-import ParticlesBackground from '../components/ParticlesBackground'
-import LoadingSpinner from '../components/LoadingSpinner'
-import VisitorCounter from '../components/VisitorCounter'
+        <div class="user-type-buttons">
+            <button onclick="redirectToCustomer()" 
+                    class="animate__animated animate__fadeInLeft"
+                    aria-label="دخول كزبون">
+                <i class="fas fa-user"></i> دخول كزبون
+            </button>
+            <button onclick="showAdminLogin()" 
+                    class="animate__animated animate__fadeInRight"
+                    aria-label="دخول كمدير">
+                <i class="fas fa-user-shield"></i> دخول كمدير
+            </button>
+        </div>
 
-export default function Home() {
-  return (
-    <Box className="min-h-screen relative flex flex-col items-center justify-center p-4 sm:p-8">
-      <ParticlesBackground />
-      <LoadingSpinner />
-      <VisitorCounter />
+        <div id="adminLoginForm" class="admin-login-form">
+            <h3>تسجيل دخول المدير</h3>
+            <div class="input-group">
+                <input type="password" 
+                       id="adminPassword" 
+                       placeholder="أدخل كلمة المرور"
+                       class="animate__animated animate__fadeIn"
+                       aria-label="كلمة مرور المدير">
+            </div>
+            <button onclick="checkAdminPassword()" 
+                    class="animate__animated animate__fadeIn"
+                    aria-label="تسجيل دخول">
+                دخول
+            </button>
+        </div>
+    </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-lg relative z-10"
-      >
-        <Box
-          className="glass-effect rounded-3xl p-8 sm:p-10 text-center"
-          bg="whiteAlpha.100"
-          backdropFilter="blur(10px)"
-        >
-          <motion.div
-            initial={{ y: -20 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Heading
-              as="h2"
-              size="xl"
-              color="white"
-              className="mb-8 text-shadow"
-            >
-              حاسبة تقسيط العمرة
-            </Heading>
-          </motion.div>
 
-          <VStack spacing={6} className="user-type-buttons">
-            <motion.div
-              className="w-full"
-              whileHover={{ y: -3 }}
-              initial={{ x: -50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-            >
-              <Button
-                leftIcon={<Icon as={FaUser} />}
-                onClick={() => redirectToCustomer()}
-                className="w-full bg-gradient-primary hover:shadow-lg"
-                size="lg"
-                colorScheme="blue"
-              >
-                دخول كزبون
-              </Button>
-            </motion.div>
-
-            <motion.div
-              className="w-full"
-              whileHover={{ y: -3 }}
-              initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-            >
-              <Button
-                leftIcon={<Icon as={FaUserShield} />}
-                onClick={() => showAdminLogin()}
-                className="w-full bg-gradient-secondary hover:shadow-lg"
-                size="lg"
-                colorScheme="teal"
-              >
-                دخول كمدير
-              </Button>
-            </motion.div>
-          </VStack>
-
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={isAdminLoginVisible ? { 
-              opacity: 1, 
-              height: 'auto' 
-            } : { 
-              opacity: 0, 
-              height: 0 
-            }}
-            className="mt-8"
-          >
-            <Box
-              className="bg-white/20 rounded-xl p-6"
-            >
-              <Heading as="h3" size="md" color="white" mb={4}>
-                تسجيل دخول المدير
-              </Heading>
-              <VStack spacing={4}>
-                <Input
-                  type="password"
-                  id="adminPassword"
-                  placeholder="أدخل كلمة المرور"
-                  bg="whiteAlpha.200"
-                  color="white"
-                  _placeholder={{ color: 'whiteAlpha.700' }}
-                  _focus={{
-                    borderColor: 'blue.400',
-                    boxShadow: '0 0 0 1px blue.400',
-                  }}
-                />
-                <Button
-                  onClick={() => checkAdminPassword()}
-                  colorScheme="blue"
-                  width="full"
-                >
-                  دخول
-                </Button>
-              </VStack>
-            </Box>
-          </motion.div>
-        </Box>
-      </motion.div>
-    </Box>
-  )
-}
-
-// components/ParticlesBackground.js
-export const ParticlesBackground = () => {
-  return (
-    <div id="particles-js" className="absolute inset-0 z-0" />
-  )
-}
-
-// components/LoadingSpinner.js
-export const LoadingSpinner = () => {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isLoading ? 1 : 0 }}
-      className="w-10 h-10 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin m-5"
-    />
-  )
-}
-
-// components/VisitorCounter.js
-export const VisitorCounter = ({ count }) => {
-  return (
-    <motion.div
-      initial={{ y: -50 }}
-      animate={{ y: 0 }}
-      className="fixed top-5 right-5 bg-white/20 backdrop-blur px-6 py-3 rounded-full text-white text-lg shadow-lg z-50"
-    >
-      <Text>{count} زائر</Text>
-    </motion.div>
-  )
-}
-
- // pages/_app.js
-import { ChakraProvider } from '@chakra-ui/react'
-import { initializeApp } from 'firebase/app'
-import { getDatabase } from 'firebase/database'
-import { AnimatePresence } from 'framer-motion'
+<!-- Essential JavaScript Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-code.js"></script>
 
     <script>
        
@@ -716,490 +366,214 @@ import { AnimatePresence } from 'framer-motion'
         };
 
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig)
-const database = getDatabase(app)
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-function MyApp({ Component, pageProps }) {
-  return (
-    <ChakraProvider>
-      <AnimatePresence mode="wait">
-        <Component {...pageProps} />
-      </AnimatePresence>
-    </ChakraProvider>
-  )
-}
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            mirror: false,
+            anchorPlacement: 'top-bottom'
+        });
 
-export default MyApp
+        // Initialize Particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#ffffff"
+                },
+                shape: {
+                    type: "circle"
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false,
+                    anim: {
+                        enable: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ffffff",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
 
-// components/ParticlesBackground.js
-import { useCallback } from 'react'
-import Particles from 'react-tsparticles'
-import { loadFull } from 'tsparticles'
 
-export default function ParticlesBackground() {
-  const particlesInit = useCallback(async (engine) => {
-    await loadFull(engine)
-  }, [])
-
-  const particlesConfig = {
-    particles: {
-      number: {
-        value: 80,
-        density: {
-          enable: true,
-          value_area: 800
+// Utility Functions
+        function showLoading() {
+            document.getElementById('loadingSpinner').style.display = 'block';
         }
-      },
-      color: {
-        value: '#ffffff'
-      },
-      shape: {
-        type: 'circle'
-      },
-      opacity: {
-        value: 0.5,
-        random: false,
-        anim: {
-          enable: false
+
+        function hideLoading() {
+            document.getElementById('loadingSpinner').style.display = 'none';
         }
-      },
-      size: {
-        value: 3,
-        random: true
-      },
-      line_linked: {
-        enable: true,
-        distance: 150,
-        color: '#ffffff',
-        opacity: 0.4,
-        width: 1
-      },
-      move: {
-        enable: true,
-        speed: 6,
-        direction: 'none',
-        random: false,
-        straight: false,
-        out_mode: 'out',
-        bounce: false
-      }
-    },
-    interactivity: {
-      detect_on: 'canvas',
-      events: {
-        onhover: {
-          enable: true,
-          mode: 'repulse'
-        },
-        onclick: {
-          enable: true,
-          mode: 'push'
-        },
-        resize: true
-      }
-    },
-    retina_detect: true
-  }
 
-  return (
-    <Particles
-      id="particles-bg"
-      init={particlesInit}
-      options={particlesConfig}
-      className="absolute inset-0"
-    />
-  )
-}
-
-// utils/firebase.js
-import { ref, onValue, runTransaction } from 'firebase/database'
-import { database } from './firebaseConfig'
-
-export const incrementVisitorCount = () => {
-  const visitorId = localStorage.getItem('visitorId')
-  if (!visitorId) {
-    const newVisitorId = Date.now().toString()
-    localStorage.setItem('visitorId', newVisitorId)
-    
-    const visitorRef = ref(database, 'visitorCount')
-    runTransaction(visitorRef, (currentCount) => {
-      return (currentCount || 0) + 1
-    })
-  }
-}
-
-export const useVisitorCount = (callback) => {
-  const visitorRef = ref(database, 'visitorCount')
-  onValue(visitorRef, (snapshot) => {
-    const count = snapshot.val() || 0
-    callback(count)
-  })
-}
-
-// hooks/useAuth.js
-import { useState } from 'react'
-import { useToast } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
-
-export const useAuth = () => {
-  const [loading, setLoading] = useState(false)
-  const toast = useToast()
-  const router = useRouter()
-
-  const checkAdminPassword = async (password) => {
-    setLoading(true)
-    try {
-      if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
-        toast({
-          title: 'تم تسجيل الدخول بنجاح',
-          status: 'success',
-          duration: 1500
-        })
-        sessionStorage.setItem('adminLoggedIn', 'true')
-        router.push('/admin')
-      } else {
-        toast({
-          title: 'خطأ في تسجيل الدخول',
-          description: 'كلمة المرور غير صحيحة',
-          status: 'error'
-        })
-      }
-    } catch (error) {
-      console.error(error)
-      toast({
-        title: 'حدث خطأ',
-        description: 'يرجى المحاولة مرة أخرى',
-        status: 'error'
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return { loading, checkAdminPassword }
-}
-       // hooks/useLoading.js
-import { atom, useAtom } from 'jotai'
-
-const loadingAtom = atom(false)
-
-export const useLoading = () => {
-  const [isLoading, setIsLoading] = useAtom(loadingAtom)
-  
-  const showLoading = () => setIsLoading(true)
-  const hideLoading = () => setIsLoading(false)
-  
-  return { isLoading, showLoading, hideLoading }
-}
-
-// components/LoadingSpinner.js
-import { motion, AnimatePresence } from 'framer-motion'
-import { useLoading } from '@/hooks/useLoading'
-
-export const LoadingSpinner = () => {
-  const { isLoading } = useLoading()
-  
-  return (
-    <AnimatePresence>
-      {isLoading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="w-10 h-10 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mx-auto my-5"
-        />
-      )}
-    </AnimatePresence>
-  )
-}
-
-// hooks/useAuth.js
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { useToast } from '@chakra-ui/react'
-import { useLoading } from './useLoading'
-
-export const useAuth = () => {
-  const router = useRouter()
-  const toast = useToast()
-  const { showLoading, hideLoading } = useLoading()
-  const [isAdminFormVisible, setIsAdminFormVisible] = useState(false)
-
-  const redirectToCustomer = async () => {
-    showLoading()
-    toast({
-      title: 'جاري التحميل...',
-      description: 'سيتم توجيهك إلى صفحة الزبون',
-      status: 'info',
-      duration: 2000,
-      isClosable: false,
-    })
-    
-    setTimeout(() => {
-      router.push('/customer')
-    }, 2000)
-  }
-
-  const showAdminLogin = () => {
-    setIsAdminFormVisible(true)
-  }
-
-  const checkAdminPassword = async (password) => {
-    showLoading()
-    
-    try {
-      if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
-        toast({
-          title: 'تم تسجيل الدخول بنجاح',
-          description: 'جاري توجيهك إلى لوحة التحكم',
-          status: 'success',
-          duration: 1500,
-        })
-        
-        sessionStorage.setItem('adminLoggedIn', 'true')
-        setTimeout(() => {
-          router.push('/admin')
-        }, 1500)
-      } else {
-        hideLoading()
-        toast({
-          title: 'خطأ في تسجيل الدخول',
-          description: 'كلمة المرور غير صحيحة',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        })
-      }
-    } catch (error) {
-      console.error(error)
-      hideLoading()
-      toast({
-        title: 'حدث خطأ',
-        description: 'يرجى المحاولة مرة أخرى',
-        status: 'error',
-        duration: 3000,
-      })
-    }
-  }
-
-  return {
-    isAdminFormVisible,
-    redirectToCustomer,
-    showAdminLogin,
-    checkAdminPassword,
-  }
-}
-
-// components/AdminLoginForm.js
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Input, Button, VStack, Heading } from '@chakra-ui/react'
-import { useAuth } from '@/hooks/useAuth'
-
-export const AdminLoginForm = () => {
-  const [password, setPassword] = useState('')
-  const { isAdminFormVisible, checkAdminPassword } = useAuth()
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    checkAdminPassword(password)
-    setPassword('')
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, height: 0 }}
-      animate={{ 
-        opacity: isAdminFormVisible ? 1 : 0,
-        height: isAdminFormVisible ? 'auto' : 0
-      }}
-      transition={{ duration: 0.5 }}
-    >
-      <form onSubmit={handleSubmit} className="bg-white/20 rounded-xl p-6 mt-8">
-        <VStack spacing={4}>
-          <Heading as="h3" size="md" color="white">
-            تسجيل دخول المدير
-          </Heading>
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="أدخل كلمة المرور"
-            bg="whiteAlpha.200"
-            color="white"
-            _placeholder={{ color: 'whiteAlpha.700' }}
-          />
-          <Button
-            type="submit"
-            colorScheme="blue"
-            width="full"
-          >
-            دخول
-          </Button>
-        </VStack>
-      </form>
-    </motion.div>
-  )
-}
-
-      // hooks/useVisitorCount.js
-import { useState, useEffect } from 'react'
-import { ref, onValue, runTransaction } from 'firebase/database'
-import { database } from '@/lib/firebase'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
-
-export const useVisitorCount = () => {
-  const [count, setCount] = useState(0)
-  const countMotion = useMotionValue(0)
-  
-  const roundedCount = useTransform(countMotion, latest => Math.round(latest))
-
-  useEffect(() => {
-    const incrementCount = async () => {
-      const visitorId = localStorage.getItem('visitorId')
-      if (!visitorId) {
-        const newVisitorId = Date.now().toString()
-        localStorage.setItem('visitorId', newVisitorId)
-        
-        const visitorRef = ref(database, 'visitorCount')
-        await runTransaction(visitorRef, (currentCount) => {
-          return (currentCount || 0) + 1
-        })
-      }
-    }
-
-    const listenToCount = () => {
-      const visitorRef = ref(database, 'visitorCount')
-      return onValue(visitorRef, (snapshot) => {
-        const newCount = snapshot.val() || 0
-        setCount(newCount)
-        animate(countMotion, newCount, {
-          duration: 2,
-          ease: 'easeOut'
-        })
-      })
-    }
-
-    incrementCount()
-    const unsubscribe = listenToCount()
-
-    return () => unsubscribe()
-  }, [])
-
-  return { count, roundedCount }
-}
-
-// components/VisitorCounter.js
-import { motion } from 'framer-motion'
-import { useVisitorCount } from '@/hooks/useVisitorCount'
-
-export const VisitorCounter = () => {
-  const { roundedCount } = useVisitorCount()
-
-  return (
-    <motion.div
-      initial={{ y: -50, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      className="fixed top-5 right-5 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full text-white text-xl shadow-lg z-50"
-    >
-      <motion.span>{roundedCount}</motion.span> زائر
-    </motion.div>
-  )
-}
-
-// lib/errorBoundary.js
-import { Component } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
-import { Button, Text, VStack } from '@chakra-ui/react'
-
-function ErrorFallback({ error, resetErrorBoundary }) {
-  return (
-    <VStack spacing={4} p={8} align="center">
-      <Text color="red.500">حدث خطأ غير متوقع</Text>
-      <Text fontSize="sm">{error.message}</Text>
-      <Button onClick={resetErrorBoundary} colorScheme="blue">
-        حاول مرة أخرى
-      </Button>
-    </VStack>
-  )
-}
-
-export const AppErrorBoundary = ({ children }) => (
-  <ErrorBoundary FallbackComponent={ErrorFallback}>
-    {children}
-  </ErrorBoundary>
-)
-
-// pages/_app.js
-import { useEffect } from 'react'
-import { ChakraProvider } from '@chakra-ui/react'
-import { AppErrorBoundary } from '@/lib/errorBoundary'
-
-function MyApp({ Component, pageProps }) {
-  useEffect(() => {
-    // Performance optimization
-    const optimizeStyles = () => {
-      const styleSheets = document.querySelectorAll('link[rel="stylesheet"]')
-      styleSheets.forEach(sheet => {
-        sheet.media = 'all'
-      })
-    }
-
-    // Service worker registration
-    const registerServiceWorker = async () => {
-      if ('serviceWorker' in navigator) {
-        try {
-          await navigator.serviceWorker.register('/sw.js')
-          console.log('ServiceWorker registration successful')
-        } catch (err) {
-          console.error('ServiceWorker registration failed:', err)
+        // Customer Redirect Function
+        function redirectToCustomer() {
+            showLoading();
+            Swal.fire({
+                title: 'جاري التحميل...',
+                html: 'سيتم توجيهك إلى صفحة الزبون',
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            }).then(() => {
+                window.location.href = 'customer.html';
+            });
         }
-      }
-    }
 
-    window.addEventListener('load', () => {
-      setTimeout(optimizeStyles, 0)
-      registerServiceWorker()
-    })
-  }, [])
+        // Admin Login Functions
+        function showAdminLogin() {
+            const adminLoginForm = document.getElementById('adminLoginForm');
+            gsap.to(adminLoginForm, {
+                duration: 0.5,
+                display: 'block',
+                opacity: 1,
+                y: 0,
+                ease: 'power3.out'
+            });
+        }
 
-  return (
-    <ChakraProvider>
-      <AppErrorBoundary>
-        <Component {...pageProps} />
-      </AppErrorBoundary>
-    </ChakraProvider>
-  )
-}
+        function checkAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            showLoading();
 
-export default MyApp
+            if (password === '2022') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'تم تسجيل الدخول بنجاح',
+                    text: 'جاري توجيهك إلى لوحة التحكم',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    sessionStorage.setItem('adminLoggedIn', 'true');
+                    window.location.href = 'admin.html';
+                });
+            } else {
+                hideLoading();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ في تسجيل الدخول',
+                    text: 'كلمة المرور غير صحيحة',
+                    confirmButtonText: 'حاول مرة أخرى'
+                });
+                document.getElementById('adminPassword').value = '';
+            }
+        }
 
-// components/AdminLogin.js
-import { useRef } from 'react'
-import { Input } from '@chakra-ui/react'
-import { useAuth } from '@/hooks/useAuth'
 
-export const AdminLogin = () => {
-  const inputRef = useRef()
-  const { checkAdminPassword } = useAuth()
+// Visitor Counter Functions
+        function incrementVisitorCount() {
+            const visitorId = localStorage.getItem('visitorId');
+            if (!visitorId) {
+                const newVisitorId = Date.now().toString();
+                localStorage.setItem('visitorId', newVisitorId);
+                
+                const visitorRef = database.ref('visitorCount');
+                visitorRef.transaction((currentCount) => {
+                    return (currentCount || 0) + 1;
+                });
+            }
+            displayVisitorCount();
+        }
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      checkAdminPassword(inputRef.current.value)
-    }
-  }
+        function displayVisitorCount() {
+            const visitorRef = database.ref('visitorCount');
+            visitorRef.on('value', (snapshot) => {
+                const count = snapshot.val() || 0;
+                gsap.to('#visitorCountNumber', {
+                    textContent: count,
+                    duration: 2,
+                    snap: { textContent: 1 },
+                    stagger: 1,
+                    ease: 'power1.inOut'
+                });
+            });
+        }
 
-  return (
-    <Input
-      ref={inputRef}
-      type="password"
-      onKeyPress={handleKeyPress}
-      placeholder="أدخل كلمة المرور"
-    />
-  )
-}
+        // Error Handling
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo);
+            return false;
+        };
 
-            </script>
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            incrementVisitorCount();
+            displayVisitorCount();
+        });
+
+        document.getElementById('adminPassword').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                checkAdminPassword();
+            }
+        });
+
+        // Performance Optimization
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const styleSheets = document.querySelectorAll('link[rel="stylesheet"]');
+                styleSheets.forEach(sheet => {
+                    sheet.media = 'all';
+                });
+            }, 0);
+        });
+
+        // Service Worker Registration (if needed)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
 </body>
 </html>
+
+
